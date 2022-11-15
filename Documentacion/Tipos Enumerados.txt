@@ -1,0 +1,141 @@
+
+TipoPerfil
+----------
+alumno
+pas
+pdi
+aa
+
+CORRESPONDENCIA EN TEXTO
+------------------------
+"Alumno"
+"Personal de Administración y Servicios (PAS)"
+"Personal Docente Investigador (PDI)"
+"Antiguos Alumnos"
+
+
+
+TipoAviso
+---------
+sugerencia
+incidencia
+felicitacion
+
+CORRESPONDENCIA EN TEXTO
+------------------------
+"Sugerencia"
+"Incidencia"
+"Felicitación"
+
+
+
+TipoCategoria
+-------------
+administracion
+comunicaciones
+conectividad
+docencia
+web
+archivo
+asesoria_juridica
+biblioteca
+centro_informacion
+departamentos_docentes
+inspeccion_servicios
+oficina_gestion
+informatica
+documentacion
+imprenta
+cafeteria
+universidad
+
+CORRESPONDENCIA EN TEXTO (Sugerencia/Incidencia)
+------------------------------------------------
+"Administración digital"
+"Comunicaciones"
+"Conectividad"
+"Docencia e"
+"Web"
+
+CORRESPONDENCIA EN TEXTO (Felicitación)
+---------------------------------------
+"Archivo Universitario"
+"Asesoría Jurídica"
+"Biblioteca"
+"Centro de Información"
+"Departamentos Docentes"
+"Inspección de Servicios"
+"Oficina de Gestión de Infraestructuras y Mantenimiento"
+"Servicio de Administración" = administracion
+"Servicios Informáticos"
+"Servicio de Documentación"
+"Servicio de Imprenta"
+"Servicio de Cafetería"
+"Toda la Universidad"
+
+
+
+TipoSubcategoria
+----------------
+certificado_digital
+certificado_electronico
+registro_electronico
+sede_electronica
+portafirmas
+correo_electronico
+google_meet
+cuenta_alumno
+cuenta_personal
+cuenta_generica
+cuenta_sara
+conexion_cable
+cortafuegos
+dns
+vpn
+wifi_eduroam
+wifi_visitantes
+aula_virtual
+blackboard_collaborate
+listado_clase
+moodle
+cursos_online
+analitica_web
+certificado_ssl
+hosting
+portal_eventos
+redirecciones_web
+
+CORRESPONDENCIA EN TEXTO
+------------------------
+"Certificado digital de personal física"
+"Certificado electrónico de empleado público"
+"Registro electrónico"
+"Sede electrónica"
+"Portafirmas"
+
+"Correo electrónico"
+"Google Meet"
+"Cuenta de Alumno"
+"Cuenta de personal"
+"Cuenta genérica"
+
+"Cuenta as la Red SARA"
+"Conexión por cable en despachos"
+"Cortafuegos corporativo"
+"Resolución de nombres de dominio (DNS)"
+"VPN Acceso remoto"
+"Wifi Eduroam (ssid: eduroam)"
+"Wifi para visitantes (ssid: UCM-Visitantes)"
+
+"Aula Virtual"
+"Blackboard Collaborate"
+"Listados de clase"
+"Moodle: Aula Global"
+"Plataforma de cursos online privados"
+
+"Analítica Web"
+"Emisión de certificados SSL"
+"Hosting: alojamiento de páginas web"
+"Portal de eventos"
+"Redirecciones web"
+

@@ -1,0 +1,57 @@
+
+.img-holder {
+    padding-top: 1rem;
+}
+
+img {
+    width: 15%;
+    height: auto
+}
+
+.text-holder {
+    display: inline-block;  
+    padding-top: 1rem;
+    width: auto;
+}
+
+h1 {
+    margin-top: 1vw;
+    margin-bottom: 0;
+    font-family: Arial;
+    font-size: 10vw;
+    color: white;
+    text-shadow: 3px 0 red, -3px 0 red, 0 3px red, 0 -3px red, 1px 1px red, -1px -1px red, 1px -1px red, -1px 1px red;
+}
+
+h2 {
+    margin-top: 1vw;
+    margin-bottom: 0;
+    font-family: 'Lucida Sans';
+    font-size: 4vw;
+    color: red;
+}
+
+.link-holder {
+    margin-top: 4vw;
+    margin-bottom: 2vw;
+}
+
+a {
+    border-style: solid;
+    border-width: 3px;
+    border-radius: 15px;
+    border-color: darkblue;
+    padding: 1vw 4vw 1vw 4vw;
+    font-family: calibri;
+    font-size: 1.5vw;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+    background-color: darkblue;
+
+}
+
+span {
+   margin-left: 3vw;
+   margin-right: 3vw;
+}

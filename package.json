@@ -1,0 +1,34 @@
+{
+  "name": "g33_po",
+  "version": "1.0.0",
+  "description": "AW - Práctica obligatoria",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Morwar22/AW_UCM_CAU.git"
+  },
+  "keywords": [
+    "UCM",
+    "FDI",
+    "AW",
+    "G33",
+    "práctica",
+    "obligatoria",
+    "UCM-CAU"
+  ],
+  "author": "Daniel Compán y Alejandro Moreno",
+  "license": "MIT",
+  "private": true,
+  "bugs": {
+    "url": "https://github.com/Morwar22/AW_UCM_CAU/issues"
+  },
+  "homepage": "https://github.com/Morwar22/AW_UCM_CAU#readme",
+  "dependencies": {
+    "ejs": "^3.1.8",
+    "express": "^4.18.2",
+    "mysql": "^2.18.1"
+  }
+}

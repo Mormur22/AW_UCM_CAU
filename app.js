@@ -30,21 +30,8 @@ app.get("/index.html", function(request, response) {
     response. sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Proporcionar hojas de estilos
-
-app.get("/css/common.css", function(request, response) {
-    response.sendFile(path.join(__dirname, "public", "css", "common.css"));
-});
-
-app.get("/css/index.css", function(request, response) {
-    response.sendFile(path.join(__dirname, "public", "css", "index.css"));
-});
-
-// Proporcionar imagenes
-
-app.get("/img/icons/escudo-UCM.png", function(request, response) {
-    response.sendFile(path.join(__dirname, "public", "img", "icons", "escudo-UCM.png"));
-});
+// Uso del middleware Static para servir todos los ficheros estáticos (.html, .css, .jpg, png, ...) de la carpeta public y sus subdirectorios
+app.use(express.static(path.join(__dirname, "public")));
 
 // Escuchar peticiones
 app.listen(3000, function(err){
@@ -54,6 +41,7 @@ app.listen(3000, function(err){
         console.log("Servidor arrancado en el puerto 3000")
     }
 });
+
 
 // Definición de las funciones callback
 // ...

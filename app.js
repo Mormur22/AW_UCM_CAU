@@ -17,7 +17,7 @@ app.set("view engine","ejs");  // package module (npm install ejs --save)
 app.set("views",path.join(__dirname,"views"));
 
 // Crear el pool de conexiones
-const pool = mysql.createPool(dbConfig);
+const pool = mysql.createPool(dbConfig.mysqlConfig);
 
 // Crear el objeto DAO
 let dao = new DAO(pool);

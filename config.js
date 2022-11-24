@@ -10,13 +10,13 @@ const localDB = {
 
 /* Datos de conexión a la BD externa */
 const externalDB = {
-   databaseConfig:  {
-        host: "aw-db.cilmfqfwy9bi.eu-west-3.rds.amazonaws.com",
-        user: "admin",
+    mysqlConfig:  {
+        host:"aw-db.cilmfqfwy9bi.eu-west-3.rds.amazonaws.com",
+        user:"admin",
         password: "Adminucm22",
-        database: "aw_db1"
+        database:"UCM_AW_CAU"
     },
-    puerto: 3306
+    port: 3306
 };
 
-module.exports = localDB;
+module.exports = externalDB;

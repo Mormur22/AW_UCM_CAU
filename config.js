@@ -22,4 +22,4 @@ const externalDB = {
     puerto: 3306
 };
 
-module.exports = externalDB;
+module.exports = localDB;

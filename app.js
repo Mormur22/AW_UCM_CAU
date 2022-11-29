@@ -30,12 +30,7 @@ const user_data = {
     isTechnician: true
 }
 // Tengase en cuenta que las consultas devuelven "null" como texto.
-// De todas formas, primera condicion devuelve 'true' para null al estar hecha intencionadamente con == en vez de ===
-
-function undef(v) {
-    if(v == undefined) return true;
-    return false;
-}
+// De todas formas, primera condicion devuelve 'true' para 'null' al estar hecha intencionadamente con == en vez de ===
 
 // Creación de la aplicación express
 const app = express();
@@ -60,9 +55,9 @@ app.get("/index.html", function(request, response) {
     response. sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-app.get("/header.html", function(request, response) {
+app.get("/main.html", function(request, response) {
     response.status(200);
-    response.render("header", { userData: user_data });
+    response.render("main", { userData: user_data });
 });
 
 // Uso del middleware Static para servir todos los ficheros estáticos (.html, .css, .jpg, png, ...) de la carpeta public y sus subdirectorios

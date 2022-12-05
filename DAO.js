@@ -18,7 +18,7 @@ class DAO {
      * Método que comprueba la conexión a la base de datos.
      * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, Boolean result).
      * result = 'true' si ha podido conectarse. 'false' si no.
-    */
+     */
     testConnection(callback) {
         this.pool.getConnection(
             function(err, connection) {

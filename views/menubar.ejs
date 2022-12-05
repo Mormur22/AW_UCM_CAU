@@ -1,11 +1,11 @@
             <div id="menubar" class="menu_bar">
                 <% if(isTechnician) { %>
-                <div id="opcion1" class="menu_item" onclick="option(1)" showin="background">Avisos entrantes</div>
+                <div id="opcion1" class="menu_item" onclick="option(1)" data-showin="background">Avisos entrantes</div>
                 <% } %>
-                <div id="opcion2" class="menu_item" onclick="option(2)" showin="background">Mis avisos</div>
-                <div id="opcion3" class="menu_item" onclick="option(3)" showin="background">Historico de avisos</div>
+                <div id="opcion2" class="menu_item" onclick="option(2)" data-showin="background">Mis avisos</div>
+                <div id="opcion3" class="menu_item" onclick="option(3)" data-showin="background">Historico de avisos</div>
                 <% if(isTechnician) { %>
-                <div id="opcion4" class="menu_item" onclick="option(4)" showin="background">Gestión de usuarios</div>
+                <div id="opcion4" class="menu_item" onclick="option(4)" data-showin="background">Gestión de usuarios</div>
                 <% } %>
             </div>
             <div id="data">

@@ -19,7 +19,7 @@
     padding-left: 30px;
 }
 
-.menu_item[showin="foreground"] {
+.menu_item[data-showin="foreground"] {
     background-color:azure;
     color: darkblue;
 }
@@ -30,3 +30,6 @@
     background-color: yellow;
 }
 
+#data{
+    margin-top: 30px;
+}

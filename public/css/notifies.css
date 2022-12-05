@@ -1,0 +1,14 @@
+#con_inc_not {
+    margin-top: 30px;
+}
+
+.ticon {
+    margin-left: 5px;
+    margin-right: 5px;
+    max-height: 35px;
+    max-width: 35px;
+}
+
+.ficon:hover {
+    cursor: pointer;
+}

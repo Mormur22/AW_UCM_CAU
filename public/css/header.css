@@ -125,4 +125,5 @@
     color: white;
     background-color: darkblue;
     max-width: 80px;
+    box-sizing: unset; /* Para corregir el efecto de la regla * en el archivo '_reboot.scss' (linea 251) de BootStrap. */
 }

@@ -1,0 +1,41 @@
+﻿            <div id="con_inc_not" class="container">
+                <div class="table-responsive">
+                    <table id="tab_inc_not" class="table table-bordered table-hover">
+                        <caption>Lista de incidencias</caption>
+                        <thead class="thead-dark table-dark">
+                            <tr id="avi0" class="cab_avi">
+                                <th class="text-center align-middle" scope="col">Tipo</th>
+                                <th class="text-center align-middle" scope="col">Fecha</th>
+                                <th class="text-center align-middle" scope="col">Texto</th>
+                                <th class="text-center align-middle" scope="col">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% rows.forEach( function(row) { %>
+                            <tr id="<%= 'avi' + row.id %>" class="row_avi <%= row.htmlClass %>" data-id="<%= row.id %>">
+                                <td class="text-center align-middle"><img class="ticon" src="<%= row.imageURL %>" /></td>
+                                <td class="text-center align-middle"><%= row.date %></td>
+                                <td class="align-middle"><%= row.resume %></td>
+                                <td class="text-center align-middle">
+                                    <% if(row.actions[0] === 1) { %>
+                                    <img class="ticon ficon" src="img\icons\ojo.png" onclick=<% __append('"') %>viewNotify(<%= row.id %>)<% __append('"') %> />
+                                    <% } else if(row.actions[0] === 0) { %>
+                                    <img class="ticon" src="img\icons\ojo-gris.png" />
+                                    <% } %>
+                                    <% if(row.actions[1] === 1) { %>
+                                    <img class="ticon ficon" src="img\icons\tecnico.png" onclick=<% __append('"') %>assignNotify(<%= row.id %>)<% __append('"') %> />
+                                    <% } else if(row.actions[1] === 0) { %>
+                                    <img class="ticon" src="img\icons\tecnico-gris.png" />
+                                    <% } %>
+                                    <% if(row.actions[2] === 1) { %>
+                                    <img class="ticon ficon" src="img\icons\papelera.png" onclick=<% __append('"') %>cancelNotify(<%= row.id %>)<% __append('"') %> />
+                                    <% } else if(row.actions[2] === 0) { %>
+                                    <img class="ticon" src="img\icons\papelera-gris.png" />
+                                    <% } %>
+                                </td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>

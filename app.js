@@ -4,33 +4,22 @@
 
 const path = require("path");  // core module
 const express = require("express");  // package module (npm install express --save)
-const mysql = require("mysql");  // Package Module (npm install mysql --save)
-const dbConfig = require("./config.js");  // File Module
-const DAO = require("./DAO.js");  // File Module
+const mysql = require("mysql");  // Package module (npm install mysql --save)
+const dbConfig = require("./config.js");  // File module
+const DAO = require("./DAO.js");  // File module
+const Util = require("./util.js"); // File Module
+const Hardcode = require("./hardcode.js"); // File Module
 
-// Ejemplo de objeto devuelto por la BD al consultar la tabla técnico
-const tecnico = {
-    idTec: 1,
-    email: "aortiz@ucm.es",
-    password: "letmein",
-    nombre: "Alexander Ortiz",
-    perfil: "pas",
-    imagen: "aortiz.jpg",
-    desactivado: 0,
-    numEmp: "4678-dfs"
-};
 
-// Ejemplo de objeto con los datos que nos interesan del usuario que utiliza la aplicación (ya sea tecnico u usuario normal)
-// Estos datos deben estar presentes en la sesion una vez que el usuario ha hecho login
-const user_data = {
-    id: tecnico.idTec,
-    name: tecnico.nombre,
-    profile: tecnico.perfil,
-    imageURL: tecnico.imagen == undefined || tecnico.imagen == "null" ? "\\img\\avatars\\default.jpg" : "\\img\\avatars\\" + tecnico.imagen,
-    isTechnician: true
-}
-// Tengase en cuenta que las consultas devuelven "null" como texto.
-// De todas formas, primera condicion devuelve 'true' para 'null' al estar hecha intencionadamente con == en vez de ===
+// Crear un objeto Util
+const util = new Util();
+
+// Crear un objeto Hardcode
+const hardcode = new Hardcode();
+
+const user_data = hardcode.tecnico1_session();
+const avisos_BD = hardcode.avisos_DB();
+const notifies_data = hardcode.avisos_HTML();
 
 // Creación de la aplicación express
 const app = express();
@@ -44,7 +33,7 @@ app.set("views",path.join(__dirname,"views"));
 // Crear el pool de conexiones
 const pool = mysql.createPool(dbConfig.mysqlConfig);
 
-// Crear el objeto DAO
+// Crear un objeto DAO
 let dao = new DAO(pool);
 
 app.get("/", function(request, response) {
@@ -58,6 +47,11 @@ app.get("/index.html", function(request, response) {
 app.get("/main.html", function(request, response) {
     response.status(200);
     response.render("main", { userData: user_data });
+});
+
+app.get("/tables/notifies", function(request, response) {
+    response.status(200);
+    response.render("notifies", { rows: avisos_BD.map( a => util.toTechnicianHtmlNotify(a, user_data.idTec) ) });
 });
 
 // Uso del middleware Static para servir todos los ficheros estáticos (.html, .css, .jpg, png, ...) de la carpeta public y sus subdirectorios

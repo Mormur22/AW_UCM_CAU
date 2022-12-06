@@ -1,7 +1,6 @@
 /* APLICACIONES WEB. Práctica obligatoria: UCM-CAU - El Centro de Atencion a Usuarios. Grupo 33: Daniel Compán López de Lacalle y Alejandro Moreno Murillo */
 'use strict'
 
-const path = require("path");// modulo para manejar rutas
 // watch front-end changes
 const livereload = require("livereload");
 const connectLivereload = require("connect-livereload");
@@ -29,6 +28,7 @@ const daoTec = new DAOTec(pool);
 const { check, validationResult } = require("express-validator"); // https://www.youtube.com/watch?v=hBETsBY3Hlg
 
 //Configuracion de las vistas y usos
+const path = require("path");  // core module
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(__dirname + '/public'));
@@ -36,11 +36,6 @@ app.use(connectLivereload());
 app.use(bodyParser.urlencoded({ extended:true}));
 app.use(express.json());
 
-const path = require("path");  // core module
-const express = require("express");  // package module (npm install express --save)
-const mysql = require("mysql");  // Package module (npm install mysql --save)
-const dbConfig = require("./config.js");  // File module
-const DAO = require("./DAO.js");  // File module
 const Util = require("./util.js"); // File Module
 const Hardcode = require("./hardcode.js"); // File Module
 
@@ -56,7 +51,7 @@ const avisos_BD = hardcode.avisos_DB();
 const notifies_data = hardcode.avisos_HTML();
 
 // Creación de la aplicación express
-const app = express();
+
 
 
 
@@ -182,7 +177,7 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
 
     });
     console.log("Usuario logeado: ", request.session.userName);
-    response.render("login", {  
+    response.render("main", {  
         title: "Página de inicio de sesión",
         msgRegistro: false});
    
@@ -328,7 +323,7 @@ app.listen(3000, function(err){
 dao.testDB();
 // Definición de las funciones callback
 // ...
-=======
+
 // Definición de las funciones callback
 // ...
 

@@ -1,0 +1,13 @@
+            <form id="searchbar">
+                <div id="text_op" class="formrow">
+                    <label id="lab_search" class="formitem" for="search_text">Texto:</label>
+                    <input id="txt_search" class="formitem" type="text" />
+                    <button id="btn_search" class="formitem" onclick="search()">Buscar</button>
+                </div>
+                <% if(isTechnician) { %>
+                <div id="user_op" class="formrow">
+                    <input id="chk_users" class="formitem" type="checkbox" />
+                    <label id="lab_user" class="formitem" for="hk_users">Usuarios</label>
+                </div>
+                <% } %>
+            </form>

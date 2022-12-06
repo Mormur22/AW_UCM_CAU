@@ -18,7 +18,7 @@ class DAO {
      * Método que comprueba la conexión a la base de datos.
      * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, Boolean result).
      * result = 'true' si ha podido conectarse. 'false' si no.
-    */
+     */
     testConnection(callback) {
         this.pool.getConnection(
             function(err, connection) {
@@ -125,7 +125,88 @@ class DAO {
         );
     }
 
-   
+
+    /**
+     * Devuelve los avisos abiertos.
+     * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, [Aviso , ... , Aviso] result).
+     */
+    getOpenNotifies(callback) {
+        this.pool.getConnection(
+            function(err, connection) {
+                if(err) {
+                    callback(new Error("Error de conexión a la base de datos"), false);
+                }
+                else {
+                    //connection.query("SELECT idAvi, tipo, categoria, subcategoria, date_format(fecha,'%d/%m/%Y') AS fecha, observaciones, comentario, cerrado, cancelado, idUsu, idTec FROM UCM_AW_CAU_AVI_Avisos WHERE cerrado = 0 AND cancelado = 0;", [],
+                    connection.query("SELECT * FROM UCM_AW_CAU_AVI_Avisos AVI WHERE cerrado = 0 AND cancelado = 0;", [],
+                        function(err, rows) {
+                            connection.release();
+                            if(err) callback(new Error("No se ha podido recuperar datos de la tabla UCM_AW_CAU_EMP_Empleados"), null);
+                            else{
+                                callback(null, rows);
+                            }
+                        }
+                    );
+                }
+            }
+        );
+    }
+
+    /**
+     * Devuelve los avisos abiertos de un tecnico.
+     * @param myIdTec El id del técnico que está usando la applicaión.
+     * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, [Aviso , ... , Aviso] result).
+     */
+    getMyOpenNotifies(myIdTec, callback) {
+        this.pool.getConnection(
+            function(err, connection) {
+                if(err) {
+                    callback(new Error("Error de conexión a la base de datos"), false);
+                }
+                else {
+                    //connection.query("SELECT idAvi, tipo, categoria, subcategoria, date_format(fecha,'%d/%m/%Y') AS fecha, observaciones, comentario, cerrado, cancelado, idUsu, idTec FROM UCM_AW_CAU_AVI_Avisos WHERE cerrado = 0 AND cancelado = 1 AND idTec = ?;", [myIdTec],
+                    connection.query("SELECT * FROM UCM_AW_CAU_AVI_Avisos WHERE cerrado = 0 AND cancelado = 0 AND idTec = ?;", [myIdTec],
+                        function(err, rows) {
+                            connection.release();
+                            if(err) callback(new Error("No se ha podido recuperar datos de la tabla UCM_AW_CAU_EMP_Empleados"), null);
+                            else{
+                                callback(null, rows);
+                            }
+                        }
+                    );
+                }
+            }
+        );
+    }
+
+    /**
+     * Devuelve los avisos cerrados de un tecnico.
+     * @param myIdTec El id del técnico que está usando la applicaión.
+     * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, [Aviso , ... , Aviso] result).
+     */
+    getMyClosedNotifies(myIdTec, callback) {
+        this.pool.getConnection(
+            function(err, connection) {
+                if(err) {
+                    callback(new Error("Error de conexión a la base de datos"), false);
+                }
+                else {
+                    //connection.query("SELECT idAvi, tipo, categoria, subcategoria, date_format(fecha,'%d/%m/%Y') AS fecha, observaciones, comentario, cerrado, cancelado, idUsu, idTec FROM UCM_AW_CAU_AVI_Avisos WHERE cerrado = 1 AND cancelado = 1 AND idTec = ?;", [myIdTec],
+                    connection.query("SELECT * FROM UCM_AW_CAU_AVI_Avisos WHERE (cerrado = 1 OR cancelado = 0) AND idTec = ?;", [myIdTec],
+                        function(err, rows) {
+                            connection.release();
+                            if(err) callback(new Error("No se ha podido recuperar datos de la tabla UCM_AW_CAU_EMP_Empleados"), null);
+                            else{
+                                callback(null, rows);
+                            }
+                        }
+                    );
+                }
+            }
+        );
+    }
+
+
 }
 
 

@@ -18,6 +18,7 @@ const DAOUsu = require("./DAOUsuario");
 const DAOTec = require("./DAOTecnico");
 const bodyParser = require("body-parser");
 
+
 const PORT = process.env.PORT || config.puerto;
 const pool = mysql.createPool(config.mysqlConfig);
 // Crear una instancia de DAOTasks
@@ -35,6 +36,29 @@ app.use(connectLivereload());
 app.use(bodyParser.urlencoded({ extended:true}));
 app.use(express.json());
 
+const path = require("path");  // core module
+const express = require("express");  // package module (npm install express --save)
+const mysql = require("mysql");  // Package module (npm install mysql --save)
+const dbConfig = require("./config.js");  // File module
+const DAO = require("./DAO.js");  // File module
+const Util = require("./util.js"); // File Module
+const Hardcode = require("./hardcode.js"); // File Module
+
+
+// Crear un objeto Util
+const util = new Util();
+
+// Crear un objeto Hardcode
+const hardcode = new Hardcode();
+
+const user_data = hardcode.tecnico_session(1);
+const avisos_BD = hardcode.avisos_DB();
+const notifies_data = hardcode.avisos_HTML();
+
+// Creación de la aplicación express
+const app = express();
+
+
 
 //Ubicacion Archivos estaticos
 app.use(express.static(path.join(__dirname, "public")));
@@ -44,7 +68,6 @@ liveReloadServer.watch(path.join(__dirname, "public"), path.join(__dirname, "vie
 app.use(express.json());//Devuelve middleware que solo analiza json y solo mira las solicitudes donde el encabezado Content-Type coincide con la opción de tipo.
 app.use(express.urlencoded({extended: true}));//Devuelve middleware que solo analiza cuerpos codificados en URL y solo mira las solicitudes donde el encabezado Content-Type coincide con la opción de tipo
 //Se indica a express donde se encuentan las vistas
-
 
 //---------------------------------Sesion---------------------------------
 const session = require("express-session");
@@ -177,6 +200,7 @@ app.get("/signup", (request, response) => {
     
 });
 
+
 app.post("/registro", multerFactory.single('foto'),(request, response) => {
 
     console.log(request.body);
@@ -258,6 +282,35 @@ app.post("/registro", multerFactory.single('foto'),(request, response) => {
 
  });
 
+app.get("/main.html", function(request, response) {
+    response.status(200);
+    response.render("main", { userData: user_data });
+});
+
+app.get("/tables/notifies", function(request, response) {
+    dao.getOpenNotifies(
+        function(err, result) {
+            const rows = result.map( a => util.toTechnicianHtmlNotify(a, user_data.id) );
+            response.render("notifies", { rows: rows });
+        } );
+});
+
+app.get("/tables/mynotifies", function(request, response) {
+    dao.getMyOpenNotifies(user_data.id,
+        function(err, result) {
+            const rows = result.map( a => util.toTechnicianHtmlNotify(a, user_data.id) );
+            response.render("notifies", { rows: rows });
+        } );
+});
+
+app.get("/tables/historic", function(request, response) {
+    dao.getMyClosedNotifies(user_data.id,
+        function(err, result) {
+            const rows = result.map( a => util.toTechnicianHtmlNotify(a, user_data.id) );
+            response.render("notifies", { rows: rows });
+        } );
+});
+
 
 // Uso del middleware Static para servir todos los ficheros estáticos (.html, .css, .jpg, png, ...) de la carpeta public y sus subdirectorios
 app.use(express.static(path.join(__dirname, "public")));
@@ -275,3 +328,7 @@ app.listen(3000, function(err){
 dao.testDB();
 // Definición de las funciones callback
 // ...
+=======
+// Definición de las funciones callback
+// ...
+

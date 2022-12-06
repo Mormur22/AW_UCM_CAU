@@ -1,0 +1,129 @@
+
+#cabecera {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin: 10px 10px;
+    border-style: solid;
+    border-color: darkblue;
+    border-radius: 10px;
+    position: sticky;
+    padding: 5px;
+    background-color: rgba(119,136,153,0.1);
+}
+
+#logo{
+    height: 100px;
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+#logo > img {
+    height: 100px;
+    width: 100px;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 50%;
+}
+
+#title {
+    height: 100%;
+    margin-left: 2px;
+    margin-right: 2px;
+    display: inline-block;
+    flex: 1;
+    vertical-align: middle;
+}
+
+#title_text {
+    font-family: Arial;
+    font-size: 4vw;
+    text-align: center;
+    color: white;
+    text-shadow: 2px 0 red, -2px 0 red, 0 2px red, 0 -2px red, 1px 1px red, -1px -1px red, 1px -1px red, -1px 1px red;
+}
+@media screen and (min-width: 1050px) {
+    #title_text {
+       font-size: 36pt;
+    }
+}
+
+#subtitle_text {
+    flex-wrap: nowrap;
+    font-family: 'Lucida Sans';
+    font-size: 3vw;
+    text-align: center;
+    color: red;
+}
+@media screen and (min-width: 1050px) {
+    #subtitle_text {
+       font-size: 30pt;
+    }
+}
+
+#session {
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+    white-space: nowrap;
+    margin: 5px;
+}
+
+#user_avatar{
+    height: 100px;
+    display: inline-block;
+    text-align: right;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+#user_avatar > img {
+    height: 100px;
+    width: 100px;
+    border-style: solid;
+    border-width: 0px;
+    border-radius: 50%;
+}
+
+#session_menu {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#user_name {
+    display: block;
+    padding: 5px 10px 5px 10px;
+    color: steelblue;
+    font-family: monospace;
+    font-size: large;
+    font-weight: lighter;
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#logout {
+    height: 10px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#logout_btn {
+    display: block;
+    margin: 0 auto;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 5px;
+    border-color: darkblue;
+    padding: 8px 20px 8px 20px;
+    font-family: calibri;
+    font-size: 12pt;
+    text-decoration: none;
+    color: white;
+    background-color: darkblue;
+    max-width: 80px;
+    box-sizing: unset; /* Para corregir el efecto de la regla * en el archivo '_reboot.scss' (linea 251) de BootStrap. */
+}

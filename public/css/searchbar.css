@@ -1,0 +1,85 @@
+#searchbar{
+    margin-top: 30px;
+}
+
+.formrow {
+    margin-left: 20px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.formitem{
+    margin: 0 5px;
+    display: inline-block;
+}
+
+label {
+    font-family: Tahoma;
+    font-size: 18pt;
+    letter-spacing: 2px;
+    color: #2A2B36;
+}
+
+input[type=text] {
+    margin-right: 20px;
+    border-width: 2px;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-family: Calibri;
+    font-size: 16pt;
+    text-align: center;
+    min-width: 100px;
+    width: 300px;
+    max-width: 500px;
+}
+
+input[type=text]:hover{
+    border-color: crimson;
+    background-color: yellow;
+}
+
+input[type=text]:focus {
+    border-color: red;
+    background-color:azure;
+    color: darkblue;
+    font-weight: bold;
+}
+
+button {
+    border-radius: 5px;
+    padding: 8px 40px;
+    font-family: Tahoma;
+    font-size: 12pt;
+}
+
+button:hover {
+    border-color: crimson;
+    color: crimson;
+    background-color:yellow;
+}
+
+#user_op {
+    margin-left: 40px;
+}
+
+input[type=checkbox] {
+    -ms-transform: scale(1.5); /* IE */
+    -moz-transform: scale(1.5); /* FF */
+    -webkit-transform: scale(1.5); /* Safari and Chrome */
+    -o-transform: scale(1.5); /* Opera */
+    transform: scale(1.5);
+    padding: 10px;
+}
+
+#lab_user {
+    margin-left: 10px;
+}
+
+input[type=checkbox]:hover + label {
+    color: crimson;
+    background-color:yellow;
+}
+
+diva {
+    border: solid 1px black;
+}

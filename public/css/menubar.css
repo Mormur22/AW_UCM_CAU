@@ -1,0 +1,39 @@
+#menubar {
+    margin-top: 30px;
+}
+
+.menu_bar {
+    display: flex;
+    flex-direction: row;
+    margin-top: 15px;
+    width: 800px;
+}
+
+.menu_item {
+    flex-grow: 1;
+    border: solid 1px lightgrey;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color: lightgrey;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 30px;
+}
+
+.menu_item[data-showin="foreground"] {
+    background-color:azure;
+    color: darkblue;
+}
+
+.menu_item:hover {
+    cursor: pointer;
+    border: solid 1px crimson;
+    background-color: yellow;
+}
+
+#data {
+    margin-top: 30px;
+}
+
+#img_loading {
+    height: 150px;
+}

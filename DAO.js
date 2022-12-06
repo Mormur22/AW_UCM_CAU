@@ -125,6 +125,7 @@ class DAO {
         );
     }
 
+
     /**
      * Devuelve los avisos abiertos.
      * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, [Aviso , ... , Aviso] result).
@@ -205,6 +206,8 @@ class DAO {
         );
     }
 
+
 }
+
 
 module.exports = DAO;

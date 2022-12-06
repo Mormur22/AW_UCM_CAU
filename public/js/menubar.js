@@ -18,19 +18,61 @@ function option(op) {
 
 function loadData(op) {
     switch(op) {
-        case 1: loadIncomingNotifies(); 
+        case 1:
+            loadIncomingNotifies();
+            break;
+        case 2:
+            loadMyOpenNotifies();
+            break;
+        case 3:
+            loadMyHistoricNotifies();
+            break;
     }
 }
 
 function  loadIncomingNotifies() {
     $( document ).ready(function() {
         const dataContainer = $("#data");
-        dataContainer.html("Cargando...");
+        dataContainer.html("<div class='center'><img id='img_loading' src='img\\icons\\loading.gif' /></ div>");
         $.ajax({
             url: "/tables/notifies",
             dataType: "html"
         }).done(function(data) {
+            dataContainer.empty();
+            dataContainer.html(data);
+        }).fail(function(jqXHR, textStatus) {
             dataContainer.empty()
+            dataContainer.html("&nbsp;&nbsp;&nbsp;Error al intentar recuperar los datos.");
+        });;
+    });
+}
+
+function  loadMyOpenNotifies() {
+    $( document ).ready(function() {
+        const dataContainer = $("#data");
+        dataContainer.html("<div class='center'><img id='img_loading' src='img\\icons\\loading.gif' /></ div>");
+        $.ajax({
+            url: "/tables/mynotifies",
+            dataType: "html"
+        }).done(function(data) {
+            dataContainer.empty();
+            dataContainer.html(data);
+        }).fail(function(jqXHR, textStatus) {
+            dataContainer.empty()
+            dataContainer.html("&nbsp;&nbsp;&nbsp;Error al intentar recuperar los datos.");
+        });;
+    });
+}
+
+function  loadMyHistoricNotifies() {
+    $( document ).ready(function() {
+        const dataContainer = $("#data");
+        dataContainer.html("<div class='center'><img id='img_loading' src='img\\icons\\loading.gif' /></ div>");
+        $.ajax({
+            url: "/tables/historic",
+            dataType: "html"
+        }).done(function(data) {
+            dataContainer.empty();
             dataContainer.html(data);
         }).fail(function(jqXHR, textStatus) {
             dataContainer.empty()

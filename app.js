@@ -17,7 +17,7 @@ const util = new Util();
 // Crear un objeto Hardcode
 const hardcode = new Hardcode();
 
-const user_data = hardcode.tecnico1_session();
+const user_data = hardcode.tecnico_session(1);
 const avisos_BD = hardcode.avisos_DB();
 const notifies_data = hardcode.avisos_HTML();
 
@@ -50,8 +50,27 @@ app.get("/main.html", function(request, response) {
 });
 
 app.get("/tables/notifies", function(request, response) {
-    response.status(200);
-    response.render("notifies", { rows: avisos_BD.map( a => util.toTechnicianHtmlNotify(a, user_data.idTec) ) });
+    dao.getOpenNotifies(
+        function(err, result) {
+            const rows = result.map( a => util.toTechnicianHtmlNotify(a, user_data.id) );
+            response.render("notifies", { rows: rows });
+        } );
+});
+
+app.get("/tables/mynotifies", function(request, response) {
+    dao.getMyOpenNotifies(user_data.id,
+        function(err, result) {
+            const rows = result.map( a => util.toTechnicianHtmlNotify(a, user_data.id) );
+            response.render("notifies", { rows: rows });
+        } );
+});
+
+app.get("/tables/historic", function(request, response) {
+    dao.getMyClosedNotifies(user_data.id,
+        function(err, result) {
+            const rows = result.map( a => util.toTechnicianHtmlNotify(a, user_data.id) );
+            response.render("notifies", { rows: rows });
+        } );
 });
 
 // Uso del middleware Static para servir todos los ficheros estáticos (.html, .css, .jpg, png, ...) de la carpeta public y sus subdirectorios

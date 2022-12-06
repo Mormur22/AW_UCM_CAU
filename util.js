@@ -50,7 +50,8 @@ class Util {
      */
     toSpanishDate(fecha) {
         if(fecha === undefined || fecha === null || fecha === "null" || typeof(fecha) !== "string") return("??/??/????");
-        const p=fecha.split("-");
+        if(fecha.length > 10) fecha = fecha.substring(0,10);
+        const p=fecha.substring(0,10).split("-");
         if(p.length > 3) return("??/??/????");
         let espfecha;
         if(p.length > 0 && p[0].length === 4 && Number.isInteger(Number(p[0])) ) espfecha = p[0];
@@ -115,7 +116,7 @@ class Util {
                 return([-1,-1,-1])
         }
     }
-
+    
     /**
      * Devuelve las acciones que un usario normal puede realizar con sus avisos (solo verlos).
      * @returns Devuelve un array con las posibles acciones que se pueden realizar sobre un aviso propio.
@@ -138,7 +139,7 @@ class Util {
             id: aviso.idAvi,
             htmlClass: this.getHtmLClass(aviso.tipo),
             imageURL: this.getImageURL(aviso.tipo),
-            date: this.toSpanishDate(aviso.fecha),
+            date: aviso.fecha.toLocaleDateString(),
             resume: this.getResume(aviso.observaciones),
             state: estado,
             actions: this.getTechnicianActions(estado, aviso.idTec, myIdTec)

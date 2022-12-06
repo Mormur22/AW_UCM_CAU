@@ -7,21 +7,90 @@ class Hardcode {
 
     /**
      * Hard-code.
-     * @returns Devuelve los datos del tecnico 1 (idTec) tal y como estarían en la BD.
+     * @param idTec Id del técnico.
+     * @returns Devuelve los datos del técnico introducido por parámtro (idTec) tal y como se recuperarian en la BD.
      */
-    tecnico1_BD() {
-        return(
-            {
-                idTec: 1,
-                email: "aortiz@ucm.es",
-                password: "letmein",
-                nombre: "Alexander Ortiz",
-                perfil: "pas",
-                imagen: "aortiz.jpg",
-                desactivado: 0,
-                numEmp: "4678-dfs"
-            }
-        );
+    tecnico_BD(idTec) {
+        switch(idTec) {
+            case 1:
+                return(
+                    {
+                        idTec: 1,
+                        email: "aortiz@ucm.es",
+                        password: "letmein",
+                        nombre: "Alexander Ortiz",
+                        perfil: "pas",
+                        imagen: "aortiz.jpg",
+                        desactivado: 0,
+                        numEmp: "4678-dfs"
+                    }
+                );
+            case 2:
+                return(
+                    {
+                        idTec: 2,
+                        email: "csolis@ucm.es",
+                        password: "letmein",
+                        nombre: "Carolina Solis",
+                        perfil: "pas",
+                        imagen: "csolis.jpg",
+                        desactivado: 0,
+                        numEmp: "5102-gev"
+                    }
+                );
+            case 3:
+                return(
+                    {
+                        idTec: 3,
+                        email: "hsmith@ucm.es",
+                        password: "letmein",
+                        nombre: "Harold Smith",
+                        perfil: "pas",
+                        imagen: "hsmith.jpg",
+                        desactivado: 0,
+                        numEmp: "6884-hnx"
+                    }
+                );
+            case 4:
+                return(
+                    {
+                        idTec: 4,
+                        email: "pjuarez@ucm.es",
+                        password: "letmein",
+                        nombre: "Pablo Juarez",
+                        perfil: "pas",
+                        imagen: "pjuarez.jpg",
+                        desactivado: 0,
+                        numEmp: "7039-con"
+                    }
+                );
+            case 5:
+                return(
+                    {
+                        idTec: 5,
+                        email: "lmoreno@ucm.es",
+                        password: "letmein",
+                        nombre: "Lucas Moreno",
+                        perfil: "pas",
+                        imagen: "lmoreno.jpg",
+                        desactivado: 0,
+                        numEmp: "8959-azy"
+                    }
+                );
+            default:
+                return(
+                    {
+                        idTec: 0,
+                        email: "undefined",
+                        password: "undefined",
+                        nombre: "undefined",
+                        perfil: "undefined",
+                        imagen: "default.jpg",
+                        desactivado: 0,
+                        numEmp: "undefined"
+                    }
+                );
+        }
     }
 
     /**
@@ -31,18 +100,72 @@ class Hardcode {
      * profile = Campo 'perfil'.
      * imageURL = tecnico.imagen == undefined || tecnico.imagen == "null" ? "\\img\\avatars\\default.jpg" : "\\img\\avatars\\" + tecnico.imagen
      * isTechnician = true .
-     * @returns Devuelve los datos de sesión que tendría el técnico 1 (idTec) al hacer login.
+     * @param idTec Id del técnico.
+     * @returns Devuelve los datos de sesión que tendría el técnico introducido por parámtro (idTec) al hacer login.
      */
-    tecnico1_session() {
-        return(
-            {
-                id: 1,
-                name: "Alexander Ortiz",
-                profile: "pas",
-                imageURL: "\\img\\avatars\\aortiz.jpg",
-                isTechnician: true
-            }
-        );
+    tecnico_session(idTec) {
+        switch(idTec) {
+            case 1:
+                return(
+                    {
+                        id: 1,
+                        name: "Alexander Ortiz",
+                        profile: "pas",
+                        imageURL: "\\img\\avatars\\aortiz.jpg",
+                        isTechnician: true
+                    }
+                );
+            case 2:
+                return(
+                    {
+                        id: 2,
+                        name: "Carolina Solis",
+                        profile: "pas",
+                        imageURL: "\\img\\avatars\\csolis.jpg",
+                        isTechnician: true
+                    }
+                );
+            case 3:
+                return(
+                    {
+                        id: 3,
+                        name: "Harold Smith",
+                        profile: "pas",
+                        imageURL: "\\img\\avatars\\hsmith.jpg",
+                        isTechnician: true
+                    }
+                );
+            case 4:
+                return(
+                    {
+                        id: 4,
+                        name: "Pablo Juarez",
+                        profile: "pas",
+                        imageURL: "\\img\\avatars\\pjuarez.jpg",
+                        isTechnician: true
+                    }
+                );
+            case 5:
+                return(
+                    {
+                        id: 5,
+                        name: "Lucas Moreno",
+                        profile: "pas",
+                        imageURL: "\\img\\avatars\\lmoreno.jpg",
+                        isTechnician: true
+                    }
+                );
+            default:
+                return(
+                    {
+                        id: 0,
+                        name: "undefined",
+                        profile: "undefined",
+                        imageURL: "\\img\\avatars\\default.jpg",
+                        isTechnician: true
+                    }
+                );
+        }
     }
 
     /**

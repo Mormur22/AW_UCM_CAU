@@ -1,0 +1,28 @@
+            <div id="con_tab_usu" class="container">
+                <div class="table-responsive">
+                    <table id="tab_usu" class="table table-bordered table-hover">
+                        <caption>Lista de usuarios</caption>
+                        <thead class="thead-dark table-dark">
+                            <tr id="usu0" class="cab_usu">
+                                <th class="text-center align-middle" scope="col">Fecha</th>
+                                <th class="text-center align-middle" scope="col">Nombre</th>
+                                <th class="text-center align-middle" scope="col">Rol</th>
+                                <th class="text-center align-middle" scope="col">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if(Array.isArray(rows) && rows.length > 0 ) rows.forEach( function(row) { %>
+                            <tr id="<%= 'usu' + row.i %>" class="row_usu <%= 'usu_' + row.type %> table-info" data-id="<%= row.id %>" data-type="<%= row.type %>" >
+                                <td class="text-center align-middle"><%= row.date %></td>
+                                <td class="text-center align-middle"><%= row.name %></td>
+                                <td class="align-middle"><%= row.role.toUpperCase() %></td>
+                                <td class="text-center align-middle">
+                                    <img class="ticon ficon" src="img\icons\ojo.png" onclick=<% __append('"') %><%= row.viewFunction %><% __append('(') %><%= row.id %><% __append(')"') %> />
+                                    <img class="ticon ficon" src="img\icons\papelera.png" onclick=<% __append('"') %><%= row.cancelFunction %><% __append('(') %><%= row.id %><% __append(')"') %> />
+                                </td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>

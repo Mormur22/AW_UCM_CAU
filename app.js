@@ -331,6 +331,13 @@ app.get("/tables/historic", function(request, response) {
         } );
 });
 
+app.get("/tables/users", function(request, response) {
+    dao.getAllUsers(
+        function(err, result) {
+            const rows = result.map( u => util.toHtmlUser(u) );
+            response.render("users", { rows: rows });
+        } );
+});
 
 // Uso del middleware Static para servir todos los ficheros estáticos (.html, .css, .jpg, png, ...) de la carpeta public y sus subdirectorios
 app.use(express.static(path.join(__dirname, "public")));
@@ -344,11 +351,4 @@ app.listen(3000, function(err){
     }
 });
 
-
 dao.testDB();
-// Definición de las funciones callback
-// ...
-
-// Definición de las funciones callback
-// ...
-

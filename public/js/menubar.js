@@ -27,6 +27,9 @@ function loadData(op) {
         case 3:
             loadMyHistoricNotifies();
             break;
+        case 4:
+            loadAllUsers();
+            break;
     }
 }
 
@@ -70,6 +73,23 @@ function  loadMyHistoricNotifies() {
         dataContainer.html("<div class='center'><img id='img_loading' src='img\\icons\\loading.gif' /></ div>");
         $.ajax({
             url: "/tables/historic",
+            dataType: "html"
+        }).done(function(data) {
+            dataContainer.empty();
+            dataContainer.html(data);
+        }).fail(function(jqXHR, textStatus) {
+            dataContainer.empty()
+            dataContainer.html("&nbsp;&nbsp;&nbsp;Error al intentar recuperar los datos.");
+        });;
+    });
+}
+
+function  loadAllUsers() {
+    $( document ).ready(function() {
+        const dataContainer = $("#data");
+        dataContainer.html("<div class='center'><img id='img_loading' src='img\\icons\\loading.gif' /></ div>");
+        $.ajax({
+            url: "/tables/users",
             dataType: "html"
         }).done(function(data) {
             dataContainer.empty();

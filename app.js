@@ -68,11 +68,11 @@ app.use(express.urlencoded({extended: true}));//Devuelve middleware que solo ana
 const session = require("express-session");
 const mysqlSession = require("express-mysql-session");
 const MySQLStore = mysqlSession(session);
-const sessionStore = new MySQLStore(config.databaseConfig);
+const sessionStore = new MySQLStore(config.mysqlConfig);
 const middlewareSession = session({
     saveUninitialized: false,
     secret: "foobar34",
-    resave: false,
+    resave: true,
     store: sessionStore
 });
 app.use(middlewareSession);
@@ -111,7 +111,7 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
             //es tecnico
             if(loginTecExito)
             {   
-                request.session.id_=loginTecExito.idUsu;
+                request.session.id_=loginTecExito.idTec;
                 request.session.userName = loginTecExito.nombre;
                 request.session.profile = loginTecExito.perfil;
                 request.session.isTechnician = true;
@@ -119,6 +119,7 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
                 response.locals.id_=request.session.id_;
                 response.locals.mailID = request.session.mailID;
                 response.locals.userName = request.session.userName;
+                response.redirect("./main.html");
             }
 
             //no es tecnico
@@ -132,14 +133,16 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
                         //es 
                         if(loginUsuExito)
                         {   
-                            request.session.id_=loginTecExito.idUsu;
-                            request.session.userName = loginTecExito.nombre;
-                            request.session.profile = loginTecExito.perfil;
+                            request.session.id_=loginUsuExito.idUsu;
+                            request.session.userName = loginUsuExito.nombre;
+                            request.session.profile = loginUsuExito.perfil;
                             request.session.isTechnician = false;
             
                             response.locals.id_=request.session.id_;
                             response.locals.mailID = request.session.mailID;
                             response.locals.userName = request.session.userName;
+                            response.redirect("./main.html");
+                           
                         }
 
                         //el correo con el usuario no está
@@ -166,7 +169,7 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
     });
 
     //habría que pasarle el request.session
-    response.redirect("./main.html");
+    
 
 })
 

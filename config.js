@@ -7,10 +7,11 @@ module.exports ={
         host: "localhost",
         user: "root",
         password: "",
-        database: "UCM_AW_CAU"
+        database: "UCM_AW_CAU",
     },
     port: 3306
 };
+
 
 
 

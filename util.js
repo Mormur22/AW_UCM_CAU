@@ -147,6 +147,26 @@ class Util {
         return htmlNotify;
     }
 
+    /**
+     * Devuelve la información necesaria para mostrar un usuario, ya sea técnico o usuario estándar.
+     * @param usutec Los datos comunes de un usuario estándar o un técnico más las propiedades 'isTechnician' (Boolean) e 'i' (Number).
+     * @returns Devuelve un objeto con la información necesaria para mostrar un usuario en la tabla de usuarios de la página principal de un técnico.
+     */
+    toHtmlUser(usutec) {
+        if(usutec === undefined || usutec === null || usutec === "null" || typeof(usutec) != "object" || Array.isArray(usutec) ) return {};
+        const htmlUser = {
+            i: usutec.i,
+            id: usutec.id,
+            date: "??/??/????",
+            name: usutec.nombre,
+            role: ( usutec.isTechnician ? "técnico" : "usuario" ),
+            type: ( usutec.isTechnician ? "tec" : "std" ),
+            viewFunction: ( usutec.isTechnician ? "viewTechnician" : "viewStandardUser" ),
+            cancelFunction: ( usutec.isTechnician ? "cancelTechnician" : "cancelStandardUser" )
+        }
+        return htmlUser;
+    }
+
 }
 
 module.exports = Util;

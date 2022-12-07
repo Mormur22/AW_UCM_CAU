@@ -75,7 +75,7 @@ const middlewareSession = session({
     resave: false,
     store: sessionStore
 });
-
+app.use(middlewareSession);
 
 //---------------------------------Multer----------------------------------
 
@@ -89,17 +89,6 @@ var almacen = multer.diskStorage({
   });
 
 const multerFactory = multer({ storage: almacen });
-
-
-
-
-app.use(middlewareSession);
-
-//Para ver que usuario esta logeado en el momento (Para pruebas) A eliminar en un futuro no muy lejano
-app.use(function(request, response, next) {
-    console.log("Usuario logeado: ", request.session.userName);
-    next();
-})
 
 app.get("/", (request, response) => {
     if(request.session.userName===undefined){
@@ -122,10 +111,10 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
             //es tecnico
             if(loginTecExito)
             {   
-                request.session.id_=loginTecExito.idTec;
-                request.session.mail = loginTecExito.email;
+                request.session.id_=loginTecExito.idUsu;
                 request.session.userName = loginTecExito.nombre;
-                console.log(request.session);
+                request.session.profile = loginTecExito.perfil;
+                request.session.isTechnician = true;
 
                 response.locals.id_=request.session.id_;
                 response.locals.mailID = request.session.mailID;
@@ -144,14 +133,13 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
                         if(loginUsuExito)
                         {   
                             request.session.id_=loginTecExito.idUsu;
-                            request.session.mail = loginTecExito.email;
                             request.session.userName = loginTecExito.nombre;
+                            request.session.profile = loginTecExito.perfil;
+                            request.session.isTechnician = false;
             
                             response.locals.id_=request.session.id_;
                             response.locals.mailID = request.session.mailID;
                             response.locals.userName = request.session.userName;
-
-
                         }
 
                         //el correo con el usuario no está
@@ -176,11 +164,10 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
         }
 
     });
-    console.log("Usuario logeado: ", request.session.userName);
-    response.render("main", {  
-        title: "Página de inicio de sesión",
-        msgRegistro: false});
-   
+
+    //habría que pasarle el request.session
+    response.redirect("./main.html");
+
 })
 
 app.get("/signup", (request, response) => {     
@@ -191,7 +178,6 @@ app.get("/signup", (request, response) => {
                                     errores: errors.mapped() ,
                                     msgRegistro: false});//False para usu que no existe True si ya existe 
     }
-    
     
 });
 
@@ -272,13 +258,52 @@ app.post("/registro", multerFactory.single('foto'),(request, response) => {
 
     //usuario
     else{
-
+        daoUsu.existeNombreUsuario(request.body.username,function(err, existeUsu) {
+            console.log("compruebausername")
+            if(err) {
+                response.status(500); 
+                console.log(err.message);
+            } 
+            else {
+                console.log("comprueba correo")
+                //no existe el usuario con el nombre de usuario
+                if(!existeUsu){
+                    daoUsu.existeCorreoUsuario(request.body.correo,function(err, existeCorreo) {
+                        if(err) {
+                            response.status(500); 
+                            console.log(err.message);
+                        } else {
+                            
+                            //no existe el tecnico con el nombre de correo
+                            if(!existeCorreo){   
+                                daoUsu.registroUsuario(request.body, function(err,insertId){
+                                console.log("registro")
+                                if(err) {
+                                    response.status(500); 
+                                    console.log(err.message);
+                                }
+                                else{
+                                    response.status(200);
+                                    response.redirect("/signup");
+                                }
+                                });
+                            }
+                        }
+                    });
+                }
+                else{
+                    response.status(500); 
+                    console.log(err.message);
+                }
+            }
+        });
     }
 
  });
 
 app.get("/main.html", function(request, response) {
     response.status(200);
+    console.log(request.session);
     response.render("main", { userData: user_data });
 });
 

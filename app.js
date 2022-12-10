@@ -119,6 +119,7 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
                 response.locals.id_=request.session.id_;
                 response.locals.mailID = request.session.mailID;
                 response.locals.userName = request.session.userName;
+                console.log(response.locals)
                 response.redirect("./main.html");
             }
 
@@ -141,6 +142,7 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
                             response.locals.id_=request.session.id_;
                             response.locals.mailID = request.session.mailID;
                             response.locals.userName = request.session.userName;
+                            console.log(response.locals);
                             response.redirect("./main.html");
                            
                         }
@@ -174,7 +176,7 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
 })
 
 app.get("/signup", (request, response) => {     
-    if(request.session.userName===undefined){
+    if(request.session.id_===undefined){
         response.status(200);
         const errors = validationResult(request);
         response.render("signup", { title: "Página de registro",
@@ -303,6 +305,15 @@ app.post("/registro", multerFactory.single('foto'),(request, response) => {
     }
 
  });
+
+ app.use(function(request, response, next) {
+    if (request.session.id_!== undefined) {
+        response.locals.id_ = request.session.id_;
+        next();
+    } else {
+        response.redirect("/");
+    }
+    });
 
 app.get("/main.html", function(request, response) {
     response.status(200);

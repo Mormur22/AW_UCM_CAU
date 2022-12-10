@@ -14,6 +14,7 @@ CREATE TABLE UCM_AW_CAU_EMP_Empleados (
 
 CREATE TABLE UCM_AW_CAU_USU_Usuarios (
   idUsu INTEGER NOT NULL UNIQUE AUTO_INCREMENT,
+  fecha DATETIME NOT NULL,
   email VARCHAR(50) NOT NULL UNIQUE,
   password VARCHAR(130) NOT NULL,
   nombre VARCHAR(50) NOT NULL,
@@ -26,6 +27,7 @@ CREATE TABLE UCM_AW_CAU_USU_Usuarios (
 
 CREATE TABLE UCM_AW_CAU_TEC_Tecnicos (
   idTec INTEGER NOT NULL UNIQUE AUTO_INCREMENT,
+  fecha DATETIME NOT NULL,
   email VARCHAR(50) NOT NULL UNIQUE,
   password VARCHAR(130) NOT NULL,
   nombre VARCHAR(50) NOT NULL,
@@ -53,31 +55,31 @@ CREATE TABLE UCM_AW_CAU_AVI_Avisos (
   FOREIGN KEY (idTec) REFERENCES UCM_AW_CAU_TEC_Tecnicos (idTec)
 );
 
-INSERT INTO UCM_AW_CAU_USU_Usuarios (idUsu, email, password, nombre, perfil, imagen, desactivado, reputacion) VALUES
-  ( 1, 'anuñez@ucm.es', 'letmein', 'Alfredo Nuñez', 'alumno', 'anuñez.jpg', 0, 50.00 ),
-  ( 2, 'alozano@ucm.es', 'letmein', 'Ana Lozano', 'alumno', 'alozano.jpg', 0, 50.00 ),
-  ( 3, 'ctorres@ucm.es', 'letmein', 'Carlota Torres', 'alumno', 'ctorres.jpg', 0, 50.00 ),
-  ( 4, 'msalas@ucm.es', 'letmein', 'Matias Salas', 'alumno', 'msalas.jpg', 0, 50.00 ),
-  ( 5, 'nroca@ucm.es', 'letmein', 'Nuria Roca', 'alumno', 'nroca.jpg', 0, 50.00 ),
-  ( 6, 'rcarrasco@ucm.es', 'letmein', 'Rebeca Carrasco', 'alumno', 'rcarrasco.jpg', 0, 50.00 ),
-  ( 7, 'rcontreras@ucm.es', 'letmein', 'Ruben Contreras', 'alumno', 'rcontreras.jpg', 0, 50.00 ),
-  ( 8, 'vramos@ucm.es', 'letmein', 'Vanesa Ramos', 'alumno', 'vramos.jpg', 0, 50.00 ),
-  ( 9, 'vramirez@ucm.es', 'letmein', 'Victor Ramirez', 'alumno', 'vramirez.jpg', 0, 50.00 ),
-  ( 10, 'bgerpe@ucm.es', 'letmein', 'Begoña Gerpe', 'pdi', 'bgerpe.jpg', 0, 50.00 ),
-  ( 11, 'eporto@ucm.es', 'letmein', 'Eva Porto', 'pdi', 'eporto.jpg', 0, 50.00 ),
-  ( 12, 'jsantaolalla@ucm.es', 'letmein', 'Javier Santaolalla', 'pdi', 'jsantaolalla.jpg', 0, 50.00 ),
-  ( 13, 'maranda@ucm.es', 'letmein', 'Marcos Aranda', 'pdi', 'maranda.jpg', 0, 50.00 ),
-  ( 14, 'rguzman@ucm.es', 'letmein', 'Roberto Guzman', 'pdi', 'rguzman.jpg', 0, 50.00 ),
-  ( 15, 'smontes@ucm.es', 'letmein', 'Sabrina Montes', 'pdi', 'smontes.jpg', 0, 50.00 ),
-  ( 16, 'agarrido@ucm.es', 'letmein', 'Ana Garrido', 'pas', 'agarrido.jpg', 0, 50.00 ),
-  ( 17, 'csamper@ucm.es', 'letmein', 'Cristian Samper', 'pas', 'csamper.jpg', 0, 50.00 ),
-  ( 18, 'mhall@ucm.es', 'letmein', 'Meredith Hall', 'pas', 'mhall.jpg', 0, 50.00 ),
-  ( 19, 'rsantos@ucm.es', 'letmein', 'Rebeca Santos', 'pas', 'rsantos.jpg', 0, 50.00 ),
-  ( 20, 'tbrown@ucm.es', 'letmein', 'Taylor Brown', 'pas', 'tbrown.jpg', 0, 50.00 ),
-  ( 21, 'avillar@ucm.es', 'letmein', 'Andres Villar', 'aa', 'avillar.jpg', 0, 50.00 ),
-  ( 22, 'jmolina@ucm.es', 'letmein', 'Julian Molina', 'aa', 'jmolina.jpg', 0, 50.00 ),
-  ( 23, 'lmarin@ucm.es', 'letmein', 'Luisa Marin', 'aa', 'lmarin.jpg', 0, 50.00 ),
-  ( 24, 'tmorgan@ucm.es', 'letmein', 'Tina Morgan', 'aa', 'tmorgan.jpg', 0, 50.00 );
+INSERT INTO UCM_AW_CAU_USU_Usuarios (idUsu, fecha, email, password, nombre, perfil, imagen, desactivado, reputacion) VALUES
+  ( 1, '2019-09-11 12:01:22', 'anuñez@ucm.es', 'letmein', 'Alfredo Nuñez', 'alumno', 'anuñez.jpg', 0, 50.00 ),
+  ( 2, '2022-09-09 18:04:41', 'alozano@ucm.es', 'letmein', 'Ana Lozano', 'alumno', 'alozano.jpg', 0, 50.00 ),
+  ( 3, '2022-09-15 21:53:22', 'ctorres@ucm.es', 'letmein', 'Carlota Torres', 'alumno', 'ctorres.jpg', 0, 50.00 ),
+  ( 4, '2021-09-13 14:02:53', 'msalas@ucm.es', 'letmein', 'Matias Salas', 'alumno', 'msalas.jpg', 0, 50.00 ),
+  ( 5, '2021-09-06 08:47:06', 'nroca@ucm.es', 'letmein', 'Nuria Roca', 'alumno', 'nroca.jpg', 0, 50.00 ),
+  ( 6, '2022-09-06 13:07:20', 'rcarrasco@ucm.es', 'letmein', 'Rebeca Carrasco', 'alumno', 'rcarrasco.jpg', 0, 50.00 ),
+  ( 7, '2022-09-07 14:02:53', 'rcontreras@ucm.es', 'letmein', 'Ruben Contreras', 'alumno', 'rcontreras.jpg', 0, 50.00 ),
+  ( 8, '2021-09-03 10:31:32', 'vramos@ucm.es', 'letmein', 'Vanesa Ramos', 'alumno', 'vramos.jpg', 0, 50.00 ),
+  ( 9, '2020-09-14 09:17:54', 'vramirez@ucm.es', 'letmein', 'Victor Ramirez', 'alumno', 'vramirez.jpg', 0, 50.00 ),
+  ( 10, '2021-09-03 11:42:27', 'bgerpe@ucm.es', 'letmein', 'Begoña Gerpe', 'pdi', 'bgerpe.jpg', 0, 50.00 ),
+  ( 11, '2020-09-04 13:09:16', 'eporto@ucm.es', 'letmein', 'Eva Porto', 'pdi', 'eporto.jpg', 0, 50.00 ),
+  ( 12, '2020-09-02 10:25:14', 'jsantaolalla@ucm.es', 'letmein', 'Javier Santaolalla', 'pdi', 'jsantaolalla.jpg', 0, 50.00 ),
+  ( 13, '2014-09-01 11:48:26', 'maranda@ucm.es', 'letmein', 'Marcos Aranda', 'pdi', 'maranda.jpg', 0, 50.00 ),
+  ( 14, '1958-09-03 09:12:30', 'rguzman@ucm.es', 'letmein', 'Roberto Guzman', 'pdi', 'rguzman.jpg', 0, 50.00 ),
+  ( 15, '2022-09-02 10:57:28', 'smontes@ucm.es', 'letmein', 'Sabrina Montes', 'pdi', 'smontes.jpg', 0, 50.00 ),
+  ( 16, '1977-10-21 12:03:44', 'agarrido@ucm.es', 'letmein', 'Ana Garrido', 'pas', 'agarrido.jpg', 0, 50.00 ),
+  ( 17, '1991-02-18 14:08:19', 'csamper@ucm.es', 'letmein', 'Cristian Samper', 'pas', 'csamper.jpg', 0, 50.00 ),
+  ( 18, '2006-04-17 09:44:37', 'mhall@ucm.es', 'letmein', 'Meredith Hall', 'pas', 'mhall.jpg', 0, 50.00 ),
+  ( 19, '1999-05-20 11:41:25', 'rsantos@ucm.es', 'letmein', 'Rebeca Santos', 'pas', 'rsantos.jpg', 0, 50.00 ),
+  ( 20, '1997-06-13 10:59:07', 'tbrown@ucm.es', 'letmein', 'Taylor Brown', 'pas', 'tbrown.jpg', 0, 50.00 ),
+  ( 21, '1978-07-05 12:41:16', 'avillar@ucm.es', 'letmein', 'Andres Villar', 'aa', 'avillar.jpg', 0, 50.00 ),
+  ( 22, '1980-11-24 09:24:14', 'jmolina@ucm.es', 'letmein', 'Julian Molina', 'aa', 'jmolina.jpg', 0, 50.00 ),
+  ( 23, '1985-12-16 08:48:53', 'lmarin@ucm.es', 'letmein', 'Luisa Marin', 'aa', 'lmarin.jpg', 0, 50.00 ),
+  ( 24, '1987-05-11 12:28:39', 'tmorgan@ucm.es', 'letmein', 'Tina Morgan', 'aa', 'tmorgan.jpg', 0, 50.00 );
 
 INSERT INTO UCM_AW_CAU_EMP_Empleados (numero) VALUES
   ('4678-dfs'),
@@ -94,12 +96,12 @@ INSERT INTO UCM_AW_CAU_EMP_Empleados (numero) VALUES
   ('5555-eee'),
   ('0000-xxx');
 
-INSERT INTO UCM_AW_CAU_TEC_Tecnicos ( idTec, email, password, nombre, perfil, imagen, desactivado, numEmp ) VALUES
-  ( 1, 'aortiz@ucm.es', 'letmein', 'Alexander Ortiz', 'pas', 'aortiz.jpg', 0, '4678-dfs' ),
-  ( 2, 'csolis@ucm.es', 'letmein', 'Carolina Solis', 'pas', 'csolis.jpg', 0, '5102-gev' ),
-  ( 3, 'hsmith@ucm.es', 'letmein', 'Harold Smith', 'pas', 'hsmith.jpg', 0, '6884-hnx' ),
-  ( 4, 'pjuarez@ucm.es', 'letmein', 'Pablo Juarez', 'pas', 'pjuarez.jpg', 0, '7039-con' ),
-  ( 5, 'lmoreno@ucm.es', 'letmein', 'Lucas Moreno', 'pas', 'lmoreno.jpg', 0, '8959-azy' );
+INSERT INTO UCM_AW_CAU_TEC_Tecnicos ( idTec, fecha, email, password, nombre, perfil, imagen, desactivado, numEmp ) VALUES
+  ( 1, '1991-09-02 11:55:19', 'aortiz@ucm.es', 'letmein', 'Alexander Ortiz', 'pas', 'aortiz.jpg', 0, '4678-dfs' ),
+  ( 2, '2002-06-05 12:24:33', 'csolis@ucm.es', 'letmein', 'Carolina Solis', 'pas', 'csolis.jpg', 0, '5102-gev' ),
+  ( 3, '2015-03-15 08:49:56', 'hsmith@ucm.es', 'letmein', 'Harold Smith', 'pas', 'hsmith.jpg', 0, '6884-hnx' ),
+  ( 4, '2020-01-05 10:25:08', 'pjuarez@ucm.es', 'letmein', 'Pablo Juarez', 'pas', 'pjuarez.jpg', 0, '7039-con' ),
+  ( 5, '2022-09-01 09:10:40', 'lmoreno@ucm.es', 'letmein', 'Lucas Moreno', 'pas', 'lmoreno.jpg', 0, '8959-azy' );
 
 INSERT INTO UCM_AW_CAU_AVI_Avisos ( idAvi, tipo, categoria, subcategoria, fecha, observaciones, comentario, cerrado, cancelado, idUsu, idTec ) VALUES
   ( 1, 'incidencia', 'comunicaciones', 'correo_electronico', '2022-09-14', 'Después de haber solicitado la migración de mi cuenta puedo acceder al nuevo correo, pero no encuentro los correos antiguos y me faltan carpetas.', 'Lo hemos revisado y por lo visto no se realizó correctamente la migración. Lo más probable es que no se seleccionasen las opciones adecuadas en el momento de hacer la copia. Somos humanos y a veces metemos la pata. Afortunadamente, tu antigua cuenta aún no había sido eliminada y hemos podido recuperar lo que faltaba. Ya deberías tenerlo todo disponible en tu nueva cuenta.', 1, 0, 12, 2 ),  -- jsantaolalla / csolis

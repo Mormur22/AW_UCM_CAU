@@ -15,10 +15,18 @@
                             <tr id="<%= 'usu' + row.i %>" class="row_usu <%= 'usu_' + row.type %> table-info" data-id="<%= row.id %>" data-type="<%= row.type %>" >
                                 <td class="text-center align-middle"><%= row.date %></td>
                                 <td class="text-center align-middle"><%= row.name %></td>
-                                <td class="align-middle"><%= row.role.toUpperCase() %></td>
+                                <td class="text-center align-middle"><%= row.role.toUpperCase() %></td>
                                 <td class="text-center align-middle">
+                                    <% if(row.actions[0] === 1) { %>
                                     <img class="ticon ficon" src="img\icons\ojo.png" onclick=<% __append('"') %><%= row.viewFunction %><% __append('(') %><%= row.id %><% __append(')"') %> />
+                                    <% } else if(row.actions[0] === 0) { %>
+                                    <img class="ticon ficon" src="img\icons\ojo-gris.png" />
+                                    <% } %>
+                                    <% if(row.actions[1] === 1) { %>
                                     <img class="ticon ficon" src="img\icons\papelera.png" onclick=<% __append('"') %><%= row.cancelFunction %><% __append('(') %><%= row.id %><% __append(')"') %> />
+                                    <% } else if(row.actions[1] === 0) { %>
+                                    <img class="ticon ficon" src="img\icons\papelera-gris.png" />
+                                    <% } %>
                                 </td>
                             </tr>
                             <% }); %>

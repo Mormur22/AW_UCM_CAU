@@ -5,7 +5,7 @@ function viewTechnician(id) {
 }
 
 function cancelTechnician(id) {
-    alert("Cancelar técnico " + id);
+    alert("Desactivar técnico " + id);
 }
 
 function viewStandardUser(id) {
@@ -13,5 +13,5 @@ function viewStandardUser(id) {
 }
 
 function cancelStandardUser(id) {
-    alert("Cancelar usuario estándar " + id);
+    alert("Desactivar usuario estándar " + id);
 }

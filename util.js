@@ -6,11 +6,20 @@
 class Util {
 
     /**
+     * Devuelve un objeto Date a partir de una fecha en formato SQL.
+     * @param sqldate Cadena de texto con la fecha en formato SQL.
+     * @returns Objeto Date con la fecha indicada como parámetro.
+     */
+    dateSQL2JS(sqldate) {
+        return new Date(Date.parse(sqldate.replace(/-/g, '/')));
+    }
+
+    /**
      * Devuelve la clase BootStrap asociada a un aviso.
      * @param tipo Valor del campo 'tipo' ( "incidencia" / "sugerencia" / "felicitacion" ) de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
      * @returns Devuelve la clase (atributo HTML 'class') de la fila de una tabla BootStrap que le corresponde a un aviso según de qué tipo sea.
      */
-    getHtmLClass(tipo) {
+    getNotifyHtmlClass(tipo) {
         if(tipo === undefined || tipo === null || tipo === "null" || typeof(tipo) !== "string" ) return("table-light");
         switch(tipo){
             case "incidencia":
@@ -29,7 +38,7 @@ class Util {
      * @param tipo Valor del campo 'tipo' ( "incidencia" / "sugerencia" / "felicitacion" ) de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
      * @returns Devuelve la URL de la imagen (atributo HTML 'src' de la etiqueta 'img') que le corresponde a un aviso según de qué tipo sea.
      */
-    getImageURL(tipo) {
+    getNotifyImageURL(tipo) {
         if(tipo === undefined || tipo === null || tipo === "null" || typeof(tipo) !== "string" ) return("img\\icons\\desconocido.png");
         switch(tipo){
             case "incidencia":
@@ -68,7 +77,7 @@ class Util {
      * @param observaciones Cadena de texto de la que se quiere obtener el resumen.
      * @returns Devuelve la misma cadena si tiene menos de 81 caracteres y si no los primeros 77 caracteres seguidos de 3 puntos suspensivos (...) .
      */
-    getResume(observaciones) {
+    getNotifyResume(observaciones) {
         if(observaciones == undefined || observaciones == null || typeof(observaciones) != "string") return("?");
         if(observaciones.length <= 80 ) return(observaciones);
         else return(observaciones.substring(0,77) + "..." );
@@ -79,7 +88,7 @@ class Util {
      * @param aviso objeto con los datos de un aviso recuperado de la BD.
      * @returns Estado del aviso: 1 (open)  / 2 (assigned) / 3 (closed) / 4 (cancelled) .
      */
-    getState(aviso) {
+    getNotifyState(aviso) {
         if(aviso === undefined || aviso === null || aviso === "null" || typeof(aviso) != "object" || Array.isArray(aviso) ) return -1;
         if(aviso.cancelado === undefined || aviso.cancelado === null || aviso.cancelado === "null") return -1;
         if(aviso.cancelado == 1) return 4;
@@ -100,7 +109,7 @@ class Util {
      * @returns Devuelve un array con las posibles acciones que se pueden realizar sobre un aviso.
      * actions = [view, assign, cancel]. Cada una con valores: -1 (not present) / 0 (disable) / 1 (enable) .
      */
-    getTechnicianActions(state, idTec, myIdTec) {
+    getNotifyTechnicianActions(state, idTec, myIdTec) {
         if(state === undefined || state === null || state === "null" || typeof(state) !== "number") return([-1,-1,-1]);
         switch(state){
             case 1:
@@ -122,7 +131,7 @@ class Util {
      * @returns Devuelve un array con las posibles acciones que se pueden realizar sobre un aviso propio.
      * actions = [view, assign, cancel]. Cada una con valores: -1 (not present) / 0 (disable) / 1 (enable) .
      */
-    getUserActions() {
+    getUserTechnicianActions() {
         return([1, -1, -1]);
     }
 
@@ -134,35 +143,120 @@ class Util {
      */
     toTechnicianHtmlNotify(aviso, myIdTec) {
         if(aviso === undefined || aviso === null || aviso === "null" || typeof(aviso) != "object" || Array.isArray(aviso) ) return {};
-        const estado = this.getState(aviso);
+        const estado = this.getNotifyState(aviso);
         const htmlNotify = {
             id: aviso.idAvi,
-            htmlClass: this.getHtmLClass(aviso.tipo),
-            imageURL: this.getImageURL(aviso.tipo),
+            htmlClass: this.getNotifyHtmlClass(aviso.tipo),
+            imageURL: this.getNotifyImageURL(aviso.tipo),
             date: aviso.fecha.toLocaleDateString(),
-            resume: this.getResume(aviso.observaciones),
+            resume: this.getNotifyResume(aviso.observaciones),
             state: estado,
-            actions: this.getTechnicianActions(estado, aviso.idTec, myIdTec)
+            actions: this.getNotifyTechnicianActions(estado, aviso.idTec, myIdTec)
         }
         return htmlNotify;
     }
 
     /**
+     * Devuelve la información necesaria para mostrarle un aviso abierto a un usuario estándar.
+     * @param aviso Los datos del aviso sacados de la BD
+     * @returns Devuelve un objeto con la información necesaria para mostrar un aviso en la tabla de mis avisos de la página principal de un usuario estándar.
+     */
+    toUserHtmlOpenNotify(aviso) {
+        if(aviso === undefined || aviso === null || aviso === "null" || typeof(aviso) != "object" || Array.isArray(aviso) ) return {};
+        const estado = this.getNotifyState(aviso);
+        const htmlNotify = {
+            id: aviso.idAvi,
+            htmlClass: this.getNotifyHtmlClass(aviso.tipo),
+            imageURL: this.getNotifyImageURL(aviso.tipo),
+            date: aviso.fecha.toLocaleDateString(),
+            resume: this.getNotifyResume(aviso.observaciones),
+            state: estado,
+            name: aviso.nombre,
+            actions: [1, -1, -1]
+        }
+        return htmlNotify;
+    }
+
+    /**
+     * Devuelve la información necesaria para mostrarle un aviso cerrado a un usuario estándar.
+     * @param aviso Los datos del aviso sacados de la BD
+     * @returns Devuelve un objeto con la información necesaria para mostrar un aviso en la tablade historico de avisos de la página principal de un usuario estándar.
+     */
+    toUserHtmlClosedNotify(aviso) {
+        if(aviso === undefined || aviso === null || aviso === "null" || typeof(aviso) != "object" || Array.isArray(aviso) ) return {};
+        const estado = this.getNotifyState(aviso);
+        const htmlNotify = {
+            id: aviso.idAvi,
+            htmlClass: this.getNotifyHtmlClass(aviso.tipo),
+            imageURL: this.getNotifyImageURL(aviso.tipo),
+            date: aviso.fecha.toLocaleDateString(),
+            resume: this.getNotifyResume(aviso.observaciones),
+            state: estado,
+            actions: [1, -1, -1]
+        }
+        return htmlNotify;
+    }
+
+    /**
+     * Devuelve los datos comunes de un usuario estándar o un técnico.
+     * @param usutec Usuario o técnico. Obejto con los datos de un usuario estándar o técnico recuperados de la base de datos.
+     * @returns Objeto 'Common' con los datos comunes de un usuario estándar o un técnico más las propiedades 'isTechnician' (Boolean).
+     * Common = { id: Number, fecha: Date, email: String, password: String, nombre: String, perfil: String, imagen: String, desactivado: Boolean, isTechnician: Boolean } .
+     */
+    getCommon(usutec) {
+        if(usutec === undefined || usutec === null || usutec === "null" || typeof(usutec) != "object" || Array.isArray(usutec) ) return {};
+        const isTechnician = usutec.idTec === undefined ? false : true;
+        return {
+            id: isTechnician ? usutec.idTec : usutec.idUsu,
+            fecha: usutec.fecha,
+            email: usutec.email,
+            password: usutec.password,
+            nombre: usutec.nombre,
+            perfil: usutec.perfil,
+            imagen: usutec.imagen,
+            desactivado: usutec.desactivado,
+            isTechnician: isTechnician
+        };
+    }
+
+    /**
+     * Devuelve un array de datos comunes de usuario estándar o técnico.
+     * @param  args Array de objetos, o un solo objeto, con los datos de un usuario estándar o técnico recuperados de la BD.
+     * @returns Array de objetos 'Common' con los datos comunes de un usuario estándar o un técnico más las propiedades 'isTechnician' (Boolean) e 'i' (Number) .
+     * Common = { id: Number, fecha: Date, email: String, password: String, nombre: String, perfil: String, imagen: String, desactivado: Boolean, isTechnician: Boolean, i: Number } .
+     */
+    toComonArray(...args) {
+        let n = 1;
+        let ca = [];
+        const thisObj = this;
+        for(const arg of args) {
+            if(arg !== undefined || arg !== null ||arg !== "null") {
+                if(typeof(arg) === "object") {
+                    if(Array.isArray(arg)) ca = ca.concat( arg.map( o => { return {...thisObj.getCommon(o), i: n++ }; } ) );
+                    else ca = [...ca, {...thisObj.getCommon(arg), i: n++ } ];
+                }
+            }
+        }
+        return ca;
+    }
+
+    /**
      * Devuelve la información necesaria para mostrar un usuario, ya sea técnico o usuario estándar.
-     * @param usutec Los datos comunes de un usuario estándar o un técnico más las propiedades 'isTechnician' (Boolean) e 'i' (Number).
+     * @param common Los datos comunes de un usuario estándar o un técnico más las propiedades 'isTechnician' (Boolean) e 'i' (Number).
      * @returns Devuelve un objeto con la información necesaria para mostrar un usuario en la tabla de usuarios de la página principal de un técnico.
      */
-    toHtmlUser(usutec) {
-        if(usutec === undefined || usutec === null || usutec === "null" || typeof(usutec) != "object" || Array.isArray(usutec) ) return {};
+    toHtmlCommon(common) {
+        if(common === undefined || common === null || common === "null" || typeof(common) != "object" || Array.isArray(common) ) return {};
         const htmlUser = {
-            i: usutec.i,
-            id: usutec.id,
-            date: "??/??/????",
-            name: usutec.nombre,
-            role: ( usutec.isTechnician ? "técnico" : "usuario" ),
-            type: ( usutec.isTechnician ? "tec" : "std" ),
-            viewFunction: ( usutec.isTechnician ? "viewTechnician" : "viewStandardUser" ),
-            cancelFunction: ( usutec.isTechnician ? "cancelTechnician" : "cancelStandardUser" )
+            i: common.i,
+            id: common.id,
+            date: common.fecha.toLocaleDateString(),
+            name: common.nombre,
+            role: ( common.isTechnician ? "técnico" : "usuario" ),
+            type: ( common.isTechnician ? "tec" : "std" ),
+            viewFunction: ( common.isTechnician ? "viewTechnician" : "viewStandardUser" ),
+            cancelFunction: ( common.isTechnician ? "cancelTechnician" : "cancelStandardUser" ),
+            actions: ( common.desactivado ? [1, 0] : [1, 1] )
         }
         return htmlUser;
     }

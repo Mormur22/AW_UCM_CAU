@@ -1,9 +1,9 @@
 "use strict";
 
 /**
- * Clase que implementa la funcionalidad relacionada con la gestión de la BD.
+ * Clase que implementa la funcionalidad relacionada con la gestión de usuarios en la BD.
  */
-class DAO_USUARIO {
+class DAO_Usuario {
 
     /**
      * Constrictor de la clase 'DAO'.
@@ -40,48 +40,42 @@ class DAO_USUARIO {
      * result: Cadena de texto con información del número de filas en cada tabla.
      */
     existeNombreUsuario(nombre,callback){
-            this.pool.getConnection(function(err,connection){
-                if(err){
-                    reject(new Error("Error de conexión a la base de datos"));
-                }
-                else{
-                    const existeName = "SELECT * FROM UCM_AW_CAU_USU_USUARIOS where nombre = ?";
-                    connection.query(existeName,[nombre],
-                    function(err, result){
-                        connection.release();
-                        if(err){
-                            
-                            console.log("ERROR: "+err.message);
-                            callback(new Error("Error de acceso a la base de datos"));
-                        }
-                        else{
-                            
-                            if (result.length==1) callback(null,true);
-                            else callback(null,false);
-                        }
-                    });
-                }
+        this.pool.getConnection(function(err,connection){
+            if(err){
+                reject(new Error("Error de conexión a la base de datos"));
+            }
+            else{
+                const existeName = "SELECT * FROM UCM_AW_CAU_USU_Usuarios where nombre = ?;";
+                connection.query(existeName,[nombre],
+                function(err, result){
+                    connection.release();
+                    if(err){
+                        console.log("ERROR: "+err.message);
+                        callback(new Error("Error de acceso a la base de datos"));
+                    }
+                    else{
+                        if (result.length==1) callback(null,true);
+                        else callback(null,false);
+                    }
+                });
+            }
         });
     }
 
 
-    
     /*
     Comprueba que no E un correo en la base de datos
     True --> El usuario/correo existe
     False --> No Existe
     */
-
-
     existeCorreoUsuario(usuario,callback){
         this.pool.getConnection(function(err,connection){
             if(err){
                 callback(new Error("Error de conexión a la base de datos"));
             }
             else{
-                
                 //El usuario no existe
-                const existeName = "SELECT * FROM ucm_aw_cau_usu_usuarios where email= ?";
+                const existeName = "SELECT * FROM UCM_AW_CAU_USU_Usuarios WHERE email= ?;";
                 connection.query(existeName,[usuario.correo],
                     function(err, result2){
                     connection.release();
@@ -99,16 +93,14 @@ class DAO_USUARIO {
     }
 
 
-    
     registroUsuario(usuario,callback){
-       
         this.pool.getConnection(function(err,connection){
             if(err){
                  callback(new Error("Error de conexión a la base de datos"));
             }
             else{
                 console.log("Datos registro usuario: "+usuario.nombre+" "+usuario.correo+" "+usuario.pass); 
-                const valor="INSERT INTO ucm_aw_cau_usu_usuarios (nombre, email, password,perfil,desactivado,reputacion) VALUES (?,?,?,?,?,?);";
+                const valor="INSERT INTO UCM_AW_CAU_USU_Usuarios (nombre, email, password,perfil,desactivado,reputacion) VALUES (?,?,?,?,?,?);";
                 connection.query(valor,[usuario.nombre, usuario.correo, usuario.password,usuario.perfil,false,0],
                 function(err2, result2){
                     connection.release(); //devolver el pool de conexiones.
@@ -121,44 +113,68 @@ class DAO_USUARIO {
                         else callback(null,false);
                     }
                 });
-                
             }
         });
     }
 
     
-
     loginUsuario(email, password,callback) {
-            //console.log("DAO "+email+" "+password);
-            this.pool.getConnection(function(err, connection) {
-                if (err) {
-                    callback(new Error("Error de conexión a la base de datos"));
-                }
-                else {
-                    //console.log("Datos log usuario: "+ email +" "+ password);
-                    // connection.query('USE back2study;');
-                    connection.query("SELECT * FROM ucm_aw_cau_usu_usuarios WHERE email = ? AND password= ?" ,
-                        [email,password],
-                        function(err, rows) {
-                            connection.release(); // devolver al pool la conexión
-                            if (err) {
-                                callback(new Error("Error de acceso a la base de datos"));
+        //console.log("DAO "+email+" "+password);
+        this.pool.getConnection(function(err, connection) {
+            if (err) {
+                callback(new Error("Error de conexión a la base de datos"));
+            }
+            else {
+                //console.log("Datos log usuario: "+ email +" "+ password);
+                // connection.query('USE back2study;');
+                connection.query("SELECT * FROM UCM_AW_CAU_USU_Usuarios WHERE email = ? AND password= ?;" ,
+                    [email,password],
+                    function(err, rows) {
+                        connection.release(); // devolver al pool la conexión
+                        if (err) {
+                            callback(new Error("Error de acceso a la base de datos"));
+                        }
+                        else {
+                            console.log(rows);
+                            if (rows.length === 0) {
+                                callback(null,false); //no está el usuario con el password proporcionado
                             }
                             else {
-                                console.log(rows);
-                                if (rows.length === 0) {
-                                    callback(null,false); //no está el usuario con el password proporcionado
-                                }
-                                else {
-                                    // console.log("DATOS DAO: "+rows[0].id+"/"+rows[0].username+"/"+rows[0].email+"/"+rows[0].password);
-                                    callback(null,rows[0]);
-                                }
+                                // console.log("DATOS DAO: "+rows[0].id+"/"+rows[0].username+"/"+rows[0].email+"/"+rows[0].password);
+                                callback(null,rows[0]);
                             }
-                        });
-                }
-            });
+                        }
+                    }
+                );
+            }
+        });
     }
-
+    
+    /**
+     * Devuelve todos los usuarios estándar.
+     * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, [Usuario , ... , Usuario] result) .
+     * Usuario = { idUsu: Number, email: String, password: String, nombre: String, perfil: String, imagen: String, desactivado: Boolean, reputacion: Number } .
+     * Ejecuta la consulta: "SELECT * FROM UCM_AW_CAU_USU_Usuarios;".
+     */
+    getAllUsers(callback) {
+        this.pool.getConnection(
+            function(err, connection) {
+                if(err) {
+                    callback(new Error("Error de conexión a la base de datos"), false);
+                }
+                else {
+                    connection.query("SELECT * FROM UCM_AW_CAU_USU_Usuarios;", [],
+                        function(err, rows) {
+                            connection.release();
+                            if(err) callback(new Error("No se ha podido recuperar datos de la tabla UCM_AW_CAU_TEC_Tecnicos"), null);
+                            else callback(null, rows);
+                        }
+                    );
+                }
+            }
+        );
+    }
+    
 }
 
-module.exports = DAO_USUARIO;
+module.exports = DAO_Usuario;

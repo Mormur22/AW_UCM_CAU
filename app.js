@@ -12,18 +12,20 @@ const express = require("express");
 const app = express();
 const config = require("./config");//Configuracion bbd y puerto
 const mysql = require("mysql");
-const DAO = require("./DAO");
+const DAOGen = require("./DAOGeneral");
 const DAOUsu = require("./DAOUsuario");
 const DAOTec = require("./DAOTecnico");
+const DAOAvi = require("./DAOAviso");
 const bodyParser = require("body-parser");
 
 
 const PORT = process.env.PORT || config.puerto;
 const pool = mysql.createPool(config.mysqlConfig);
-// Crear una instancia de DAOTasks
-const dao = new DAO(pool);
+// Crear las instancias DAO
+const daoGen= new DAOGen(pool);
 const daoUsu = new DAOUsu(pool);
 const daoTec = new DAOTec(pool);
+const daoAvi = new DAOAvi(pool);
 //Para validar errores en formularios.
 const { check, validationResult } = require("express-validator"); // https://www.youtube.com/watch?v=hBETsBY3Hlg
 
@@ -46,9 +48,8 @@ const util = new Util();
 // Crear un objeto Hardcode
 const hardcode = new Hardcode();
 
-const user_data = hardcode.tecnico_session(1);
-const avisos_BD = hardcode.avisos_DB();
-const notifies_data = hardcode.avisos_HTML();
+const user_data = hardcode.tecnicoSession(1);
+//const user_data = hardcode.usuarioSession(1);
 
 // Creación de la aplicación express
 
@@ -322,7 +323,7 @@ app.get("/main.html", function(request, response) {
 });
 
 app.get("/tables/notifies", function(request, response) {
-    dao.getOpenNotifies(
+    daoAvi.getOpenNotifies(
         function(err, result) {
             const rows = result.map( a => util.toTechnicianHtmlNotify(a, user_data.id) );
             response.render("notifies", { rows: rows });
@@ -330,27 +331,50 @@ app.get("/tables/notifies", function(request, response) {
 });
 
 app.get("/tables/mynotifies", function(request, response) {
-    dao.getMyOpenNotifies(user_data.id,
-        function(err, result) {
-            const rows = result.map( a => util.toTechnicianHtmlNotify(a, user_data.id) );
-            response.render("notifies", { rows: rows });
-        } );
+    if(user_data.isTechnician) {
+        daoAvi.getTechnicianOpenNotifies(user_data.id,
+            function(err, result) {
+                const rows = result.map( a => util.toTechnicianHtmlNotify(a, user_data.id) );
+                response.render("notifies", { rows: rows });
+            } );
+    }
+    else {
+        daoAvi.getUserOpenNotifies(user_data.id,
+            function(err, result) {
+                const rows = result.map( a => util.toUserHtmlOpenNotify(a) );
+                response.render("mynotifies", { rows: rows });
+            } );
+    }
 });
 
 app.get("/tables/historic", function(request, response) {
-    dao.getMyClosedNotifies(user_data.id,
-        function(err, result) {
-            const rows = result.map( a => util.toTechnicianHtmlNotify(a, user_data.id) );
-            response.render("notifies", { rows: rows });
-        } );
+    if(user_data.isTechnician) {
+        daoAvi.getTechnicianClosedNotifies(user_data.id,
+            function(err, result) {
+                const rows = result.map( a => util.toTechnicianHtmlNotify(a, user_data.id) );
+                response.render("notifies", { rows: rows });
+            } );
+    }
+    else {
+        daoAvi.getUserClosedNotifies(user_data.id,
+            function(err, result) {
+                const rows = result.map( a => util.toUserHtmlClosedNotify(a) );
+                response.render("notifies", { rows: rows });
+            } );
+    }
 });
 
 app.get("/tables/users", function(request, response) {
-    dao.getAllUsers(
-        function(err, result) {
-            const rows = result.map( u => util.toHtmlUser(u) );
-            response.render("users", { rows: rows });
-        } );
+    daoTec.getAllTechnicians(
+        function(err,trows) {
+            daoUsu.getAllUsers(
+                function(err,urows) {
+                    const rows = util.toComonArray(trows,urows).map( c => util.toHtmlCommon(c) );
+                    response.render("users", { rows: rows });
+                }
+            );
+        }
+    );
 });
 
 // Uso del middleware Static para servir todos los ficheros estáticos (.html, .css, .jpg, png, ...) de la carpeta public y sus subdirectorios
@@ -365,4 +389,11 @@ app.listen(3000, function(err){
     }
 });
 
-dao.testDB();
+daoGen.testDB();
+
+// DATOS DE SESIÓN NECESARIOS
+// session = { id: Number, name: String, profile: String, imageURL: String, isTechnician: Boolean }
+// EJEMPLO
+// session_ej = { id: 1, name: "Alexander Ortiz", profile: "pas", imageURL: "\\img\\avatars\\aortiz.jpg", isTechnician: Boolean }
+// La URL de la imagen se obtiene así:
+// imageURL = USU.imagen == undefined ||  tec.imagen == "null" ? "\\img\\avatars\\default.jpg" : "\\img\\avatars\\" + tec.imagen

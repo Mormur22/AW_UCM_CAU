@@ -157,6 +157,47 @@ class Util {
     }
 
     /**
+     * Devuelve la información necesaria para mostrarle un aviso abierto a un usuario estándar.
+     * @param aviso Los datos del aviso sacados de la BD
+     * @returns Devuelve un objeto con la información necesaria para mostrar un aviso en la tabla de mis avisos de la página principal de un usuario estándar.
+     */
+    toUserHtmlOpenNotify(aviso) {
+        if(aviso === undefined || aviso === null || aviso === "null" || typeof(aviso) != "object" || Array.isArray(aviso) ) return {};
+        const estado = this.getNotifyState(aviso);
+        const htmlNotify = {
+            id: aviso.idAvi,
+            htmlClass: this.getNotifyHtmlClass(aviso.tipo),
+            imageURL: this.getNotifyImageURL(aviso.tipo),
+            date: aviso.fecha.toLocaleDateString(),
+            resume: this.getNotifyResume(aviso.observaciones),
+            state: estado,
+            name: aviso.nombre,
+            actions: [1, -1, -1]
+        }
+        return htmlNotify;
+    }
+
+    /**
+     * Devuelve la información necesaria para mostrarle un aviso cerrado a un usuario estándar.
+     * @param aviso Los datos del aviso sacados de la BD
+     * @returns Devuelve un objeto con la información necesaria para mostrar un aviso en la tablade historico de avisos de la página principal de un usuario estándar.
+     */
+    toUserHtmlClosedNotify(aviso) {
+        if(aviso === undefined || aviso === null || aviso === "null" || typeof(aviso) != "object" || Array.isArray(aviso) ) return {};
+        const estado = this.getNotifyState(aviso);
+        const htmlNotify = {
+            id: aviso.idAvi,
+            htmlClass: this.getNotifyHtmlClass(aviso.tipo),
+            imageURL: this.getNotifyImageURL(aviso.tipo),
+            date: aviso.fecha.toLocaleDateString(),
+            resume: this.getNotifyResume(aviso.observaciones),
+            state: estado,
+            actions: [1, -1, -1]
+        }
+        return htmlNotify;
+    }
+
+    /**
      * Devuelve los datos comunes de un usuario estándar o un técnico.
      * @param usutec Usuario o técnico. Obejto con los datos de un usuario estándar o técnico recuperados de la base de datos.
      * @returns Objeto 'Common' con los datos comunes de un usuario estándar o un técnico más las propiedades 'isTechnician' (Boolean).

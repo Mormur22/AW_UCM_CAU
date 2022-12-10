@@ -143,7 +143,33 @@ class DAO_Tecnico {
             }
         });
     }
-
+    
+    /**
+     * Devuelve el nombre de un técnico.
+     * @param idTec El id del técnico del que se quiere obtener el nombre.
+     * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, String result) .
+     */
+    getTechnicianName(idTec,callback) {
+        this.pool.getConnection(
+            function(err, connection) {
+                if(err) {
+                    callback(new Error("Error de conexión a la base de datos"), false);
+                }
+                else {
+                    connection.query("SELECT nombre FROM UCM_AW_CAU_TEC_Tecnicos WHERE idTec = ?;", [idTec],
+                        function(err, rows) {
+                            connection.release();  
+                            if(err) callback(new Error("No se ha podido recuperar datos de la tabla UCM_AW_CAU_TEC_Tecnicos"), null);
+                            else{
+                                if(rows.length === 0) callback(new Error("No se ha encontrado ningún técnico con idTec = " + idTec), null);
+                                else callback(null, rows[0].nombre);
+                            }
+                        }
+                    );
+                }
+            }
+        );
+    }
 
     /**
      * Devuelve todos los técnicos.

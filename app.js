@@ -21,8 +21,8 @@ const bodyParser = require("body-parser");
 
 const PORT = process.env.PORT || config.puerto;
 const pool = mysql.createPool(config.mysqlConfig);
-// Crear instancias DAO
-const daoGen = new DAOGen(pool);
+// Crear las instancias DAO
+const daoGen= new DAOGen(pool);
 const daoUsu = new DAOUsu(pool);
 const daoTec = new DAOTec(pool);
 const daoAvi = new DAOAvi(pool);
@@ -49,6 +49,7 @@ const util = new Util();
 const hardcode = new Hardcode();
 
 const user_data = hardcode.tecnicoSession(1);
+//const user_data = hardcode.usuarioSession(1);
 
 // Creación de la aplicación express
 
@@ -319,19 +320,37 @@ app.get("/tables/notifies", function(request, response) {
 });
 
 app.get("/tables/mynotifies", function(request, response) {
-    daoAvi.getMyOpenNotifies(user_data.id,
-        function(err, result) {
-            const rows = result.map( a => util.toTechnicianHtmlNotify(a, user_data.id) );
-            response.render("notifies", { rows: rows });
-        } );
+    if(user_data.isTechnician) {
+        daoAvi.getTechnicianOpenNotifies(user_data.id,
+            function(err, result) {
+                const rows = result.map( a => util.toTechnicianHtmlNotify(a, user_data.id) );
+                response.render("notifies", { rows: rows });
+            } );
+    }
+    else {
+        daoAvi.getUserOpenNotifies(user_data.id,
+            function(err, result) {
+                const rows = result.map( a => util.toUserHtmlOpenNotify(a) );
+                response.render("mynotifies", { rows: rows });
+            } );
+    }
 });
 
 app.get("/tables/historic", function(request, response) {
-    daoAvi.getMyClosedNotifies(user_data.id,
-        function(err, result) {
-            const rows = result.map( a => util.toTechnicianHtmlNotify(a, user_data.id) );
-            response.render("notifies", { rows: rows });
-        } );
+    if(user_data.isTechnician) {
+        daoAvi.getTechnicianClosedNotifies(user_data.id,
+            function(err, result) {
+                const rows = result.map( a => util.toTechnicianHtmlNotify(a, user_data.id) );
+                response.render("notifies", { rows: rows });
+            } );
+    }
+    else {
+        daoAvi.getUserClosedNotifies(user_data.id,
+            function(err, result) {
+                const rows = result.map( a => util.toUserHtmlClosedNotify(a) );
+                response.render("notifies", { rows: rows });
+            } );
+    }
 });
 
 app.get("/tables/users", function(request, response) {
@@ -360,3 +379,10 @@ app.listen(3000, function(err){
 });
 
 daoGen.testDB();
+
+// DATOS DE SESIÓN NECESARIOS
+// session = { id: Number, name: String, profile: String, imageURL: String, isTechnician: Boolean }
+// EJEMPLO
+// session_ej = { id: 1, name: "Alexander Ortiz", profile: "pas", imageURL: "\\img\\avatars\\aortiz.jpg", isTechnician: Boolean }
+// La URL de la imagen se obtiene así:
+// imageURL = USU.imagen == undefined ||  tec.imagen == "null" ? "\\img\\avatars\\default.jpg" : "\\img\\avatars\\" + tec.imagen

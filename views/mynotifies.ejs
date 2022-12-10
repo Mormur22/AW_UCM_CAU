@@ -1,0 +1,25 @@
+            <div id="con_tab_avi" class="container">
+                <div class="table-responsive">
+                    <table id="tab_avi" class="table table-bordered table-hover">
+                        <caption>Lista de incidencias</caption>
+                        <thead class="thead-dark table-dark">
+                            <tr id="avi0" class="cab_avi">
+                                <th class="text-center align-middle" scope="col">Fecha</th>
+                                <th class="text-center align-middle" scope="col">Texto</th>                           
+                                <th class="text-center align-middle" scope="col">Tipo</th>
+                                <th class="text-center align-middle" scope="col">Técnico</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if(Array.isArray(rows) && rows.length > 0 ) rows.forEach( function(row) { %>
+                            <tr id="<%= 'avi' + row.id %>" class="row_avi <%= row.htmlClass %>" data-id="<%= row.id %>">
+                                <td class="text-center align-middle"><%= row.date %></td>
+                                <td class="align-middle"><%= row.resume %></td>
+                                <td class="text-center align-middle"><img class="ticon" src="<%= row.imageURL %>" /></td>
+                                <td class="text-center align-middle"><%= row.name %></td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>

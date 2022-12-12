@@ -90,15 +90,15 @@ class DAO_Tecnico {
     }
 
    
-    registroTecnico(usuario,callback){
+    registroTecnico(usuario,img,callback){
         this.pool.getConnection(function(err,connection){
             if(err){
                  callback(new Error("Error de conexión a la base de datos"));
             }
             else{
                 console.log("Datos registro usuario: "+usuario.nombre+" "+usuario.correo+" "+usuario.pass); 
-                const valor="INSERT INTO UCM_AW_CAU_TEC_Tecnicos (nombre, email, password,perfil,desactivado,numEmp) VALUES (?,?,?,?,?,?);";
-                connection.query(valor,[usuario.username, usuario.correo, usuario.password2,usuario.perfil,false,usuario.numEmp],
+                const valor="INSERT INTO UCM_AW_CAU_TEC_Tecnicos (nombre, email, password,perfil,desactivado,numEmp,imagen) VALUES (?,?,?,?,?,?,?);";
+                connection.query(valor,[usuario.username, usuario.correo, usuario.password2,usuario.perfil,false,usuario.numEmp,img],
                 function(err2, result2){
                     connection.release(); //devolver el pool de conexiones.
                     if(err2){
@@ -141,6 +141,34 @@ class DAO_Tecnico {
                     }
                 );
             }
+        });
+    }
+
+
+    obtenerImagen(id, callback) {
+        this.pool.getConnection(function(err, connection) {
+        if (err)
+            callback(err);
+        else {
+                let sql = "SELECT imagen FROM UCM_AW_CAU_TEC_Tecnicos  WHERE idTec = ?";
+                connection.query(sql, [id], function(err, rows) {
+                    connection.release(); // devolver al pool la conexión
+                    if (err) {
+                        callback(new Error("Error de acceso a la base de datos"));
+                    }
+                    else {
+                        console.log(rows);
+                        if (rows.length === 0) {
+                            callback(null,false); //no está el usuario con el password proporcionado
+                        }
+                        else {
+                            console.log(rows);
+                            // console.log("DATOS DAO: "+rows[0].id+"/"+rows[0].username+"/"+rows[0].email+"/"+rows[0].password);
+                            callback(null,rows[0].imagen);
+                        }
+                    }
+            });
+        }
         });
     }
     

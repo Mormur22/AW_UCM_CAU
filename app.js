@@ -89,14 +89,20 @@ var almacen = multer.diskStorage({
     }
   });
 
-const multerFactory = multer({ storage: almacen });
+const multerFactory = multer({ storage: multer.memoryStorage() });
 
 app.get("/", (request, response) => {
-    if(request.session.userName===undefined){
+
+    if(request.session.iduser===undefined){
         response.status(200);
         response.render("login", {  
                 title: "Página de inicio de sesión",
                 msgRegistro: false});
+    }
+
+    //cargarme la sessión
+    else{
+
     }
 });
 
@@ -112,14 +118,16 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
             //es tecnico
             if(loginTecExito)
             {   
-                request.session.id_=loginTecExito.idTec;
-                request.session.userName = loginTecExito.nombre;
+                request.session.iduser=loginTecExito.idTec;
+                request.session.name = loginTecExito.nombre;
+                request.session.correo = loginTecExito.email;
                 request.session.profile = loginTecExito.perfil;
                 request.session.isTechnician = true;
 
-                response.locals.id_=request.session.id_;
-                response.locals.mailID = request.session.mailID;
-                response.locals.userName = request.session.userName;
+                response.locals.iduser=request.session.iduser;
+                response.locals.correo = request.session.email;
+                response.locals.name = request.session.name;
+                response.locals.isTechnician = true;
                 console.log(response.locals)
                 response.redirect("./main.html");
             }
@@ -135,14 +143,16 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
                         //es 
                         if(loginUsuExito)
                         {   
-                            request.session.id_=loginUsuExito.idUsu;
-                            request.session.userName = loginUsuExito.nombre;
+                            request.session.iduser=loginUsuExito.idUsu;
+                            request.session.name = loginUsuExito.nombre;
+                            request.session.correo = loginUsuExito.email
                             request.session.profile = loginUsuExito.perfil;
-                            request.session.isTechnician = false;
+                            request.session.isTechnician = 0;
             
-                            response.locals.id_=request.session.id_;
-                            response.locals.mailID = request.session.mailID;
-                            response.locals.userName = request.session.userName;
+                            response.locals.iduser=request.session.iduser;
+                            response.locals.correo = request.session.correo;
+                            response.locals.name = request.session.name;
+                            response.locals.isTechnician = 0;
                             console.log(response.locals);
                             response.redirect("./main.html");
                            
@@ -176,13 +186,19 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
 
 })
 
+
 app.get("/signup", (request, response) => {     
-    if(request.session.id_===undefined){
+    if(request.session.iduser===undefined){
         response.status(200);
         const errors = validationResult(request);
         response.render("signup", { title: "Página de registro",
                                     errores: errors.mapped() ,
                                     msgRegistro: false});//False para usu que no existe True si ya existe 
+    }
+
+    //cargarme la session
+    else{
+
     }
     
 });
@@ -191,7 +207,13 @@ app.get("/signup", (request, response) => {
 app.post("/registro", multerFactory.single('foto'),(request, response) => {
 
     console.log(request.body);
+
     //aqui se deben hacer las comprobaciones
+   let imagen;
+    if (request.file) {
+        imagen= request.file.buffer ;
+    }
+
 
     let esTecnico = request.body['tecnico-check'];
 
@@ -225,7 +247,7 @@ app.post("/registro", multerFactory.single('foto'),(request, response) => {
                                         //el numero de empleado es correcto
                                         if(existeNumEmp){
                                             
-                                            daoTec.registroTecnico(request.body, function(err,insertId){
+                                            daoTec.registroTecnico(request.body,imagen,function(err,insertId){
                                                 console.log("registro")
                                                 if(err) {
                                                     response.status(500); 
@@ -282,7 +304,7 @@ app.post("/registro", multerFactory.single('foto'),(request, response) => {
                             
                             //no existe el tecnico con el nombre de correo
                             if(!existeCorreo){   
-                                daoUsu.registroUsuario(request.body, function(err,insertId){
+                                daoUsu.registroUsuario(request.body, imagen, function(err,insertId){
                                 console.log("registro")
                                 if(err) {
                                     response.status(500); 
@@ -308,19 +330,39 @@ app.post("/registro", multerFactory.single('foto'),(request, response) => {
  });
 
  app.use(function(request, response, next) {
-    if (request.session.id_!== undefined) {
-        response.locals.id_ = request.session.id_;
+    if (request.session.iduser!== undefined) {
+        response.locals.iduser = request.session.iduser;
         next();
     } else {
         response.redirect("/");
     }
-    });
+});
+
+
 
 app.get("/main.html", function(request, response) {
     response.status(200);
     console.log(request.session);
-    response.render("main", { userData: user_data });
+    response.locals.name = request.session.name;
+    response.locals.isTechnician = response.locals.isTechnician;
+    response.render("main");
 });
+
+app.get("/imagen", function(request, response) {
+   
+    daoUsu.obtenerImagen (request.session.iduser, function(err, imagen) {
+        if (imagen) {
+        console.log("muestraimagen");
+        response.end(imagen);
+        } 
+        else {
+            response.status(404);
+            response.end("Not found");
+        }
+    });
+});
+    
+
 
 app.get("/tables/notifies", function(request, response) {
     daoAvi.getOpenNotifies(
@@ -377,6 +419,12 @@ app.get("/tables/users", function(request, response) {
     );
 });
 
+app.get("/logout",(request, response) => {
+    response.status(200);
+    request.session.destroy();
+    response.redirect("/");
+});
+
 // Uso del middleware Static para servir todos los ficheros estáticos (.html, .css, .jpg, png, ...) de la carpeta public y sus subdirectorios
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -392,7 +440,7 @@ app.listen(3000, function(err){
 daoGen.testDB();
 
 // DATOS DE SESIÓN NECESARIOS
-// session = { id: Number, name: String, profile: String, imageURL: String, isTechnician: Boolean }
+// session = { id: Number, name: String, profile: String, imageURL: String, isTechnician: Boolean}
 // EJEMPLO
 // session_ej = { id: 1, name: "Alexander Ortiz", profile: "pas", imageURL: "\\img\\avatars\\aortiz.jpg", isTechnician: Boolean }
 // La URL de la imagen se obtiene así:

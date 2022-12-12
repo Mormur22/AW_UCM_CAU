@@ -214,7 +214,6 @@ app.post("/registro", multerFactory.single('foto'),(request, response) => {
         imagen= request.file.buffer ;
     }
 
-
     let esTecnico = request.body['tecnico-check'];
 
     //tecnico
@@ -342,7 +341,6 @@ app.post("/registro", multerFactory.single('foto'),(request, response) => {
 
 app.get("/main.html", function(request, response) {
     response.status(200);
-    console.log(request.session);
     response.locals.name = request.session.name;
     response.locals.isTechnician = response.locals.isTechnician;
     response.render("main");
@@ -352,12 +350,14 @@ app.get("/imagen", function(request, response) {
    
     daoUsu.obtenerImagen (request.session.iduser, function(err, imagen) {
         if (imagen) {
-        console.log("muestraimagen");
-        response.end(imagen);
+            response.status(200);       
+            console.log("muestraimagen");
+            response.end(imagen);
         } 
         else {
-            response.status(404);
-            response.end("Not found");
+            response.status(200);       
+            console.log(path.join(__dirname,'public', 'img', 'user-default.jpg'));
+            response.sendFile(path.join(__dirname,'public', 'img','avatars', 'default.jpg'));
         }
     });
 });
@@ -367,21 +367,21 @@ app.get("/imagen", function(request, response) {
 app.get("/tables/notifies", function(request, response) {
     daoAvi.getOpenNotifies(
         function(err, result) {
-            const rows = result.map( a => util.toTechnicianHtmlNotify(a, user_data.id) );
+            const rows = result.map( a => util.toTechnicianHtmlNotify(a, request.session.idUser) );
             response.render("notifies", { rows: rows });
         } );
 });
 
 app.get("/tables/mynotifies", function(request, response) {
-    if(user_data.isTechnician) {
-        daoAvi.getTechnicianOpenNotifies(user_data.id,
+    if(request.session.isTechnician) {
+        daoAvi.getTechnicianOpenNotifies(request.session.idUser,
             function(err, result) {
-                const rows = result.map( a => util.toTechnicianHtmlNotify(a, user_data.id) );
+                const rows = result.map( a => util.toTechnicianHtmlNotify(a, request.session.idUser) );
                 response.render("notifies", { rows: rows });
             } );
     }
     else {
-        daoAvi.getUserOpenNotifies(user_data.id,
+        daoAvi.getUserOpenNotifies(request.session.idUser,
             function(err, result) {
                 const rows = result.map( a => util.toUserHtmlOpenNotify(a) );
                 response.render("mynotifies", { rows: rows });
@@ -390,15 +390,15 @@ app.get("/tables/mynotifies", function(request, response) {
 });
 
 app.get("/tables/historic", function(request, response) {
-    if(user_data.isTechnician) {
-        daoAvi.getTechnicianClosedNotifies(user_data.id,
+    if(request.session.isTechnician) {
+        daoAvi.getTechnicianClosedNotifies(request.session.idUser,
             function(err, result) {
-                const rows = result.map( a => util.toTechnicianHtmlNotify(a, user_data.id) );
+                const rows = result.map( a => util.toTechnicianHtmlNotify(a, request.session.idUser) );
                 response.render("notifies", { rows: rows });
             } );
     }
     else {
-        daoAvi.getUserClosedNotifies(user_data.id,
+        daoAvi.getUserClosedNotifies(request.session.idUser,
             function(err, result) {
                 const rows = result.map( a => util.toUserHtmlClosedNotify(a) );
                 response.render("notifies", { rows: rows });
@@ -427,6 +427,7 @@ app.get("/logout",(request, response) => {
 
 // Uso del middleware Static para servir todos los ficheros estáticos (.html, .css, .jpg, png, ...) de la carpeta public y sus subdirectorios
 app.use(express.static(path.join(__dirname, "public")));
+
 
 // Escuchar peticiones
 app.listen(3000, function(err){

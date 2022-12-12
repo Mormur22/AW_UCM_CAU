@@ -99,10 +99,11 @@ class DAO_Usuario {
                  callback(new Error("Error de conexión a la base de datos"));
             }
             else{
+                let fecha =new Date().toISOString().replace('T', ' ').substr(0, 19);
                 console.log("Datos registro usuario: "+usuario.nombre+" "+usuario.correo+" "+usuario.pass); 
-                const valor="INSERT INTO UCM_AW_CAU_USU_Usuarios (nombre, email, password,perfil,desactivado,reputacion,imagen) VALUES (?,?,?,?,?,?,?);";
+                const valor="INSERT INTO UCM_AW_CAU_USU_Usuarios (nombre,fecha,email, password,perfil,desactivado,reputacion,imagen) VALUES (?,?,?,?,?,?,?,?);";
                 console.log(valor);
-                connection.query(valor,[usuario.username, usuario.correo, usuario.password,usuario.perfil,false,0,img],
+                connection.query(valor,[usuario.username,fecha, usuario.correo, usuario.password,usuario.perfil,false,0,img],
                 function(err2, result2){
                     connection.release(); //devolver el pool de conexiones.
                     if(err2){

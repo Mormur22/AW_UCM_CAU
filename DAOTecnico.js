@@ -96,9 +96,10 @@ class DAO_Tecnico {
                  callback(new Error("Error de conexión a la base de datos"));
             }
             else{
+                let fecha =new Date().toISOString().replace('T', ' ').substr(0, 19);
                 console.log("Datos registro usuario: "+usuario.nombre+" "+usuario.correo+" "+usuario.pass); 
-                const valor="INSERT INTO UCM_AW_CAU_TEC_Tecnicos (nombre, email, password,perfil,desactivado,numEmp,imagen) VALUES (?,?,?,?,?,?,?);";
-                connection.query(valor,[usuario.username, usuario.correo, usuario.password2,usuario.perfil,false,usuario.numEmp,img],
+                const valor="INSERT INTO UCM_AW_CAU_TEC_Tecnicos (nombre,fecha,email, password,perfil,desactivado,numEmp,imagen) VALUES (?,?,?,?,?,?,?,?);";
+                connection.query(valor,[usuario.username,fecha,usuario.correo, usuario.password,usuario.perfil,false,usuario.numEmp,img],
                 function(err2, result2){
                     connection.release(); //devolver el pool de conexiones.
                     if(err2){

@@ -102,7 +102,7 @@ app.get("/", (request, response) => {
 
     //cargarme la sessión
     else{
-
+        response.redirect("logout");
     }
 });
 
@@ -122,11 +122,13 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
                 request.session.name = loginTecExito.nombre;
                 request.session.correo = loginTecExito.email;
                 request.session.profile = loginTecExito.perfil;
+                request.session.fecha = loginTecExito.fecha;
                 request.session.isTechnician = true;
 
                 response.locals.iduser=request.session.iduser;
                 response.locals.correo = request.session.email;
                 response.locals.name = request.session.name;
+                response.locals.perfil = request.session.profile;
                 response.locals.isTechnician = true;
                 console.log(response.locals)
                 response.redirect("./main.html");
@@ -147,12 +149,14 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
                             request.session.name = loginUsuExito.nombre;
                             request.session.correo = loginUsuExito.email
                             request.session.profile = loginUsuExito.perfil;
-                            request.session.isTechnician = 0;
+                            request.session.fecha = loginUsuExito.fecha.toISOString().replace('T', ' ').substr(0, 19);
+                            request.session.isTechnician = false;
             
                             response.locals.iduser=request.session.iduser;
                             response.locals.correo = request.session.correo;
                             response.locals.name = request.session.name;
-                            response.locals.isTechnician = 0;
+                            response.locals.perfil = request.session.profile;
+                            response.locals.isTechnician = false;
                             console.log(response.locals);
                             response.redirect("./main.html");
                            
@@ -194,13 +198,7 @@ app.get("/signup", (request, response) => {
         response.render("signup", { title: "Página de registro",
                                     errores: errors.mapped() ,
                                     msgRegistro: false});//False para usu que no existe True si ya existe 
-    }
-
-    //cargarme la session
-    else{
-
-    }
-    
+    }   
 });
 
 
@@ -341,9 +339,50 @@ app.post("/registro", multerFactory.single('foto'),(request, response) => {
 
 app.get("/main.html", function(request, response) {
     response.status(200);
+
     response.locals.name = request.session.name;
-    response.locals.isTechnician = response.locals.isTechnician;
-    response.render("main");
+    response.locals.isTechnician = request.session.isTechnician;
+    response.locals.fecha = request.session.fecha;
+    response.locals.perfil= request.session.perfil;
+    let avisosData;
+    //Recuperamos los datos del perfil dependiendo de si es usuario o técnico de
+    if(response.locals.isTechnician===true){
+
+       
+        daoAvi.getTechnicianAllNotifies(request.session.iduser, function (err,avisos)
+        {   if(err){
+                console.log(err);
+            }
+            else{
+                console.log(avisos);
+                avisosData = util.getAvisosNumbers(avisos);
+                response.locals.numAvisos = avisosData.numAvisos;
+                response.locals.numInc = avisosData.numInc;
+                response.locals.numSug = avisosData.numSug;
+                response.locals.numFel = avisosData.numFel;
+                response.render("main");
+            }
+        });
+    
+    }
+
+    else {
+        daoAvi.getUserAllNotifies(request.session.iduser, function (err,avisos)
+            {   if(err){
+                console.log(err);
+            }
+            else{
+                console.log(avisos);
+                avisosData = util.getAvisosNumbers(avisos);
+                response.locals.numAvisos = avisosData.numAvisos;
+                response.locals.numInc = avisosData.numInc;
+                response.locals.numSug = avisosData.numSug;
+                response.locals.numFel = avisosData.numFel;
+                console.log(response.locals);
+                response.render("main");
+            }
+        });
+    }
 });
 
 app.get("/imagen", function(request, response) {

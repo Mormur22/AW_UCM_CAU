@@ -261,6 +261,18 @@ class Util {
         return htmlUser;
     }
 
+    getAvisosNumbers(avisos) {
+        const avisosData ={
+            numAvisos : avisos.length,
+            numInc : avisos.filter( obj =>{ return obj.tipo==="incidencia"}).length,
+            numSug : avisos.filter( obj =>{ return obj.tipo==="sugerencia"}).length,
+            numFel : avisos.filter( obj =>{ return obj.tipo==="felicitacion"}).length,
+        }
+        console.log(avisosData);
+        return avisosData;
+    }
 }
+
+
 
 module.exports = Util;

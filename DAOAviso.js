@@ -91,6 +91,44 @@ class DAO_Aviso {
         );
     }
 
+    getTechnicianAllNotifies(myIdTec, callback) {
+        this.pool.getConnection(
+            function(err, connection) {
+                if(err) {
+                    callback(new Error("Error de conexión a la base de datos"), false);
+                }
+                else {
+                    connection.query("SELECT tipo FROM UCM_AW_CAU_AVI_Avisos WHERE idTec = ?;", [myIdTec],
+                        function(err, rows) {
+                            connection.release();
+                            if(err) callback(new Error("No se ha podido recuperar datos de la tabla UCM_AW_CAU_AVI_Avisos"), null);
+                            else callback(null, rows);
+                        }
+                    );
+                }
+            }
+        );
+    }
+
+    getUserAllNotifies(myIdUsu, callback) {
+        this.pool.getConnection(
+            function(err, connection) {
+                if(err) {
+                    callback(new Error("Error de conexión a la base de datos"), false);
+                }
+                else {
+                    connection.query("SELECT * FROM UCM_AW_CAU_AVI_Avisos WHERE idUsu = ?;", [myIdUsu],
+                        function(err, rows) {
+                            connection.release();
+                            if(err) callback(new Error("No se ha podido recuperar datos de la tabla UCM_AW_CAU_AVI_Avisos"), null);
+                            else callback(null, rows);
+                        }
+                    );
+                }
+            }
+        );
+    }
+
     /**
      * Devuelve los avisos cerrados de un usuario estándar.
      * @param myIdUsu El id del usuarioa estándar que está usando la applicaión.

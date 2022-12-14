@@ -14,6 +14,27 @@ class DAO_Aviso {
         this.pool = pool;
     }
 
+    createNotify(aviso,callback){
+        this.pool.getConnection(
+            function(err, connection) {
+                if(err) {
+                    callback(new Error("Error de conexión a la base de datos"), false);
+                }
+                else {
+                    let fecha =new Date().toISOString().replace('T', ' ').substr(0, 19);
+                    connection.query("INSERT INTO UCM_AW_CAU_AVI_Avisos (tipo, categoria, subcategoria, fecha, observaciones, cerrado, cancelado, idUsu) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", 
+                    [aviso.tipo, aviso.categoria, aviso.subcategoria, fecha, aviso.observaciones, 0, 0, aviso.idUsu],
+                        function(err, rows) {
+                            connection.release();
+                            if(err) callback(new Error("No se ha podido crear el aviso"), null);
+                            else callback(null, rows[0].idAvi);
+                        }
+                    );
+                }
+            }
+        );
+    }
+
     /**
      * Devuelve los avisos abiertos.
      * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, [Aviso , ... , Aviso] result).

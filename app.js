@@ -254,7 +254,7 @@ app.post("/registro", multerFactory.single('foto'),(request, response) => {
                                                 }
                                                 else{
                                                     response.status(200);
-                                                    response.redirect("/signup");
+                                                    response.redirect("/");
                                                 }
                                             });
                                         }
@@ -303,6 +303,7 @@ app.post("/registro", multerFactory.single('foto'),(request, response) => {
                             
                             //no existe el tecnico con el nombre de correo
                             if(!existeCorreo){   
+                                console.log(request.body);
                                 daoUsu.registroUsuario(request.body, imagen, function(err,insertId){
                                 console.log("registro")
                                 if(err) {
@@ -311,7 +312,7 @@ app.post("/registro", multerFactory.single('foto'),(request, response) => {
                                 }
                                 else{
                                     response.status(200);
-                                    response.redirect("/signup");
+                                    response.redirect("/");
                                 }
                                 });
                             }
@@ -412,6 +413,23 @@ app.get("/imagen", function(request, response) {
             }
         });
     }
+});
+
+app.post("/crearAviso", multerFactory.none(), function(request, response){
+   
+    let aviso ={
+
+        tipo: request.tipo,
+        categoria: request.categoria,
+        subcategoria: request.subcategoria,
+        observaciones: request.obs,
+        idUsu: request.session.idUsu,
+    }
+
+    daoAvi.createNotify(aviso, function(err, result){
+
+    });
+   
 });
     
 

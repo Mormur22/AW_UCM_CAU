@@ -36,6 +36,8 @@
     });
     </script>
 
+    
+
 </head>
 
 <body>
@@ -71,6 +73,13 @@
                         <input type="password" name="password2" class="form-control" id="floatingInput" placeholder="Confirmar contraseña" >
                     </div>
 
+                    <div class="input-group p-2">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Tecnico
+                          </label>
+                        <input class="form-check-input tecnico" style="margin-left:1rem" name="tecnico-check" type="checkbox" value="yes" id="flexCheckDefault">
+                    </div>
+
                     <div class="from-group p-2">
                         <label for="perfil">Perfil Unversitario</label>
                         <select class="from-control" id="perfil" name="perfil">
@@ -85,19 +94,13 @@
                         </select>
                     </div>
 
-                    <div class="input-group mb-3">
-                        <input class="form-check-input tecnico" name="tecnico-check" type="checkbox" value="yes" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                          Tecnico
-                        </label>
-                    </div>
 
                     <div class="input-group p-2">
                         <input type="text" name="numEmp" class="form-control" id="floatingInput" placeholder="NºEmpleado">
                     </div>
 
 
-                    <div class="input-group mb-3">
+                    <div class="input-group p-2">
                         <input type="file" class="form-control" id="foto" name="foto">
                     </div>
 

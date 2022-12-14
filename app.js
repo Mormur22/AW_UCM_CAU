@@ -424,21 +424,21 @@ app.post("/crearAviso", multerFactory.none(), function(request, response){
 app.get("/tables/notifies", function(request, response) {
     daoAvi.getOpenNotifies(
         function(err, result) {
-            const rows = result.map( a => util.toTechnicianHtmlNotify(a, request.session.idUser) );
+            const rows = result.map( a => util.toTechnicianHtmlNotify(a, request.session.iduser) );
             response.render("notifies", { rows: rows });
         } );
 });
 
 app.get("/tables/mynotifies", function(request, response) {
     if(request.session.isTechnician) {
-        daoAvi.getTechnicianOpenNotifies(request.session.idUser,
+        daoAvi.getTechnicianOpenNotifies(request.session.iduser,
             function(err, result) {
-                const rows = result.map( a => util.toTechnicianHtmlNotify(a, request.session.idUser) );
+                const rows = result.map( a => util.toTechnicianHtmlNotify(a, request.session.iduser) );
                 response.render("notifies", { rows: rows });
             } );
     }
     else {
-        daoAvi.getUserOpenNotifies(request.session.idUser,
+        daoAvi.getUserOpenNotifies(request.session.iduser,
             function(err, result) {
                 const rows = result.map( a => util.toUserHtmlOpenNotify(a) );
                 response.render("mynotifies", { rows: rows });
@@ -448,14 +448,14 @@ app.get("/tables/mynotifies", function(request, response) {
 
 app.get("/tables/historic", function(request, response) {
     if(request.session.isTechnician) {
-        daoAvi.getTechnicianClosedNotifies(request.session.idUser,
+        daoAvi.getTechnicianClosedNotifies(request.session.iduser,
             function(err, result) {
-                const rows = result.map( a => util.toTechnicianHtmlNotify(a, request.session.idUser) );
+                const rows = result.map( a => util.toTechnicianHtmlNotify(a, request.session.iduser) );
                 response.render("notifies", { rows: rows });
             } );
     }
     else {
-        daoAvi.getUserClosedNotifies(request.session.idUser,
+        daoAvi.getUserClosedNotifies(request.session.iduser,
             function(err, result) {
                 const rows = result.map( a => util.toUserHtmlClosedNotify(a) );
                 response.render("notifies", { rows: rows });

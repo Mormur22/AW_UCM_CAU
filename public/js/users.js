@@ -1,13 +1,15 @@
 "use strict";
 
-const parseCookie = str =>
-  str
-  .split(';')
-  .map(v => v.split('='))
-  .reduce((acc, v) => {
-    acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
-    return acc;
-  }, {});
+if(!parseCookie){
+    var parseCookie = str =>
+    str
+    .split(';')
+    .map(v => v.split('='))
+    .reduce((acc, v) => {
+        acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
+        return acc;
+    }, {});
+}
 
 window.onload = function () {
     try{

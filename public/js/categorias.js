@@ -53,7 +53,8 @@ const permisosSubCatgoriaAA= {
     web: [0,0,0,1,0]
 };
 
-const parseCookie = str =>
+if(!parseCookie){
+var parseCookie = str =>
   str
   .split(';')
   .map(v => v.split('='))
@@ -61,7 +62,7 @@ const parseCookie = str =>
     acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
     return acc;
   }, {});
-
+}
 
 function getCategorias(perfil) {
     switch(perfil){
@@ -96,13 +97,28 @@ function getCategoriasVal(perfil) {
 function getSubCategorias(perfil, categoria) {
     switch(perfil){
         case "alumno":
+            return subCategoriasInc[categoria].filter( (c,i) => permisosSubCatgoriaAlumno[categoria][i] ? true : false );
+        case "pas":
+            return subCategoriasInc[categoria].filter( (c,i) => permisosSubCatgoriaPAS[i] ? true : false );
+        case "pdi":
+            return subCategoriasInc[categoria].filter( (c,i) => permisosSubCatgoriaPDI[i] ? true : false );
+        case "aa":
+            return subCategoriasInc[categoria].filter( (c,i) => permisosSubCatgoriaAA[i] ? true : false );
+        default:
+            return [];
+    }
+}
+
+function getSubCategoriasVal(perfil, categoria) {
+    switch(perfil){
+        case "alumno":
             return subCategoriasIncVal[categoria].filter( (c,i) => permisosSubCatgoriaAlumno[categoria][i] ? true : false );
         case "pas":
-            return subCategoriasIncVal[categoria].filter( (c,i) => permisosCatgoriaPAS[i] ? true : false );
+            return subCategoriasIncVal[categoria].filter( (c,i) => permisosSubCatgoriaPAS[i] ? true : false );
         case "pdi":
-            return subCategoriasIncVal[categoria].filter( (c,i) => permisosCatgoriaPDI[i] ? true : false );
+            return subCategoriasIncVal[categoria].filter( (c,i) => permisosSubCatgoriaPDI[i] ? true : false );
         case "aa":
-            return subCategoriasIncVal[categoria].filter( (c,i) => permisosCatgoriaAA[i] ? true : false );
+            return subCategoriasIncVal[categoria].filter( (c,i) => permisosSubCatgoriaAA[i] ? true : false );
         default:
             return [];
     }
@@ -116,22 +132,9 @@ window.onload = function () {
     catch(error){
         console.log("Error recuperndo cookie");
     }
-    
+    /*
     let catSel = document.getElementById("Categoria");
     let subSel = document.getElementById("Subcategoria");
-
-
-        // todo: Disable all  Selection by setting disabled to false
-    catSel = false; // remove all options bar first
-    subSel = false; // remove all options bar first
-    
-    for (let categoria in tabla_permisos) {
-        catSel.options[catSel.options.length] = new Option(
-        categoria,
-        categoria
-        );
-    }
-
     catSel.onchange = function () {
 		 
         subSel = true; // remove all options bar first
@@ -143,7 +146,26 @@ window.onload = function () {
             subSel.options[subSel.options.length] = new Option(subcat, subcat);
         }
    }
+   */
 }
+
+$('#ModalIncidencia').modal('hide');
+if($('.modal-backdrop').is(':visible')) {
+  $('body').removeClass('modal-open'); 
+  $('.modal-backdrop').remove(); 
+};
+
+$('#ModalSugerencia').modal('hide');
+if($('.modal-backdrop').is(':visible')) {
+  $('body').removeClass('modal-open'); 
+  $('.modal-backdrop').remove(); 
+};
+
+$('#ModalFelicitacion').modal('hide');
+if($('.modal-backdrop').is(':visible')) {
+  $('body').removeClass('modal-open'); 
+  $('.modal-backdrop').remove(); 
+};
 
 $("#ModalIncidencia").one("show.bs.modal", openInc);
 
@@ -152,10 +174,13 @@ function openInc(){
     //debugger
     catSel.empty();
 
-    const catval = getCategoriasVal(perfil);
-    getCategorias(window.currentUser.perfil)
-        .map((cat,i) => {
-            $("#Categoria").append(new Option(cat, catval[i]));
+    const catval = getCategoriasVal(window.currentUser.perfil);
+    console.log(catval);
+    console.log(getCategorias(window.currentUser.perfil));
+    //getCategorias(window.currentUser.perfil)
+    catval
+        .map((cat) => {
+            catSel.append(new Option(cat,cat));
         });
     // Agregar el evento change() a catSel y impementar loadSubCat()
 }

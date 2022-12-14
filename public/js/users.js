@@ -20,7 +20,22 @@ function cancelTechnician(id) {
             confirmBtn: {
                 text: 'Desactivar',
                 action: function () {
-                    $.alert('Desactivar técnico confirmado!');
+                    $.ajax({
+                        url: "/user/cancelTechnician/"+id,
+                        method: "POST",
+                        dataType: "text"
+                    }).done(function(data) {
+                        console.log(data);
+                        if(data === "true") $.alert({
+                                title: "Confirmación",
+                                content: "Técnico borrado con éxito."
+                            });
+                        else $.alert({
+                            title: "Error",
+                            content: "No se pudo borrar el técnico."
+                        });
+                    }).fail(function(jqXHR, textStatus) {
+                    });;
                 }
             },
             cancelBtn: {

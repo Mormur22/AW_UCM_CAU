@@ -225,6 +225,36 @@ class DAO_Tecnico {
         );
     }
 
+    cancelTechnician(idTec,callback) {
+        this.pool.getConnection(
+            function(err, connection) {
+                if(err) {
+                    callback(new Error("Error de conexión a la base de datos"), null);
+                }
+                else {
+                    connection.query("UPDATE UCM_AW_CAU_TEC_Tecnicos SET desactivado = 1 WHERE idTec = ?;", [idTec],
+                        function(err, rows) {
+                            if(rows.affectedRows != 1) {
+                                connection.release();
+                                if(rows.affectedRows == 0) callback(new Error("Error al intentar desactivar el técnico (idTec="+idTec+" no encontrado)."),null);
+                                else callback(new Error("Error al intentar desactivar el técnico ("+rows.affectedRows+" filas modificadas)."),null);
+                            }
+                            else{
+                                connection.query("UPDATE UCM_AW_CAU_AVI_Avisos SET idTec = NULL WHERE idTec = ?;", [idTec],
+                                    function(err, rows) {
+                                        connection.release();
+                                        if(err) callback(new Error("No se ha podido modificar los datos del técnico (idTec="+idTec+")."), null);
+                                        else callback(null, rows);
+                                    }
+                                );
+                            }
+                        }
+                    );
+                }
+            }
+        );
+    }
+
 }
 
 module.exports = DAO_Tecnico;

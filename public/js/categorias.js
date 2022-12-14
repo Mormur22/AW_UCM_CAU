@@ -1,5 +1,14 @@
+const permisosCatgoriaAlumno = [1,1,1,1,1];
+const permisosCatgoriaPAS = [1,1,1,1,1];
+const permisosCatgoriaPDI = [1,1,1,1,1];
+const permisosCatgoriaAA = [1,1,0,0,1];
+
+const categoriasInc = ["administracion","comunicaciones","conectividad","docencia","web"];
+
 const tabla_permisos=
-{  
+{ 
+
+
     Administracion_digital: {
        
             "certificado_digital":
@@ -96,16 +105,24 @@ const tabla_permisos=
         
             "Aula Virtual":
             [["Alumno",1],["PAS",0],["PDI",1],["AA",0]],
-    
+        
+
+        
             "Collaborate":
             [["Alumno",0],["PAS",1],["PDI",1],["AA",0]],
-    
+        
+
+        
             "Listados de clase":
             [["Alumno",0],["PAS",1],["PDI",1],["AA",0]],
+        
 
+        
             "Moodle: Aula Global":
             [["Alumno",1],["PAS",1],["PDI",1],["AA",0]],
-    
+        
+
+        
             "Plataforma de recursos online privados":
             [["Alumno",1],["PAS",0],["PDI",1],["AA",0]],
         
@@ -116,34 +133,76 @@ const tabla_permisos=
         
             "Analítica web":
             [["Alumno",0],["PAS",1],["PDI",1],["AA",0]],
-             
+        
+
+        
             "Emision de certificados":
             [["Alumno",0],["PAS",1],["PDI",1],["AA",0]],
-           
+        
+
+        
             "Hosting: alojamiento de paginas web":
             [["Alumno",0],["PAS",1],["PDI",1],["AA",0]],
         
+
+        
             "Portal de eventos":
             [["Alumno",1],["PAS",1],["PDI",1],["AA",1]],
-      
+        
+
+        
             "Redirecciones Web":
             [["Alumno",0],["PAS",1],["PDI",1],["AA",0]],
+        
+
     }
+
 }
 
 
-window.onload = function () {
+const parseCookie = str =>
+  str
+  .split(';')
+  .map(v => v.split('='))
+  .reduce((acc, v) => {
+    acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
+    return acc;
+  }, {});
 
-  
-    const catSel = document.getElementById("Categoria"),
-      subSel = document.getElementById("Subcategoria")
+
+function getCategorias(perfil) {
+    switch(perfil){
+        case "alumno":
+            return categoriasInc.filter( (c,i) => permisosCatgoriaAlumno[i] ? true : false );
+        case "pas":
+            return categoriasInc.filter( (c,i) => permisosCatgoriaPAS[i] ? true : false );
+        case "pdi":
+            return categoriasInc.filter( (c,i) => permisosCatgoriaPDI[i] ? true : false );
+        case "aa":
+            return categoriasInc.filter( (c,i) => permisosCatgoriaAA[i] ? true : false );
+        default:
+            return [];
+    }
+}
+
+window.onload = function () {
+    try{
+        const cookies = parseCookie(document.cookie);
+        console.log(cookies);
+        window.currentUser=JSON.parse(cookies.cookieUser);
+        console.log( window.currentUser);
+    }
+    catch(error){
+        console.log("Error recuperndo cookie");
+    }
+    let catSel = document.getElementById("Categoria");
+    let subSel = document.getElementById("Subcategoria");
 
 
         // todo: Disable all  Selection by setting disabled to false
     catSel = false; // remove all options bar first
     subSel = false; // remove all options bar first
     
-
     for (let categoria in tabla_permisos) {
         catSel.options[catSel.options.length] = new Option(
         categoria,
@@ -162,4 +221,19 @@ window.onload = function () {
             subSel.options[subSel.options.length] = new Option(subcat, subcat);
         }
    }
+}
+
+$("#ModalIncidencia").one("show.bs.modal", openInc);
+
+function openInc(){
+    const catSel = $("#Categoria");
+    //debugger
+    catSel.empty();
+
+    getCategorias(window.currentUser.perfil)
+        .map((cat) => {
+            console.log(cat);
+            $("#Categoria").append(new Option(cat, cat));
+        });
+    // Agregar el evento change() a catSel y impementar loadSubCat()
 }

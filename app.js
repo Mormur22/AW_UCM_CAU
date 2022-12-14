@@ -133,9 +133,18 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
                 response.locals.name = request.session.name;
                 response.locals.perfil = request.session.profile;
                 response.locals.isTechnician = true;
+                const cookieVal = {
+                    id:  response.locals.iduser,
+                    nombre:  response.locals.name,
+                    correo: response.locals.correo,
+                    perfil: response.locals.perfil,
+                    isTechnician: response.locals.isTechnician
+                }
+                const cookieValStr = JSON.stringify(cookieVal);
+                response.cookie("cookieUser",cookieValStr);
                 console.log("locals (técnico):");
-                console.log(response.locals)
-                response.redirect("./main.html");
+                console.log(response.locals);
+                response.redirect("./main");
             }
 
             //no es tecnico
@@ -164,7 +173,16 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
                             response.locals.isTechnician = false;
                             console.log("locals (usuario estándar):");
                             console.log(response.locals);
-                            response.redirect("./main.html");
+                            const cookieVal = {
+                                id:  response.locals.iduser,
+                                nombre:  response.locals.name,
+                                correo: response.locals.correo,
+                                perfil: response.locals.perfil,
+                                isTechnician: response.locals.isTechnician
+                            }
+                            const cookieValStr = JSON.stringify(cookieVal);
+                            response.cookie("cookieUser",cookieValStr);
+                            response.redirect("./main");
                            
                         }
 
@@ -544,6 +562,13 @@ app.get("/logout",(request, response) => {
     response.status(200);
     request.session.destroy();
     response.redirect("/");
+});
+
+app.post("/user/cancelTechnician/:idTec",(request, response) => {
+    daoTec.cancelTechnician(request.params.idTec,function(err,res){
+        if(err) response.send(false);
+        else response.send(true);
+    });
 });
 
 // Uso del middleware Static para servir todos los ficheros estáticos (.html, .css, .jpg, png, ...) de la carpeta public y sus subdirectorios

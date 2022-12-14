@@ -130,6 +130,7 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
                 response.locals.name = request.session.name;
                 response.locals.perfil = request.session.profile;
                 response.locals.isTechnician = true;
+                console.log("locals (técnico):");
                 console.log(response.locals)
                 response.redirect("./main.html");
             }
@@ -157,6 +158,7 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
                             response.locals.name = request.session.name;
                             response.locals.perfil = request.session.profile;
                             response.locals.isTechnician = false;
+                            console.log("locals (usuario estándar):");
                             console.log(response.locals);
                             response.redirect("./main.html");
                            
@@ -387,19 +389,30 @@ app.get("/main.html", function(request, response) {
 });
 
 app.get("/imagen", function(request, response) {
-   
-    daoUsu.obtenerImagen (request.session.iduser, function(err, imagen) {
-        if (imagen) {
-            response.status(200);       
-            console.log("muestraimagen");
-            response.end(imagen);
-        } 
-        else {
-            response.status(200);       
-            console.log(path.join(__dirname,'public', 'img', 'user-default.jpg'));
-            response.sendFile(path.join(__dirname,'public', 'img','avatars', 'default.jpg'));
-        }
-    });
+    if(request.session.isTechnician){
+        daoTec.obtenerImagen(request.session.iduser, function(err, imagen) {
+            if (imagen) {
+                response.status(200);
+                response.sendFile(path.join(__dirname,'public', 'img','avatars', imagen));
+            } 
+            else {
+                response.status(200);
+                response.sendFile(path.join(__dirname,'public', 'img','avatars', 'default.jpg'));
+            }
+        });
+    }
+    else{
+        daoUsu.obtenerImagen(request.session.iduser, function(err, imagen) {
+            if (imagen) {
+                response.status(200);
+                response.sendFile(path.join(__dirname,'public', 'img','avatars', imagen));
+            } 
+            else {
+                response.status(200);
+                response.sendFile(path.join(__dirname,'public', 'img','avatars', 'default.jpg'));
+            }
+        });
+    }
 });
 
 app.post("/crearAviso", multerFactory.none(), function(request, response){

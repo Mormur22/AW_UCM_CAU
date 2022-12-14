@@ -17,6 +17,7 @@ const DAOUsu = require("./DAOUsuario");
 const DAOTec = require("./DAOTecnico");
 const DAOAvi = require("./DAOAviso");
 const bodyParser = require("body-parser");
+const { body, validationResult } = require('express-validator');
 
 
 const PORT = process.env.PORT || config.puerto;
@@ -27,7 +28,6 @@ const daoUsu = new DAOUsu(pool);
 const daoTec = new DAOTec(pool);
 const daoAvi = new DAOAvi(pool);
 //Para validar errores en formularios.
-const { check, validationResult } = require("express-validator"); // https://www.youtube.com/watch?v=hBETsBY3Hlg
 
 //Configuracion de las vistas y usos
 const path = require("path");  // core module
@@ -109,6 +109,9 @@ app.get("/", (request, response) => {
 app.post("/login_user", multerFactory.none(),(request, response) => {
 
     console.log(request.body);
+
+
+
     daoTec.loginTecnico(request.body.correo, request.body.password, function(err, loginTecExito) {
 
         //tiene exito
@@ -166,14 +169,23 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
 
                         //el correo con el usuario no está
                         else{
-                            console.log(500);
-                            console.log("ERROR no coinciden usuario y contraseña");
+                            response.status(500);
+                                response.render("login", {  
+                                title: "Error", 
+                                msgRegistro: "ERROR no coinciden usuario y contraseña", 
+                                tipoAlert: "alert-danger"
+                            });
                         }
                     }
 
                     //error de base de datos
                     else{
-                        console.log(err.message);
+                        response.status(500);
+                        response.render("login", {  
+                            title: "Error", 
+                            msgRegistro: err.msg,
+                            tipoAlert: "alert-danger"
+                        });
                     }
                 });
             }
@@ -182,7 +194,11 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
 
         //error de base de datos
         else{
-            console.log(err.message);
+            response.status(500);
+            response.render("login", {  
+            title: "Error", 
+            msgRegistro: "ERROR no coinciden usuario y contraseña",tipoAlert: "alert-danger"
+            });
         }
 
     });
@@ -204,138 +220,169 @@ app.get("/signup", (request, response) => {
 });
 
 
-app.post("/registro", multerFactory.single('foto'),(request, response) => {
+app.post("/registro", multerFactory.single('foto'),(request,response) => {
+    
+        let imagen;
+        if (request.file) {
+            imagen= request.file.buffer ;
+        }
 
-    console.log(request.body);
+        let esTecnico = request.body['tecnico-check'];
 
-    //aqui se deben hacer las comprobaciones
-   let imagen;
-    if (request.file) {
-        imagen= request.file.buffer ;
-    }
-
-    let esTecnico = request.body['tecnico-check'];
-
-    //tecnico
-    if(esTecnico){
-        daoTec.existeTecnico(request.body.username,function(err, existeTec) {
-            console.log("compruebausername")
-            if(err) {
-                response.status(500); 
-                console.log(err.message);
-            } 
-            else {
-                console.log("comprueba correo")
-                //no existe el tecnico con el nombre de usuario
-                if(!existeTec){
-                    daoTec.existeCorreoTecnico(request.body.correo,function(err, existeCorreo) {
-                        if(err) {
-                            response.status(500); 
-                            console.log(err.message);
-                        } else {
-                            
-                            //no existe el tecnico con el nombre de correo
-                            if(!existeCorreo){
+        //tecnico
+        if(esTecnico){
+            daoTec.existeTecnico(request.body.username,function(err, existeTec) {
+                console.log("compruebausername")
+                if(err) {
+                    response.status(500); 
+                    console.log(err.message);
+                } 
+                else {
+                    console.log("comprueba correo")
+                    //no existe el tecnico con el nombre de usuario
+                    if(!existeTec){
+                        daoTec.existeCorreoTecnico(request.body.correo,function(err, existeCorreo) {
+                            if(err) {
+                                response.status(500); 
+                                response.render("signup", 
+                                { title: "ERROR",
+                                msgRegistro: err.message,
+                                tipoAlert: "alert-danger"});//False para usu que no existe True si ya existe 
+                            } else {
                                 
-                                daoTec.existeNumEmpleado(request.body.numEmp, function(err, existeNumEmp) {
-                                    if(err) {
-                                        response.status(500); 
-                                        console.log(err.message);
-                                    } else {
-                                       
-                                        //el numero de empleado es correcto
-                                        if(existeNumEmp){
-                                            
-                                            daoTec.registroTecnico(request.body,imagen,function(err,insertId){
-                                                console.log("registro")
-                                                if(err) {
-                                                    response.status(500); 
-                                                    console.log(err.message);
-                                                }
-                                                else{
-                                                    response.status(200);
-                                                    response.redirect("/");
-                                                }
-                                            });
-                                        }
-
-                                        else{
+                                //no existe el tecnico con el nombre de correo
+                                if(!existeCorreo){
+                                    
+                                    daoTec.existeNumEmpleado(request.body.numEmp, function(err, existeNumEmp) {
+                                        if(err) {
                                             response.status(500); 
-                                            console.log(err.message);
-                                        }
-                                    }
-                                });
-                            }
+                                            response.render("signup", { title: "ERROR",
+                                            msgRegistro: err.message,
+                                            tipoAlert: "alert-danger"});
+                                        } else {
+                                        
+                                            //el numero de empleado es correcto
+                                            if(existeNumEmp){
+                                                
+                                                daoTec.registroTecnico(request.body,imagen,function(err,insertId){
+                                                    console.log("registro")
+                                                    if(err) {
+                                                        response.status(500); 
+                                                        console.log(err.message);
+                                                        response.render("signup", { title: "ERROR",
+                                                        msgRegistro: err.message,
+                                                        tipoAlert: "alert-danger"});
+                                                    }
+                                                    else{
+                                                        response.status(200);
+                                                        response.redirect("/");
+                                                    }
+                                                });
+                                            }
 
-                            else{
+                                            else{
+                                                response.status(500); 
+                                                response.render("signup", { title: "ERROR",
+                                                msgRegistro: "EL CODIGO DE EMPLEADO NO EXISTE",
+                                                tipoAlert: "alert-danger"});//False para usu que no existe True si ya existe 
+                                            }
+                                        }
+                                    });
+                                }
+
+                                else{
+                                    response.status(500); 
+                                    response.render("signup", { title: "ERROR",
+                                    msgRegistro: "EL CORREO DEL USUARIO YA ESTA REGISTRADO COMO TECNICO",
+                                    tipoAlert: "alert-danger"});//False para usu que no existe True si ya existe 
+                                }
+                            }
+                        });
+                    }
+
+                    else{
+                        response.status(500); 
+                        response.render("signup", { title: "ERROR",
+                        msgRegistro: "EL NOMBRE DE USUARIO YA ESTA REGISTRADO COMO TECNICO",
+                        tipoAlert: "alert-danger"});//False para usu que no existe True si ya existe 
+                    }
+                }
+            });
+        }
+
+        //usuario
+        else{
+            daoUsu.existeNombreUsuario(request.body.username,function(err, existeUsu) {
+                console.log("compruebausername")
+                if(err) {
+                    response.status(500); 
+                    console.log(err.message);
+                    response.render("signup", { title: "ERROR",
+                    msgRegistro: err.message,
+                    tipoAlert: "alert-danger"});
+                } 
+                else {
+                    console.log("comprueba correo")
+                    console.log(existeUsu);
+                    //no existe el usuario con el nombre de usuario
+                    if(!existeUsu){
+                        daoUsu.existeCorreoUsuario(request.body.correo,function(err, existeCorreo) {
+                            if(err) {
                                 response.status(500); 
                                 console.log(err.message);
-                            }
-                        }
-                    });
-                }
-
-                else{
-                    response.status(500); 
-                    console.log(err.message);
-                }
-            }
-        });
-    }
-
-    //usuario
-    else{
-        daoUsu.existeNombreUsuario(request.body.username,function(err, existeUsu) {
-            console.log("compruebausername")
-            if(err) {
-                response.status(500); 
-                console.log(err.message);
-            } 
-            else {
-                console.log("comprueba correo")
-                //no existe el usuario con el nombre de usuario
-                if(!existeUsu){
-                    daoUsu.existeCorreoUsuario(request.body.correo,function(err, existeCorreo) {
-                        if(err) {
-                            response.status(500); 
-                            console.log(err.message);
-                        } else {
-                            
-                            //no existe el tecnico con el nombre de correo
-                            if(!existeCorreo){   
-                                console.log(request.body);
-                                daoUsu.registroUsuario(request.body, imagen, function(err,insertId){
-                                console.log("registro")
-                                if(err) {
-                                    response.status(500); 
-                                    console.log(err.message);
+                                response.render("signup", { title: "ERROR",
+                                msgRegistro: err.message,
+                                tipoAlert: "alert-danger"});
+                            } 
+                            else {
+                                console.log(existeCorreo)
+                                //no existe el usuario con el nombre de correo
+                                if(!existeCorreo){   
+                                    console.log(request.body);
+                                    daoUsu.registroUsuario(request.body.correo, imagen, function(err,insertId){
+                                    console.log("registro")
+                                    if(err) {
+                                        response.status(500); 
+                                                        console.log(err.message);
+                                                        response.render("signup", { title: "ERROR",
+                                                        msgRegistro: err.message,
+                                                        tipoAlert: "alert-danger"});
+                                    }
+                                    else{
+                                        response.status(200);
+                                        response.redirect("/");
+                                    }
+                                    });
                                 }
+
                                 else{
-                                    response.status(200);
-                                    response.redirect("/");
+                                    response.status(500); 
+                                    response.render("signup", { title: "ERROR",
+                                    msgRegistro: "EL CORREO DEL USUARIO YA ESTA REGISTRADO COMO USUARIO",
+                                    tipoAlert: "alert-danger"});//False para usu que no existe True si ya existe 
                                 }
-                                });
                             }
-                        }
-                    });
+                        });
+                    }
+                    else{
+                        response.status(500); 
+                        response.render("signup", { title: "ERROR",
+                        msgRegistro: "EL NOMBRE DEL USUARIO YA ESTA REGISTRADO COMO USUARIO",
+                        tipoAlert: "alert-danger"});//False para usu que no existe True si ya existe 
+                    }
                 }
-                else{
-                    response.status(500); 
-                    console.log(err.message);
-                }
-            }
-        });
-    }
+            });
+        }
 
- });
+    });
 
- app.use(function(request, response, next) {
-    if (request.session.iduser!== undefined) {
-        response.locals.iduser = request.session.iduser;
-        next();
-    } else {
-        response.redirect("/");
-    }
+    app.use(function(request, response, next) {
+        if (request.session.iduser!== undefined) {
+            response.locals.iduser = request.session.iduser;
+            next();
+        } else {
+            response.redirect("/");
+        }
 });
 
 

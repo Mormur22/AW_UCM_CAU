@@ -34,10 +34,24 @@
      
      
     });
+
+
+    function ansValidation(ev) {
+        ev.preventDefault
+        // there is no input named name
+        //var nameValue = document.getElementById("name").value
+        var nameValue = "test";
+        var passValue = document.getElementById("password").value
+        var confpassValue = document.getElementById("password2").value
+        // the typeof operator returns a string.
+        if(typeof nameValue !== "string"){
+            window.alert("Please re-enter your name")
+        // we use strict validation ( !== ) because it's a good practice.
+        }else if(passValue !== confpassValue) {
+        window.alert("Passwords do not match!")
+        }
+}
     </script>
-
-    
-
 </head>
 
 <body>
@@ -50,27 +64,36 @@
     <div class="container">
         <div class="row vh-80 justify-content-center align-items-center">
             <div class="col-auto bg-light p-5 rounded">
-                <form action="/registro" method="POST", enctype="multipart/form-data">
+                
+                <% if (msgRegistro) { %>
+                    <div class="alert <%=tipoAlert%> alert-dismissible fade show " role="alert">
+                        <strong><%=msgRegistro%></strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <% } %>
+
+
+                <form action="/registro" name="signup" method="POST" enctype="multipart/form-data">
                     <h1 class="display-6 text-center">Registrarse</h1>
                     <!--Los campos vacios se comprueban con el campo 'required'-->
                     <div class="row mb-4">
                         <div class="col-6">
                             <div class="input-group p-2">
-                                <input type="text" name="username" class="form-control" id="floatingInput" placeholder="Nombre de usuario">
+                                <input type="text" name="username" class="form-control" id="username" placeholder="Nombre de usuario" required>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="input-group p-2">
-                                <input type="email" name="correo" class="form-control" id="floatingInput" placeholder="correo@ucm.es">
+                                <input type="email" name="correo" class="form-control" id="email" placeholder="correo@ucm.es" required pattern="^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?ucm\.es$">
                                 
                             </div>
                         </div>
                     </div>
                     <div class="input-group p-2">
-                        <input type="password" name="password" class="form-control" id="floatingInput" placeholder="Contraseña" >
+                        <input type="password" name="password" class="form-control" id="password" placeholder="Contraseña" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,16 }$" required title="Las contraseñas deben tener entre 8 y 16 caracteres, al menos un dígito, al menos una minúscula, al menos una mayúscula y al menos un carácter no alfanumérico">
                     </div>
                     <div class="input-group p-2">
-                        <input type="password" name="password2" class="form-control" id="floatingInput" placeholder="Confirmar contraseña" >
+                        <input type="password" name="password2" class="form-control" id="password2" placeholder="Confirmar contraseña" required>
                     </div>
 
                     <div class="input-group p-2">
@@ -105,7 +128,7 @@
                     </div>
 
                     <br>
-                    <button type="submit" class="btn btn-primary w-100">Registarse</button>
+                    <button type="submit" onclick="ansValidation(event)" class="btn btn-primary w-100">Registarse</button>
                     <a href="/" class="link-dark "><h6 class="h6 text-center">Ya estoy registrado</h5></a>
                 </form>
             </div>

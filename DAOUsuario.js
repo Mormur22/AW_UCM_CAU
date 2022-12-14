@@ -68,7 +68,7 @@ class DAO_Usuario {
     True --> El usuario/correo existe
     False --> No Existe
     */
-    existeCorreoUsuario(usuario,callback){
+    existeCorreoUsuario(correo,callback){
         this.pool.getConnection(function(err,connection){
             if(err){
                 callback(new Error("Error de conexión a la base de datos"));
@@ -76,7 +76,7 @@ class DAO_Usuario {
             else{
                 //El usuario no existe
                 const existeName = "SELECT * FROM UCM_AW_CAU_USU_Usuarios WHERE email= ?;";
-                connection.query(existeName,[usuario.correo],
+                connection.query(existeName,[correo],
                     function(err, result2){
                     connection.release();
                     if(err){
@@ -84,7 +84,7 @@ class DAO_Usuario {
                         callback(new Error("Error de acceso a la base de datos"));
                     }
                     else{
-                        if (result2.length==1) callback(null,true);
+                        if (result2.length==1) callback(new Error("El correo ya está registrado"), true);
                         else callback(null,false);
                     }
                 });

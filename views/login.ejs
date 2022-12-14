@@ -29,8 +29,15 @@
             <div class="col col-lg-12" style="margin-bottom: 2rem">
                 <img src="../img/backgrounds/3-2016-07-21-EscudoUCMTransparenteBig.png"  class="rounded-circle mx-auto d-block" style="width: 8rem;">
             </div>
-
+            
             <div class="col-auto p-5 rounded" style="background-color: #EDEDED ;">
+
+                <% if (msgRegistro) { %>
+                    <div class="alert <%=tipoAlert%> alert-dismissible fade show " role="alert">
+                        <strong><%=msgRegistro%></strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <% } %>
                 <form action="/login_user" method="POST" enctype="multipart/form-data">
                     <h1 class="display-6 text-center" style="margin-bottom:2.5rem">Iniciar Sesión</h1>
                     <div class="input-group p-2">

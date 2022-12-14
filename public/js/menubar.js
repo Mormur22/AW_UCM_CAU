@@ -1,7 +1,6 @@
 "use strict";
 
 let actualOp = 0;
-const contenedorTabla = $("#tabla");
 const numOp = 4;
 
 function option(op) {

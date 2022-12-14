@@ -3,162 +3,55 @@ const permisosCatgoriaPAS = [1,1,1,1,1];
 const permisosCatgoriaPDI = [1,1,1,1,1];
 const permisosCatgoriaAA = [1,1,0,0,1];
 
-const categoriasInc = ["administracion","comunicaciones","conectividad","docencia","web"];
+const categoriasInc = ["Administracion Digital","Comunicaciones","Conectividad","Docencia e","Web"];
+const categoriasIncVal = ["administracion","comunicaciones","conectividad","docencia","web"];
+const subCategoriasInc = {
+    administracion: ["Certificado digital de personal física", "Certificado electrónico de empleado público", "Registro electrónico", "Sede electrónica", "Portafirmas"],
+    comunicaciones: ["Correo electrónico","Google Meet","Cuenta de Alumno","Cuenta de personal","Cuenta genérica"],
+    conectividad: ["Cuenta de la Red SARA","Conexión por cable en despachos","Cortafuegos corporativo","Resolución de nombres de dominio (DNS)","VPN Acceso remoto","Wifi Eduroam (ssid: eduroam)","Wifi para visitantes (ssid: UCM-Visitantes)"],
+    docencia: ["Aula Virtual","Blackboard Collaborate","Listados de clase","Moodle: Aula Global","Plataforma de cursos online Privados"],
+    web: ["Analítica Web","Emisión de certificados SSL","Hosting: alojamiento de páginas web","Portal de eventos","Redirecciones web"]
+};
 
-const tabla_permisos=
-{ 
+const subCategoriasIncVal = {
+    administracion: ["certificado_digital", "certificado_electronico", "registro_electronico", "sede_electronica", "portafirmas"],
+    comunicaciones: ["correo_electronico","google_meet","cuenta_alumno","cuenta_personal","cuenta_generica"],
+    conectividad: ["cuenta_sara","conexion_cable","cortafuegos","dns","vpn","wifi_eduroam","wifi_visitantes"],
+    docencia: ["aula_virtual","blackboard_collaborate","listado_clase","moodle","cursos_online"],
+    web: ["analitica_web","certificado_ssl","hosting","portal_eventos","redirecciones_web"]
+};
 
+const permisosSubCatgoriaAlumno = {
+    administracion: [1,0,1,1,0],
+    comunicaciones: [1,1,1,0,0],
+    conectividad: [0,0,1,0,1,1,0],
+    docencia: [1,0,0,1,1],
+    web: [0,0,0,1,0]
+};
 
-    Administracion_digital: {
-       
-            "certificado_digital":
-            [["Alumno",1],["PAS",1],["PDI",1],["AA",0]],
-        
-            "certificado_electronico":
-            [["Alumno",0],["PAS",1],["PDI",1],["AA",0]],
-        
+const permisosSubCatgoriaPAS = {
+    administracion: [1,1,1,1,1],
+    comunicaciones: [1,1,0,1,1],
+    conectividad: [1,1,1,1,1,1,1],
+    docencia: [0,1,1,1,0],
+    web: [1,1,1,1,1]
+};
 
-        
-            "registro_electronico":
-            [["Alumno",1],["PAS",1],["PDI",1],["AA",1]],
-        
+const permisosSubCatgoriaPDI = {
+    administracion: [1,1,1,1,1],
+    comunicaciones: [1,1,0,1,1],
+    conectividad: [0,1,1,0,1,1,1],
+    docencia: [1,1,1,1,1],
+    web: [1,1,1,1,1]
+};
 
-        
-            "sede_electronica":
-            [["Alumno",1],["PAS",1],["PDI",1],["AA",1]],
-        
-
-        
-            "portafirmas":
-            [["Alumno",0],["PAS",1],["PDI",1],["AA",0]],
-        
-    },
-
-    Comunicaciones: {
-       
-            "correo_electronico":
-            [["Alumno",1],["PAS",1],["PDI",1],["AA",1]],
-        
-        
-            "google_meet":
-            [["Alumno",1],["PAS",1],["PDI",1],["AA",1]],
-        
-
-        
-            "cuenta_alumno":
-            [["Alumno",1],["PAS",0],["PDI",0],["AA",1]],
-        
-
-        
-            "cuenta_personal":
-            [["Alumno",0],["PAS",1],["PDI",1],["AA",0]],
-            
-
-            
-            "cuenta_generica":
-            [["Alumno",0],["PAS",1],["PDI",1],["AA",0]],
-        
-    
-    },
-
-    Conectividad: {
-        
-        
-            "Cuentas de la Red SARA":
-            [["Alumno",0],["PAS",1],["PDI",0],["AA",0]],
-        
-
-        
-            "Conexion por cable en despachos":
-            [["Alumno",0],["PAS",1],["PDI",1],["AA",0]],
-        
-
-        
-            "Cortafuegos corporativo":
-            [["Alumno",1],["PAS",1],["PDI",1],["AA",0]],
-        
-
-        
-            "Resolucion DNS":
-            [["Alumno",0],["PAS",1],["PDI",0],["AA",0]],
-        
-
-        
-            "VPN Acceso Remoto":
-            [["Alumno",1],["PAS",1],["PDI",1],["AA",0]],
-        
-
-        
-            "Wifi Eduroam":
-            [["Alumno",1],["PAS",1],["PDI",1],["AA",0]],
-        
-
-        
-            "Wifi UCM":
-            [["Alumno",0],["PAS",1],["PDI",1],["AA",0]],
-        
-
-    },
-
-    Docencia: {
-        
-        
-            "Aula Virtual":
-            [["Alumno",1],["PAS",0],["PDI",1],["AA",0]],
-        
-
-        
-            "Collaborate":
-            [["Alumno",0],["PAS",1],["PDI",1],["AA",0]],
-        
-
-        
-            "Listados de clase":
-            [["Alumno",0],["PAS",1],["PDI",1],["AA",0]],
-        
-
-        
-            "Moodle: Aula Global":
-            [["Alumno",1],["PAS",1],["PDI",1],["AA",0]],
-        
-
-        
-            "Plataforma de recursos online privados":
-            [["Alumno",1],["PAS",0],["PDI",1],["AA",0]],
-        
-
-    },
-
-    Web: {
-        
-            "Analítica web":
-            [["Alumno",0],["PAS",1],["PDI",1],["AA",0]],
-        
-
-        
-            "Emision de certificados":
-            [["Alumno",0],["PAS",1],["PDI",1],["AA",0]],
-        
-
-        
-            "Hosting: alojamiento de paginas web":
-            [["Alumno",0],["PAS",1],["PDI",1],["AA",0]],
-        
-
-        
-            "Portal de eventos":
-            [["Alumno",1],["PAS",1],["PDI",1],["AA",1]],
-        
-
-        
-            "Redirecciones Web":
-            [["Alumno",0],["PAS",1],["PDI",1],["AA",0]],
-        
-
-    }
-
-}
-
+const permisosSubCatgoriaAA= {
+    administracion: [0,0,1,1,0],
+    comunicaciones: [1,1,1,0,0],
+    conectividad: [0,0,0,0,0,0,0],
+    docencia: [0,0,0,0,0],
+    web: [0,0,0,1,0]
+};
 
 const parseCookie = str =>
   str
@@ -175,11 +68,41 @@ function getCategorias(perfil) {
         case "alumno":
             return categoriasInc.filter( (c,i) => permisosCatgoriaAlumno[i] ? true : false );
         case "pas":
-            return categoriasInc.filter( (c,i) => permisosCatgoriaPAS[i] ? true : false );
+            return categoriasInc.filter( (c,i) => permisosSubCatgoriaPAS[i] ? true : false );
         case "pdi":
-            return categoriasInc.filter( (c,i) => permisosCatgoriaPDI[i] ? true : false );
+            return categoriasInc.filter( (c,i) => permisosSubCatgoriaPDI[i] ? true : false );
         case "aa":
-            return categoriasInc.filter( (c,i) => permisosCatgoriaAA[i] ? true : false );
+            return categoriasInc.filter( (c,i) => permisosSubCatgoriaAA[i] ? true : false );
+        default:
+            return [];
+    }
+}
+
+function getCategoriasVal(perfil) {
+    switch(perfil){
+        case "alumno":
+            return categoriasIncVal.filter( (c,i) => permisosCatgoriaAlumno[i] ? true : false );
+        case "pas":
+            return categoriasIncVal.filter( (c,i) => permisosCatgoriaPAS[i] ? true : false );
+        case "pdi":
+            return categoriasIncVal.filter( (c,i) => permisosCatgoriaPDI[i] ? true : false );
+        case "aa":
+            return categoriasIncVal.filter( (c,i) => permisosCatgoriaAA[i] ? true : false );
+        default:
+            return [];
+    }
+}
+
+function getSubCategorias(perfil, categoria) {
+    switch(perfil){
+        case "alumno":
+            return subCategoriasIncVal[categoria].filter( (c,i) => permisosSubCatgoriaAlumno[categoria][i] ? true : false );
+        case "pas":
+            return subCategoriasIncVal[categoria].filter( (c,i) => permisosCatgoriaPAS[i] ? true : false );
+        case "pdi":
+            return subCategoriasIncVal[categoria].filter( (c,i) => permisosCatgoriaPDI[i] ? true : false );
+        case "aa":
+            return subCategoriasIncVal[categoria].filter( (c,i) => permisosCatgoriaAA[i] ? true : false );
         default:
             return [];
     }
@@ -188,13 +111,12 @@ function getCategorias(perfil) {
 window.onload = function () {
     try{
         const cookies = parseCookie(document.cookie);
-        console.log(cookies);
         window.currentUser=JSON.parse(cookies.cookieUser);
-        console.log( window.currentUser);
     }
     catch(error){
         console.log("Error recuperndo cookie");
     }
+    
     let catSel = document.getElementById("Categoria");
     let subSel = document.getElementById("Subcategoria");
 
@@ -230,10 +152,10 @@ function openInc(){
     //debugger
     catSel.empty();
 
+    const catval = getCategoriasVal(perfil);
     getCategorias(window.currentUser.perfil)
-        .map((cat) => {
-            console.log(cat);
-            $("#Categoria").append(new Option(cat, cat));
+        .map((cat,i) => {
+            $("#Categoria").append(new Option(cat, catval[i]));
         });
     // Agregar el evento change() a catSel y impementar loadSubCat()
 }

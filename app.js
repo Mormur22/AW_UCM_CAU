@@ -171,8 +171,6 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
                             response.locals.name = request.session.name;
                             response.locals.perfil = request.session.profile;
                             response.locals.isTechnician = false;
-                            console.log("locals (usuario estándar):");
-                            console.log(response.locals);
                             const cookieVal = {
                                 id:  response.locals.iduser,
                                 nombre:  response.locals.name,
@@ -183,7 +181,7 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
                             const cookieValStr = JSON.stringify(cookieVal);
                             response.cookie("cookieUser",cookieValStr);
                             response.redirect("./main");
-                           
+
                         }
 
                         //el correo con el usuario no está
@@ -571,6 +569,13 @@ app.post("/user/cancelTechnician/:idTec",(request, response) => {
     });
 });
 
+app.post("/user/cancelUser/:idUsu",(request, response) => {
+    daoUsu.cancelUser(request.params.idUsu,function(err,res){
+        if(err) response.send(false);
+        else response.send(true);
+    });
+});
+
 // Uso del middleware Static para servir todos los ficheros estáticos (.html, .css, .jpg, png, ...) de la carpeta public y sus subdirectorios
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -585,10 +590,3 @@ app.listen(3000, function(err){
 });
 
 daoGen.testDB();
-
-// DATOS DE SESIÓN NECESARIOS
-// session = { id: Number, name: String, profile: String, imageURL: String, isTechnician: Boolean}
-// EJEMPLO
-// session_ej = { id: 1, name: "Alexander Ortiz", profile: "pas", imageURL: "\\img\\avatars\\aortiz.jpg", isTechnician: Boolean }
-// La URL de la imagen se obtiene así:
-// imageURL = USU.imagen == undefined ||  tec.imagen == "null" ? "\\img\\avatars\\default.jpg" : "\\img\\avatars\\" + tec.imagen

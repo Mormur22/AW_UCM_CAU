@@ -1,5 +1,24 @@
 "use strict";
 
+const parseCookie = str =>
+  str
+  .split(';')
+  .map(v => v.split('='))
+  .reduce((acc, v) => {
+    acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
+    return acc;
+  }, {});
+
+window.onload = function () {
+    try{
+        const cookies = parseCookie(document.cookie);
+        window.currentUser=JSON.parse(cookies.cookieUser);
+    }
+    catch(error){
+        console.log("Error recuperndo cookie");
+    }
+}
+
 function viewTechnician(id) {
     alert("Ver técnico " + id);
 }
@@ -20,22 +39,33 @@ function cancelTechnician(id) {
             confirmBtn: {
                 text: 'Desactivar',
                 action: function () {
-                    $.ajax({
-                        url: "/user/cancelTechnician/"+id,
-                        method: "POST",
-                        dataType: "text"
-                    }).done(function(data) {
-                        console.log(data);
-                        if(data === "true") $.alert({
-                                title: "Confirmación",
-                                content: "Técnico borrado con éxito."
-                            });
-                        else $.alert({
-                            title: "Error",
-                            content: "No se pudo borrar el técnico."
+                    if(window.currentUser.id === id) {
+                        $.alert({
+                            title: "ERROR",
+                            content: "No puede borrar su propio usuario."
                         });
-                    }).fail(function(jqXHR, textStatus) {
-                    });;
+
+                    }
+                    else{
+                        $.ajax({
+                            url: "/user/cancelTechnician/"+id,
+                            method: "POST",
+                            dataType: "text"
+                        }).done(function(data) {
+                            console.log(data);
+                            if(data === "true") $.alert({
+                                    title: "Confirmación",
+                                    content: "Técnico borrado con éxito.",
+                                    onClose: function(){
+                                        loadAllUsers();
+                                    }
+                                });
+                            else $.alert({
+                                title: "Error",
+                                content: "No se pudo borrar el técnico."
+                            });
+                        });
+                    }
                 }
             },
             cancelBtn: {
@@ -68,7 +98,24 @@ function cancelStandardUser(id) {
             confirmBtn: {
                 text: 'Desactivar',
                 action: function () {
-                    $.alert('Desactivar usuario confirmado!');
+                    $.ajax({
+                        url: "/user/cancelUser/"+id,
+                        method: "POST",
+                        dataType: "text"
+                    }).done(function(data) {
+                        console.log(data);
+                        if(data === "true") $.alert({
+                                title: "Confirmación",
+                                content: "Usuario borrado con éxito.",
+                                onClose: function(){
+                                    loadAllUsers();
+                                }
+                            });
+                        else $.alert({
+                            title: "Error",
+                            content: "No se pudo borrar el usuario."
+                        });
+                    });
                 }
             },
             cancelBtn: {

@@ -115,9 +115,3 @@ INSERT INTO UCM_AW_CAU_AVI_Avisos ( idAvi, tipo, categoria, subcategoria, fecha,
   ( 9, 'incidencia', 'docencia', 'aula_virtual', '2022-11-28', 'La calefacción está muy alta en el Aula 2.09 ¿podéis bajarla unos grados?', 'Lo siento, nosotros no llevamos eso. Pregunta en conserjería.', 1, 1, 7, 3 ),  -- rcontreras / hsmith
   ( 10, 'incidencia', 'comunicaciones', 'correo_electronico', '2022-12-02', 'Este curso es mi último año en la universidad y me gustaría conservar copia de mis correos electrónicos ¿Podéis hacerme una?', 'Si solo te interesa conservar unos cuantos emails te recomiendo que uses la opción de exportar correos. Crea una nueva carpeta con todos los correos que te interesen y desde las opciones de carpeta elije "exportar".<br/><br/>Si los quieres todos, podemos proporcionarte una copia, pero primero deberás realizar una solicitud de entrega de datos desde la página de administración electrónica. No se te olvide marcar la casilla de "correos electrónicos".', 1, 0, 14, 5 ),  -- rguzman / lmoreno
   ( 11, 'incidencia', 'comunicaciones', 'correo_electronico', '2022-12-12', 'Voy a estar ausente un tiempo y deseo que otra persona pueda acceder a la cuenta institucional para poder contestar a los correos nuevos.', 'Lo siento, pero por motivos de privacidad de datos no se permite esa posibilidad. Sin embargo siempre puedes activar la opción de reenvío automático para correos entrantes. Cuando la marques se te habilitará el campo "cuenta de destino", en el que deberás escribir la dirección de correo electrónico de la persona que quieres que los reciba. Otra opción es la de "respuesta automática", en la que puedes poner un texto como "estoy de vacaciones y no puedo atenderte". Pero acuérdate de desactívala cuando vuelvas.', 1, 0, 13, 4 );  -- maranda / pjuarez
-
-
-/* Crear (como mínimo) registros para: */
--- 5 usuarios
--- 3 tecnicos
--- 10 avisos

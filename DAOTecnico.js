@@ -204,7 +204,7 @@ class DAO_Tecnico {
      * Devuelve todos los técnicos.
      * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, [Tecnico , ... , Tecnico] result) .
      * Tecnico = { idTec: Number, email: String, password: String, nombre: String, perfil: String, imagen: String, desactivado: Boolean, numEmp: String } .
-     * Ejecuta la consulta: "SELECT * FROM UCM_AW_CAU_TEC_Tecnicos;".
+     * Ejecuta la consulta: "SELECT * FROM UCM_AW_CAU_TEC_Tecnicos WHERE desactivado=0;".
      */
     getAllTechnicians(callback) {
         this.pool.getConnection(
@@ -213,7 +213,7 @@ class DAO_Tecnico {
                     callback(new Error("Error de conexión a la base de datos"), false);
                 }
                 else {
-                    connection.query("SELECT * FROM UCM_AW_CAU_TEC_Tecnicos;", [],
+                    connection.query("SELECT * FROM UCM_AW_CAU_TEC_Tecnicos WHERE desactivado=0;", [],
                         function(err, rows) {
                             connection.release();
                             if(err) callback(new Error("No se ha podido recuperar datos de la tabla UCM_AW_CAU_TEC_Tecnicos"), null);
@@ -243,7 +243,7 @@ class DAO_Tecnico {
                                 connection.query("UPDATE UCM_AW_CAU_AVI_Avisos SET idTec = NULL WHERE idTec = ?;", [idTec],
                                     function(err, rows) {
                                         connection.release();
-                                        if(err) callback(new Error("No se ha podido modificar los datos del técnico (idTec="+idTec+")."), null);
+                                        if(err) callback(new Error("No se ha podido modificar los avisos del técnico (idTec="+idTec+")."), null);
                                         else callback(null, rows);
                                     }
                                 );

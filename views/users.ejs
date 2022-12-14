@@ -17,7 +17,7 @@
                                 <td class="text-center align-middle"><%= row.name %></td>
                                 <td class="text-center align-middle"><%= row.role.toUpperCase() %></td>
                                 <td class="text-center align-middle">
-                                    <% if(row.actions[0] === 1) { %>
+                                    <% if(row.actions[0] === 0) { %>
                                     <img class="ticon ficon" src="img\icons\ojo.png" onclick=<% __append('"') %><%= row.viewFunction %><% __append('(') %><%= row.id %><% __append(')"') %> />
                                     <% } else if(row.actions[0] === 0) { %>
                                     <img class="ticon ficon" src="img\icons\ojo-gris.png" />

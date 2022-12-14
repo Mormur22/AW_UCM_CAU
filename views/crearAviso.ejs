@@ -9,15 +9,15 @@
         <div class="modal-body">
             <div class=row >
                 <div class="col-4">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalSugerencia" data-bs-whatever="@mdo">Sugerencia</button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalSugerencia" data-bs-dismiss="modal" aria-label="Close" data-backdrop="false">Sugerencia</button>
                 </div>
 
                 <div class="col-4">
-                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalIncidencia" data-bs-whatever="@fat">Incidencia</button>
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalIncidencia" data-bs-dismiss="modal" aria-label="Close" data-backdrop="false">Incidencia</button>
                 </div>
 
                 <div class="col-4">
-                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalFelicitación" data-bs-whatever="@getbootstrap">Felicitación</button>
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalFelicitación" data-bs-dismiss="modal" aria-label="Close" data-backdrop="false">Felicitación</button>
               </div>
             </div>
         </div>
@@ -31,36 +31,32 @@
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="ModalIncidenciaLabel">Nueva Incidencia</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-backdrop="false"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-        <form>
-           
-          <div class="row">
-          
-            <select id="Categoria" size="1">
-                <option value="" selected="selected">-- Seleccionar Categoría --</option>
-            </select>
+        <form action="/crearAviso" name="crarAviso" method="POST" enctype="multipart/form-data">
+            <div class="row">
+            
+              <select id="Categoria" size="1">
+                  <option value="" selected="selected">-- Seleccionar Categoría --</option>
+              </select>
 
 
-   
-            <select id="Subcategoria" size="1">
-                <option value="" selected="selected">-- Seleccionar Subategoría --</option>
-            </select>
+    
+              <select id="Subcategoria" size="1">
+                  <option value="" selected="selected">-- Seleccionar Subategoría --</option>
+              </select>
 
 
-          </div>
+            </div>
 
-          <div class="mb-3">
-              <label for="message-text" class="col-form-label">Observaciones:</label>
-            <textarea class="form-control" id="message-text"></textarea>
-          </div>
-
+            <div class="mb-3">
+                <label for="message-text" class="col-form-label">Observaciones:</label>
+              <textarea class="form-control" id="message-text"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Crear Sugerencia</button>
         </form>
         
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Crear Incidencia</button>
         </div>
       </div>
     </div>
@@ -74,29 +70,26 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-backdrop="false"></button>
         </div>
         <div class="modal-body">
-          <form>
+          <form action="/crearAviso" name="crarAviso" method="POST" enctype="multipart/form-data">
             <div class="row">
-              <div class="from-group p-2">
-                      <select id="Categoria" size="1">
-                        <option value="" selected="selected">-- Seleccionar Categoría --</option>
-                      </select>
-              </div>
-  
-              <div class="from-group p-2">
-                  <select id="Subcategoria" size="1">
-                    <option value="" selected="selected">-- Seleccionar Subategoría --</option>
-              </select>
-  
-                </div>
+             
+              <select id="Categoria" size="1">
+                <option value="" selected="selected">-- Seleccionar Categoría --</option>
+            </select>
+
+
+   
+            <select id="Subcategoria" size="1">
+                <option value="" selected="selected">-- Seleccionar Subategoría --</option>
+            </select>
+                
             </div>
             <div class="mb-3">
               <label for="message-text" class="col-form-label">Message:</label>
               <textarea class="form-control" id="message-text"></textarea>
             </div>
+            <button type="submit" class="btn btn-primary">Crear Sugerencia</button>
           </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Crear Sugerencia</button>
         </div>
       </div>
     </div>
@@ -110,17 +103,18 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-backdrop="false"></button>
         </div>
         <div class="modal-body">
-          <form>
+          <form action="/crearAviso" name="crarAviso" method="POST" enctype="multipart/form-data">
             <div class="mb-3">
+              <select id="CategoriaFel" size="1">
+                <option value="" selected="selected">-- Seleccionar Categoría --</option>
+            </select>
             </div>
             <div class="mb-3">
               <label for="message-text" class="col-form-label">Comentario:</label>
               <textarea class="form-control" id="message-text"></textarea>
             </div>
+            <button type="submit" class="btn btn-primary">Enviar Felicitación</button>
           </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Enviar Felicitación</button>
         </div>
       </div>
     </div>

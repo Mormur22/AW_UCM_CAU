@@ -96,24 +96,16 @@ const tabla_permisos=
         
             "Aula Virtual":
             [["Alumno",1],["PAS",0],["PDI",1],["AA",0]],
-        
-
-        
+    
             "Collaborate":
             [["Alumno",0],["PAS",1],["PDI",1],["AA",0]],
-        
-
-        
+    
             "Listados de clase":
             [["Alumno",0],["PAS",1],["PDI",1],["AA",0]],
-        
 
-        
             "Moodle: Aula Global":
             [["Alumno",1],["PAS",1],["PDI",1],["AA",0]],
-        
-
-        
+    
             "Plataforma de recursos online privados":
             [["Alumno",1],["PAS",0],["PDI",1],["AA",0]],
         
@@ -124,30 +116,19 @@ const tabla_permisos=
         
             "Analítica web":
             [["Alumno",0],["PAS",1],["PDI",1],["AA",0]],
-        
-
-        
+             
             "Emision de certificados":
             [["Alumno",0],["PAS",1],["PDI",1],["AA",0]],
-        
-
-        
+           
             "Hosting: alojamiento de paginas web":
             [["Alumno",0],["PAS",1],["PDI",1],["AA",0]],
         
-
-        
             "Portal de eventos":
             [["Alumno",1],["PAS",1],["PDI",1],["AA",1]],
-        
-
-        
+      
             "Redirecciones Web":
             [["Alumno",0],["PAS",1],["PDI",1],["AA",0]],
-        
-
     }
-
 }
 
 

@@ -149,6 +149,7 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
                         //es 
                         if(loginUsuExito)
                         {   
+                            console.log(loginUsuExito);
                             request.session.iduser=loginUsuExito.idUsu;
                             request.session.name = loginUsuExito.nombre;
                             request.session.correo = loginUsuExito.email
@@ -387,13 +388,13 @@ app.post("/registro", multerFactory.single('foto'),(request,response) => {
 
 
 
-app.get("/main.html", function(request, response) {
+app.get("/main", function(request, response) {
     response.status(200);
 
     response.locals.name = request.session.name;
     response.locals.isTechnician = request.session.isTechnician;
     response.locals.fecha = request.session.fecha;
-    response.locals.perfil= request.session.perfil;
+    response.locals.perfil= request.session.profile;
     let avisosData;
     //Recuperamos los datos del perfil dependiendo de si es usuario o técnico de
     if(response.locals.isTechnician===true){
@@ -410,7 +411,7 @@ app.get("/main.html", function(request, response) {
                 response.locals.numInc = avisosData.numInc;
                 response.locals.numSug = avisosData.numSug;
                 response.locals.numFel = avisosData.numFel;
-                response.render("main");
+                response.render("main",{msgRegistro: false});
             }
         });
     
@@ -429,7 +430,7 @@ app.get("/main.html", function(request, response) {
                 response.locals.numSug = avisosData.numSug;
                 response.locals.numFel = avisosData.numFel;
                 console.log(response.locals);
-                response.render("main");
+                response.render("main",{msgRegistro: false});
             }
         });
     }
@@ -474,7 +475,10 @@ app.post("/crearAviso", multerFactory.none(), function(request, response){
     }
 
     daoAvi.createNotify(aviso, function(err, result){
+        if(err){
 
+        }
+        response.redirect("/main");
     });
    
 });

@@ -27,13 +27,23 @@
         </div>
 
         <% if(!isTechnician) { %>
-        <div class=row id="crearA" style="margin-top:25rem; margin-right:2.5rem;justify-content:right;">
-            <div class="col-auto">
-                <%- include("crearAviso.ejs"); %>
-              </div>
-        </div>
+            <div class=row id="crearA" style="margin-top:25rem; margin-right:2.5rem;justify-content:right;">
+
+                <div class="col-auto">
+                    <% if (msgRegistro) { %>
+                        <div class="alert <%=tipoAlert%> alert-dismissible fade show " role="alert">
+                            <strong><%=msgRegistro%></strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <% } %>
+                </div>
+                
+                <div class="col-auto">
+                    <%- include("crearAviso.ejs"); %>
+                </div>
+
+            </div>
         <% } %>
-        
         <!-- Importar BootStrap JavaScript -->
         <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" type="text/javascript" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> -->
         <!-- Importar jQuery JavaScript -->

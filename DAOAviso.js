@@ -22,14 +22,26 @@ class DAO_Aviso {
                 }
                 else {
                     let fecha =new Date().toISOString().replace('T', ' ').substr(0, 19);
-                    connection.query("INSERT INTO UCM_AW_CAU_AVI_Avisos (tipo, categoria, subcategoria, fecha, observaciones, cerrado, cancelado, idUsu) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", 
-                        [aviso.tipo, aviso.categoria, aviso.subcategoria, fecha, aviso.observaciones, 0, 0, aviso.idUsu],
-                        function(err, rows) {
-                            connection.release();
-                            if(err) callback(new Error("No se ha podido crear el aviso"), false);
-                            else callback(null,true);
-                        }
-                    );
+                    if(aviso.subcategoria === "NULL"){
+                        connection.query("INSERT INTO UCM_AW_CAU_AVI_Avisos (tipo, categoria, subcategoria, fecha, observaciones, cerrado, cancelado, idUsu) VALUES (?, ?, NULL, ?, ?, ?, ?, ?);", 
+                            [aviso.tipo, aviso.categoria, fecha, aviso.observaciones, 0, 0, aviso.idUsu],
+                            function(err, rows) {
+                                connection.release();
+                                if(err) callback(new Error("No se ha podido crear el aviso"), false);
+                                else callback(null,true);
+                            }
+                        );
+                    }
+                    else{
+                        connection.query("INSERT INTO UCM_AW_CAU_AVI_Avisos (tipo, categoria, subcategoria, fecha, observaciones, cerrado, cancelado, idUsu) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", 
+                            [aviso.tipo, aviso.categoria, aviso.subcategoria, fecha, aviso.observaciones, 0, 0, aviso.idUsu],
+                            function(err, rows) {
+                                connection.release();
+                                if(err) callback(new Error("No se ha podido crear el aviso"), false);
+                                else callback(null,true);
+                            }
+                        );
+                    }
                 }
             }
         );

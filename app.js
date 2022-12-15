@@ -455,7 +455,7 @@ app.get("/imagen", function(request, response) {
         });
     }
 });
-
+//style="margin-top:25rem; margin-right:2.5rem;justify-content:right;"
 app.post("/crearAviso", function(request, response){
     const aviso ={
         tipo: request.body.tipo,
@@ -464,6 +464,7 @@ app.post("/crearAviso", function(request, response){
         observaciones: request.body.observaciones,
         idUsu: request.session.iduser,
     };
+    console.log(aviso);
     daoAvi.createNotify(aviso, function(err, result){
         response.redirect("/main");
     });

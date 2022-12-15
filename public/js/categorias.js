@@ -3,6 +3,9 @@ const permisosCatgoriaPAS = [1,1,1,1,1];
 const permisosCatgoriaPDI = [1,1,1,1,1];
 const permisosCatgoriaAA = [1,1,0,0,1];
 
+const categoriasFel = ["Archivo Universitario", "Asesoría Jurídica", "Biblioteca", "Centro de Información", "Departamentos docentes", "Inspección de Servicios", "Oficina de Gestión de Infraestructuras y Mantenimiento", "Servicio de Administración", "Servicios Informáticos", "Servicio de Documentación", "Servicio de Imprenta", "Servicio de Cafetería", "Toda la Universidad"];
+const categoriasFelVal = ["archivo", "asesoria_juridica", "biblioteca", "centro_informacion", "departamentos_docentes", "inspeccion_servicios", "oficina_gestion", "administracion", "informatica", "documentacion", "imprenta", "cafeteria", "universidad"];
+
 const categoriasInc = ["Administracion Digital","Comunicaciones","Conectividad","Docencia e","Web"];
 const categoriasIncVal = ["administracion","comunicaciones","conectividad","docencia","web"];
 
@@ -133,46 +136,24 @@ window.onload = function () {
     catch(error){
         console.log("Error recuperndo cookie");
     }
-    /*
-    let catSel = document.getElementById("Categoria");
-    let subSel = document.getElementById("Subcategoria");
-    catSel.onchange = function () {
-		 
-        subSel = true; // remove all options bar first
-
-        if (this.selectedIndex < 1)
-            return; // done
-        
-        for (var subcat in tabla_permisos[this.value]) {
-            subSel.options[subSel.options.length] = new Option(subcat, subcat);
-        }
-   }
-   */
 }
 /*
-$('#ModalIncidencia').modal('hide');
-if($('.modal-backdrop').is(':visible')) {
-  $('body').removeClass('modal-open'); 
-  $('.modal-backdrop').remove(); 
-};
+$("#ModalIncidenciaClose").click(removeModalsBackground);
+$("#ModalSugerenciaClose").click(removeModalsBackground);
+$("#ModalFelicitacionClose").click(removeModalsBackground);
 
-$('#ModalSugerencia').modal('hide');
-if($('.modal-backdrop').is(':visible')) {
-  $('body').removeClass('modal-open'); 
-  $('.modal-backdrop').remove(); 
-};
-
-$('#ModalFelicitacion').modal('hide');
-if($('.modal-backdrop').is(':visible')) {
-  $('body').removeClass('modal-open'); 
-  $('.modal-backdrop').remove(); 
-};
+function removeModalsBackground() {
+    if($('.modal-backdrop').is(':visible')) {
+        // Esto cierra el modal pero impide que se vuelva a abrir
+        $('.modal-backdrop').remove(); 
+    };
+}
 */
 $("#ModalIncidencia").one("show.bs.modal", openInc);
 
-function openInc(){
-    const catSel = $("#Categoria");
-    //debugger
+function openInc() {
+
+    const catSel = $("#CategoriaInc");
     catSel.empty();
 
     const catval = getCategoriasVal(window.currentUser.perfil);
@@ -181,7 +162,7 @@ function openInc(){
             catSel.append(new Option(cat,catval[i]));
         });
 
-    const subcCatSel = $("#Subcategoria");
+    const subcCatSel = $("#SubcategoriaInc");
     catSel.change(function(){
         subcCatSel.empty();
         const categoria=$(this).val();
@@ -191,5 +172,42 @@ function openInc(){
             subcCatSel.append(new Option(subcat,subcatval[i]));
         });
     });
-    // Agregar el evento change() a catSel y impementar loadSubCat()
+
+    
+}
+
+$("#ModalSugerencia").one("show.bs.modal", openSug);
+
+function openSug() {
+    const catSel = $("#CategoriaSug");
+    catSel.empty();
+
+    const catval = getCategoriasVal(window.currentUser.perfil);
+    getCategorias(window.currentUser.perfil)
+        .map((cat,i) => {
+            catSel.append(new Option(cat,catval[i]));
+        });
+
+    const subcCatSel = $("#SubcategoriaSug");
+    catSel.change(function(){
+        subcCatSel.empty();
+        const categoria=$(this).val();
+        const subcatval = getSubCategoriasVal(window.currentUser.perfil,categoria);
+        getSubCategorias(window.currentUser.perfil,categoria)
+        .map((subcat,i) => {
+            subcCatSel.append(new Option(subcat,subcatval[i]));
+        });
+    });
+}
+
+$("#ModalFelicitacion").one("show.bs.modal", openFel);
+
+function openFel() {
+    const catSel = $("#CategoriaFel");
+    catSel.empty();
+
+    const catval = categoriasFelVal;
+    categoriasFel.map((cat,i) => {
+            catSel.append(new Option(cat,catval[i]));
+        });
 }

@@ -5,6 +5,7 @@ const permisosCatgoriaAA = [1,1,0,0,1];
 
 const categoriasInc = ["Administracion Digital","Comunicaciones","Conectividad","Docencia e","Web"];
 const categoriasIncVal = ["administracion","comunicaciones","conectividad","docencia","web"];
+
 const subCategoriasInc = {
     administracion: ["Certificado digital de personal física", "Certificado electrónico de empleado público", "Registro electrónico", "Sede electrónica", "Portafirmas"],
     comunicaciones: ["Correo electrónico","Google Meet","Cuenta de Alumno","Cuenta de personal","Cuenta genérica"],
@@ -69,11 +70,11 @@ function getCategorias(perfil) {
         case "alumno":
             return categoriasInc.filter( (c,i) => permisosCatgoriaAlumno[i] ? true : false );
         case "pas":
-            return categoriasInc.filter( (c,i) => permisosSubCatgoriaPAS[i] ? true : false );
+            return categoriasInc.filter( (c,i) => permisosCatgoriaPAS[i] ? true : false );
         case "pdi":
-            return categoriasInc.filter( (c,i) => permisosSubCatgoriaPDI[i] ? true : false );
+            return categoriasInc.filter( (c,i) => permisosCatgoriaPDI[i] ? true : false );
         case "aa":
-            return categoriasInc.filter( (c,i) => permisosSubCatgoriaAA[i] ? true : false );
+            return categoriasInc.filter( (c,i) => permisosCatgoriaAA[i] ? true : false );
         default:
             return [];
     }
@@ -99,11 +100,11 @@ function getSubCategorias(perfil, categoria) {
         case "alumno":
             return subCategoriasInc[categoria].filter( (c,i) => permisosSubCatgoriaAlumno[categoria][i] ? true : false );
         case "pas":
-            return subCategoriasInc[categoria].filter( (c,i) => permisosSubCatgoriaPAS[i] ? true : false );
+            return subCategoriasInc[categoria].filter( (c,i) => permisosSubCatgoriaPAS[categoria][i] ? true : false );
         case "pdi":
-            return subCategoriasInc[categoria].filter( (c,i) => permisosSubCatgoriaPDI[i] ? true : false );
+            return subCategoriasInc[categoria].filter( (c,i) => permisosSubCatgoriaPDI[categoria][i] ? true : false );
         case "aa":
-            return subCategoriasInc[categoria].filter( (c,i) => permisosSubCatgoriaAA[i] ? true : false );
+            return subCategoriasInc[categoria].filter( (c,i) => permisosSubCatgoriaAA[categoria][i] ? true : false );
         default:
             return [];
     }
@@ -114,11 +115,11 @@ function getSubCategoriasVal(perfil, categoria) {
         case "alumno":
             return subCategoriasIncVal[categoria].filter( (c,i) => permisosSubCatgoriaAlumno[categoria][i] ? true : false );
         case "pas":
-            return subCategoriasIncVal[categoria].filter( (c,i) => permisosSubCatgoriaPAS[i] ? true : false );
+            return subCategoriasIncVal[categoria].filter( (c,i) => permisosSubCatgoriaPAS[categoria][i] ? true : false );
         case "pdi":
-            return subCategoriasIncVal[categoria].filter( (c,i) => permisosSubCatgoriaPDI[i] ? true : false );
+            return subCategoriasIncVal[categoria].filter( (c,i) => permisosSubCatgoriaPDI[categoria][i] ? true : false );
         case "aa":
-            return subCategoriasIncVal[categoria].filter( (c,i) => permisosSubCatgoriaAA[i] ? true : false );
+            return subCategoriasIncVal[categoria].filter( (c,i) => permisosSubCatgoriaAA[categoria][i] ? true : false );
         default:
             return [];
     }
@@ -148,7 +149,7 @@ window.onload = function () {
    }
    */
 }
-
+/*
 $('#ModalIncidencia').modal('hide');
 if($('.modal-backdrop').is(':visible')) {
   $('body').removeClass('modal-open'); 
@@ -166,7 +167,7 @@ if($('.modal-backdrop').is(':visible')) {
   $('body').removeClass('modal-open'); 
   $('.modal-backdrop').remove(); 
 };
-
+*/
 $("#ModalIncidencia").one("show.bs.modal", openInc);
 
 function openInc(){
@@ -175,12 +176,20 @@ function openInc(){
     catSel.empty();
 
     const catval = getCategoriasVal(window.currentUser.perfil);
-    console.log(catval);
-    console.log(getCategorias(window.currentUser.perfil));
-    //getCategorias(window.currentUser.perfil)
-    catval
-        .map((cat) => {
-            catSel.append(new Option(cat,cat));
+    getCategorias(window.currentUser.perfil)
+        .map((cat,i) => {
+            catSel.append(new Option(cat,catval[i]));
         });
+
+    const subcCatSel = $("#Subcategoria");
+    catSel.change(function(){
+        subcCatSel.empty();
+        const categoria=$(this).val();
+        const subcatval = getSubCategoriasVal(window.currentUser.perfil,categoria);
+        getSubCategorias(window.currentUser.perfil,categoria)
+        .map((subcat,i) => {
+            subcCatSel.append(new Option(subcat,subcatval[i]));
+        });
+    });
     // Agregar el evento change() a catSel y impementar loadSubCat()
 }

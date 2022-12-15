@@ -23,11 +23,11 @@ class DAO_Aviso {
                 else {
                     let fecha =new Date().toISOString().replace('T', ' ').substr(0, 19);
                     connection.query("INSERT INTO UCM_AW_CAU_AVI_Avisos (tipo, categoria, subcategoria, fecha, observaciones, cerrado, cancelado, idUsu) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", 
-                    [aviso.tipo, aviso.categoria, aviso.subcategoria, fecha, aviso.observaciones, 0, 0, aviso.idUsu],
+                        [aviso.tipo, aviso.categoria, aviso.subcategoria, fecha, aviso.observaciones, 0, 0, aviso.idUsu],
                         function(err, rows) {
                             connection.release();
-                            if(err) callback(new Error("No se ha podido crear el aviso"), null);
-                            else callback(null, rows[0].idAvi);
+                            if(err) callback(new Error("No se ha podido crear el aviso"), false);
+                            else callback(null,true);
                         }
                     );
                 }
@@ -65,7 +65,7 @@ class DAO_Aviso {
      * @param myIdUsu El id del usuarioa estándar que está usando la applicaión.
      * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, [Aviso , ... , Aviso] result) .
      * Aviso = { idAvi: Number, tipo: String, categoria: String, subcategoria: String, fecha: Date, observaciones: String, comentario: String, cerrado: Boolean, cancelado: Boolean, idUsu: Number, idTec: Number } + TEC.nombre .
-     * Ejecuta la consulta "SELECT AVI.idAvi, AVI.tipo, AVI.categoria, AVI.subcategoria, AVI.fecha, AVI.observaciones, AVI.comentario, AVI.cerrado, AVI.cancelado, AVI.idUsu, AVI.idTec, TEC.nombre FROM UCM_AW_CAU_AVI_Avisos AVI JOIN UCM_AW_CAU_TEC_Tecnicos TEC ON AVI.idTec = TEC.idTec WHERE AVI.cerrado = 0 AND AVI.cancelado = 0 AND AVI.idUsu = $idUsu;"
+     * Ejecuta la consulta "SELECT AVI.idAvi, AVI.tipo, AVI.categoria, AVI.subcategoria, AVI.fecha, AVI.observaciones, AVI.comentario, AVI.cerrado, AVI.cancelado, AVI.idUsu, AVI.idTec FROM UCM_AW_CAU_AVI_Avisos AVI WHERE AVI.cerrado = 0 AND AVI.cancelado = 0 AND AVI.idUsu = ?;"
      */
     getUserOpenNotifies(myIdUsu, callback) {
         this.pool.getConnection(
@@ -74,7 +74,7 @@ class DAO_Aviso {
                     callback(new Error("Error de conexión a la base de datos"), false);
                 }
                 else {
-                    connection.query("SELECT AVI.idAvi, AVI.tipo, AVI.categoria, AVI.subcategoria, AVI.fecha, AVI.observaciones, AVI.comentario, AVI.cerrado, AVI.cancelado, AVI.idUsu, AVI.idTec, TEC.nombre FROM UCM_AW_CAU_AVI_Avisos AVI JOIN UCM_AW_CAU_TEC_Tecnicos TEC ON AVI.idTec = TEC.idTec WHERE AVI.cerrado = 0 AND AVI.cancelado = 0 AND AVI.idUsu = ?;", [myIdUsu],
+                    connection.query("SELECT AVI.idAvi, AVI.tipo, AVI.categoria, AVI.subcategoria, AVI.fecha, AVI.observaciones, AVI.comentario, AVI.cerrado, AVI.cancelado, AVI.idUsu, AVI.idTec, TEC.nombre FROM UCM_AW_CAU_AVI_Avisos AVI LEFT JOIN UCM_AW_CAU_TEC_Tecnicos TEC ON AVI.idTec = TEC.idTec WHERE AVI.cerrado = 0 AND AVI.cancelado = 0 AND AVI.idUsu = ?;", [myIdUsu],
                         function(err, rows) {
                             connection.release();
                             if(err) callback(new Error("No se ha podido recuperar datos de la tabla UCM_AW_CAU_AVI_Avisos"), null);

@@ -16,7 +16,7 @@
                                 <td class="text-center align-middle"><%= row.date %></td>
                                 <td class="align-middle"><%= row.resume %></td>
                                 <td class="text-center align-middle"><img class="ticon" src="<%= row.imageURL %>" /></td>
-                                <td class="text-center align-middle"><%= row.name %></td>
+                                <td class="text-center align-middle"><%= row.name || "No asignado" %></td>
                             </tr>
                             <% }); %>
                         </tbody>

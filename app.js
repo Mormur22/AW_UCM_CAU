@@ -19,7 +19,6 @@ const DAOAvi = require("./DAOAviso");
 const bodyParser = require("body-parser");
 const { body, validationResult } = require('express-validator');
 
-
 const PORT = process.env.PORT || config.puerto;
 const pool = mysql.createPool(config.mysqlConfig);
 // Crear las instancias DAO
@@ -68,6 +67,7 @@ app.use(express.urlencoded({extended: true}));//Devuelve middleware que solo ana
 //---------------------------------Sesion---------------------------------
 const session = require("express-session");
 const mysqlSession = require("express-mysql-session");
+const { Console } = require("console");
 const MySQLStore = mysqlSession(session);
 const sessionStore = new MySQLStore(config.mysqlConfig);
 const middlewareSession = session({
@@ -108,16 +108,11 @@ app.get("/", (request, response) => {
 
 app.post("/login_user", multerFactory.none(),(request, response) => {
 
-    console.log(request.body);
-
-
-
     daoTec.loginTecnico(request.body.correo, request.body.password, function(err, loginTecExito) {
 
         //tiene exito
         if(!err){
             
-            console.log(loginTecExito);
             //es tecnico
             if(loginTecExito)
             {   
@@ -142,8 +137,6 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
                 }
                 const cookieValStr = JSON.stringify(cookieVal);
                 response.cookie("cookieUser",cookieValStr);
-                console.log("locals (técnico):");
-                console.log(response.locals);
                 response.redirect("./main");
             }
 
@@ -158,7 +151,6 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
                         //es 
                         if(loginUsuExito)
                         {   
-                            console.log(loginUsuExito);
                             request.session.iduser=loginUsuExito.idUsu;
                             request.session.name = loginUsuExito.nombre;
                             request.session.correo = loginUsuExito.email
@@ -236,7 +228,6 @@ app.get("/signup", (request, response) => {
     }   
 });
 
-
 app.post("/registro", multerFactory.single('foto'),(request,response) => {
     
         let imagen;
@@ -249,13 +240,10 @@ app.post("/registro", multerFactory.single('foto'),(request,response) => {
         //tecnico
         if(esTecnico){
             daoTec.existeTecnico(request.body.username,function(err, existeTec) {
-                console.log("compruebausername")
                 if(err) {
-                    response.status(500); 
-                    console.log(err.message);
+                    response.status(500);
                 } 
                 else {
-                    console.log("comprueba correo")
                     //no existe el tecnico con el nombre de usuario
                     if(!existeTec){
                         daoTec.existeCorreoTecnico(request.body.correo,function(err, existeCorreo) {
@@ -282,10 +270,9 @@ app.post("/registro", multerFactory.single('foto'),(request,response) => {
                                             if(existeNumEmp){
                                                 
                                                 daoTec.registroTecnico(request.body,imagen,function(err,insertId){
-                                                    console.log("registro")
+                                                    
                                                     if(err) {
                                                         response.status(500); 
-                                                        console.log(err.message);
                                                         response.render("signup", { title: "ERROR",
                                                         msgRegistro: err.message,
                                                         tipoAlert: "alert-danger"});
@@ -330,37 +317,29 @@ app.post("/registro", multerFactory.single('foto'),(request,response) => {
         //usuario
         else{
             daoUsu.existeNombreUsuario(request.body.username,function(err, existeUsu) {
-                console.log("compruebausername")
                 if(err) {
                     response.status(500); 
-                    console.log(err.message);
                     response.render("signup", { title: "ERROR",
                     msgRegistro: err.message,
                     tipoAlert: "alert-danger"});
                 } 
                 else {
-                    console.log("comprueba correo")
                     console.log(existeUsu);
                     //no existe el usuario con el nombre de usuario
                     if(!existeUsu){
                         daoUsu.existeCorreoUsuario(request.body.correo,function(err, existeCorreo) {
                             if(err) {
                                 response.status(500); 
-                                console.log(err.message);
                                 response.render("signup", { title: "ERROR",
                                 msgRegistro: err.message,
                                 tipoAlert: "alert-danger"});
                             } 
                             else {
-                                console.log(existeCorreo)
                                 //no existe el usuario con el nombre de correo
                                 if(!existeCorreo){   
-                                    console.log(request.body);
                                     daoUsu.registroUsuario(request.body.correo, imagen, function(err,insertId){
-                                    console.log("registro")
                                     if(err) {
                                         response.status(500); 
-                                                        console.log(err.message);
                                                         response.render("signup", { title: "ERROR",
                                                         msgRegistro: err.message,
                                                         tipoAlert: "alert-danger"});
@@ -403,6 +382,7 @@ app.post("/registro", multerFactory.single('foto'),(request,response) => {
 });
 
 
+console.log
 
 app.get("/main", function(request, response) {
     response.status(200);
@@ -418,10 +398,9 @@ app.get("/main", function(request, response) {
        
         daoAvi.getTechnicianAllNotifies(request.session.iduser, function (err,avisos)
         {   if(err){
-                console.log(err);
+
             }
             else{
-                console.log(avisos);
                 avisosData = util.getAvisosNumbers(avisos);
                 response.locals.numAvisos = avisosData.numAvisos;
                 response.locals.numInc = avisosData.numInc;
@@ -436,16 +415,14 @@ app.get("/main", function(request, response) {
     else {
         daoAvi.getUserAllNotifies(request.session.iduser, function (err,avisos)
             {   if(err){
-                console.log(err);
+
             }
             else{
-                console.log(avisos);
                 avisosData = util.getAvisosNumbers(avisos);
                 response.locals.numAvisos = avisosData.numAvisos;
                 response.locals.numInc = avisosData.numInc;
                 response.locals.numSug = avisosData.numSug;
                 response.locals.numFel = avisosData.numFel;
-                console.log(response.locals);
                 response.render("main",{msgRegistro: false});
             }
         });
@@ -479,28 +456,19 @@ app.get("/imagen", function(request, response) {
     }
 });
 
-app.post("/crearAviso", multerFactory.none(), function(request, response){
-   
-    let aviso ={
-
-        tipo: request.tipo,
-        categoria: request.categoria,
-        subcategoria: request.subcategoria,
-        observaciones: request.obs,
-        idUsu: request.session.idUsu,
-    }
-
+app.post("/crearAviso", function(request, response){
+    const aviso ={
+        tipo: request.body.tipo,
+        categoria: request.body.categoria,
+        subcategoria: request.body.subcategoria,
+        observaciones: request.body.observaciones,
+        idUsu: request.session.iduser,
+    };
     daoAvi.createNotify(aviso, function(err, result){
-        if(err){
-
-        }
         response.redirect("/main");
     });
-   
 });
     
-
-
 app.get("/tables/notifies", function(request, response) {
     daoAvi.getOpenNotifies(
         function(err, result) {

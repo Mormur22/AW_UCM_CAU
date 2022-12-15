@@ -24,10 +24,7 @@ class DAO_Tecnico {
                 connection.query(existeName,[nombre],
                 function(err, result){
                     connection.release();
-                    if(err){
-                        console.log("ERROR: "+err.message);
-                        callback(new Error("Error de acceso a la base de datos"));
-                    }
+                    if(err) callback(new Error("Error de acceso a la base de datos"));
                     else{
                         if (result.length==1) callback(new Error("El nombre de usuario ya existe"),true);
                         else callback(null,false);
@@ -53,10 +50,7 @@ class DAO_Tecnico {
                 connection.query(existeName,[correo],
                     function(err, result2){
                     connection.release();
-                    if(err){
-                        console.log("ERROR: "+err.message);
-                        callback(new Error("Error de acceso a la base de datos"));
-                    }
+                    if(err) callback(new Error("Error de acceso a la base de datos"));
                     else{
                         if (result2.length==1) callback( new Error("El correo ya está registrado"), true);
                         else callback(null, false);
@@ -68,9 +62,7 @@ class DAO_Tecnico {
 
     existeNumEmpleado(numEmp,callback){
         this.pool.getConnection(function(err,connection){
-            if(err){
-                callback(new Error("Error de conexión a la base de datos"));
-            }
+            if(err) callback(new Error("Error de conexión a la base de datos"));
             else{
                 //El usuario no existe
                 const existeName = "SELECT * FROM UCM_AW_CAU_EMP_Empleados WHERE numero = ?;";
@@ -97,15 +89,11 @@ class DAO_Tecnico {
             }
             else{
                 let fecha =new Date().toISOString().replace('T', ' ').substr(0, 19);
-                console.log("Datos registro usuario: "+usuario.nombre+" "+usuario.correo+" "+usuario.pass); 
                 const valor="INSERT INTO UCM_AW_CAU_TEC_Tecnicos (nombre,fecha,email, password,perfil,desactivado,numEmp,imagen) VALUES (?,?,?,?,?,?,?,?);";
                 connection.query(valor,[usuario.username,fecha,usuario.correo, usuario.password,usuario.perfil,false,usuario.numEmp,img],
                 function(err2, result2){
                     connection.release(); //devolver el pool de conexiones.
-                    if(err2){
-                        console.log("ERROR: "+err.message);
-                        callback(new Error("Error de acceso a la base de datos"));
-                    }
+                    if(err2) callback(new Error("Error de acceso a la base de datos"));
                     else{     
                         if(result2.affectedRows) callback(null,result2.insertId);
                         else callback(new Error("Error en el registro de usuario"));
@@ -117,7 +105,6 @@ class DAO_Tecnico {
 
     
     loginTecnico(email, password,callback) {
-        //console.log("DAO "+email+" "+password);
         this.pool.getConnection(function(err, connection) {
             if (err) {
                 callback(new Error("Error de conexión a la base de datos"));
@@ -131,13 +118,8 @@ class DAO_Tecnico {
                             callback(new Error("Error de acceso a la base de datos"));
                         }
                         else {
-                            if (rows.length === 0) {
-                                callback(null,false); //no está el usuario con el password proporcionado
-                            }
-                            else {
-                                // console.log("DATOS DAO: "+rows[0].id+"/"+rows[0].username+"/"+rows[0].email+"/"+rows[0].password);
-                                callback(null,rows[0]);
-                            }
+                            if (rows.length === 0) callback(null,false); //no está el usuario con el password proporcionado
+                            else callback(null,rows[0]);
                         }
                     }
                 );
@@ -158,15 +140,8 @@ class DAO_Tecnico {
                         callback(new Error("Error de acceso a la base de datos"));
                     }
                     else {
-                        console.log(rows);
-                        if (rows.length === 0) {
-                            callback(null,false); //no está el usuario con el password proporcionado
-                        }
-                        else {
-                            console.log(rows);
-                            // console.log("DATOS DAO: "+rows[0].id+"/"+rows[0].username+"/"+rows[0].email+"/"+rows[0].password);
-                            callback(null,rows[0].imagen);
-                        }
+                        if (rows.length === 0) callback(null,false); //no está el usuario con el password proporcionado
+                        else callback(null,rows[0].imagen);
                     }
             });
         }

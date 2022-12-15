@@ -34,27 +34,21 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-        <form action="/crearAviso" name="crarAviso" method="POST" enctype="multipart/form-data">
-            <div class="row">
-            
-              <select id="Categoria" size="1">
-                  <option value="" selected="selected">-- Seleccionar Categoría --</option>
-              </select>
-
-
-    
-              <select id="Subcategoria" size="1">
-                  <option value="" selected="selected">-- Seleccionar Subategoría --</option>
-              </select>
-
-
-            </div>
-
-            <div class="mb-3">
-                <label for="message-text" class="col-form-label">Observaciones:</label>
-              <textarea class="form-control" id="message-text"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Crear Sugerencia</button>
+        <form action="/crearAviso" name="crarAviso" method="POST" enctype="application/x-www-form-urlencoded">
+          <input type="hidden" name="tipo" value="incidencia" />
+          <div class="row">
+            <select id="Categoria" name="categoria" size="1">
+              <option value="" selected="selected">-- Seleccionar Categoría --</option>
+          </select>
+          <select id="Subcategoria" name="subcategoria" size="1">
+              <option value="" selected="selected">-- Seleccionar Subategoría --</option>
+          </select>            
+          </div>
+          <div class="mb-3">
+            <label for="message-text" class="col-form-label">Message:</label>
+            <textarea class="form-control" id="message-text" name="observaciones"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Crear Sugerencia</button>
         </form>
         
         </div>
@@ -70,23 +64,19 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-backdrop="false"></button>
         </div>
         <div class="modal-body">
-          <form action="/crearAviso" name="crarAviso" method="POST" enctype="multipart/form-data">
+          <form action="/crearAviso" name="crarAviso" method="POST">
+            <input type="hidden" name="tipo" value="incidencia" />
             <div class="row">
-             
-              <select id="Categoria" size="1">
+              <select id="Categoria" name="categoria" size="1">
                 <option value="" selected="selected">-- Seleccionar Categoría --</option>
             </select>
-
-
-   
-            <select id="Subcategoria" size="1">
+            <select id="Subcategoria" name="subcategoria" size="1">
                 <option value="" selected="selected">-- Seleccionar Subategoría --</option>
-            </select>
-                
+            </select>            
             </div>
             <div class="mb-3">
               <label for="message-text" class="col-form-label">Message:</label>
-              <textarea class="form-control" id="message-text"></textarea>
+              <textarea class="form-control" id="message-text" name="observaciones"></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Crear Sugerencia</button>
           </form>

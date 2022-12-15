@@ -22,14 +22,9 @@ class DAO_Usuario {
     testConnection(callback) {
         this.pool.getConnection(
             function(err, connection) {
-                if(err) {
-                    callback(new Error("Error de conexión a la base de datos"), false);
-                }
-                else {
-                    // Devolver la conexión al pool y llamar a la función de callback cone éxito
-                    connection.release();
-                    callback(null, true);
-                }
+                connection.release();
+                if(err) callback(new Error("Error de conexión a la base de datos"), false);
+                else callback(null, true);
             }
         );
     }
@@ -49,10 +44,7 @@ class DAO_Usuario {
                 connection.query(existeName,[nombre],
                 function(err, result){
                     connection.release();
-                    if(err){
-                        console.log("ERROR: "+err.message);
-                        callback(new Error("Error de acceso a la base de datos"));
-                    }
+                    if(err) callback(new Error("Error de acceso a la base de datos"));
                     else{
                         if (result.length==1) callback(null,true);
                         else callback(null,false);
@@ -79,10 +71,7 @@ class DAO_Usuario {
                 connection.query(existeName,[correo],
                     function(err, result2){
                     connection.release();
-                    if(err){
-                        console.log("ERROR: "+err.message);
-                        callback(new Error("Error de acceso a la base de datos"));
-                    }
+                    if(err) callback(new Error("Error de acceso a la base de datos"));
                     else{
                         if (result2.length==1) callback(new Error("El correo ya está registrado"), true);
                         else callback(null,false);
@@ -100,16 +89,11 @@ class DAO_Usuario {
             }
             else{
                 let fecha =new Date().toISOString().replace('T', ' ').substr(0, 19);
-                console.log("Datos registro usuario: "+usuario.nombre+" "+usuario.correo+" "+usuario.pass); 
                 const valor="INSERT INTO UCM_AW_CAU_USU_Usuarios (nombre,fecha,email, password,perfil,desactivado,reputacion,imagen) VALUES (?,?,?,?,?,?,?,?);";
-                console.log(valor);
                 connection.query(valor,[usuario.username,fecha, usuario.correo, usuario.password,usuario.perfil,false,0,img],
                 function(err2, result2){
-                    connection.release(); //devolver el pool de conexiones.
-                    if(err2){
-                        console.log("ERROR: "+err2.message);
-                        callback(new Error("Error de acceso a la base de datos"));
-                    }
+                    connection.release();
+                    if(err2) callback(new Error("Error de acceso a la base de datos"));
                     else{     
                         if(result2.affectedRows) callback(null,result2.insertId);
                         else callback(null,false);
@@ -121,30 +105,19 @@ class DAO_Usuario {
 
     
     loginUsuario(email, password,callback) {
-        //console.log("DAO "+email+" "+password);
         this.pool.getConnection(function(err, connection) {
-            if (err) {
-                callback(new Error("Error de conexión a la base de datos"));
-            }
+            if (err) callback(new Error("Error de conexión a la base de datos"));
             else {
-                //console.log("Datos log usuario: "+ email +" "+ password);
-                // connection.query('USE back2study;');
                 connection.query("SELECT * FROM UCM_AW_CAU_USU_Usuarios WHERE email = ? AND password= ?;" ,
                     [email,password],
                     function(err, rows) {
-                        connection.release(); // devolver al pool la conexión
+                        connection.release();
                         if (err) {
                             callback(new Error("Error de acceso a la base de datos"));
                         }
                         else {
-                            console.log(rows);
-                            if (rows.length === 0) {
-                                callback(null,false); //no está el usuario con el password proporcionado
-                            }
-                            else {
-                                // console.log("DATOS DAO: "+rows[0].id+"/"+rows[0].username+"/"+rows[0].email+"/"+rows[0].password);
-                                callback(null,rows[0]);
-                            }
+                            if (rows.length === 0) callback(null,false); //no está el usuario con el password proporcionado
+                            else callback(null,rows[0]);
                         }
                     }
                 );
@@ -159,20 +132,13 @@ class DAO_Usuario {
         else {
                 let sql = "SELECT imagen FROM UCM_AW_CAU_USU_Usuarios  WHERE idUsu = ?";
                 connection.query(sql, [id], function(err, rows) {
-                    connection.release(); // devolver al pool la conexión
+                    connection.release();
                     if (err) {
                         callback(new Error("Error de acceso a la base de datos"));
                     }
                     else {
-                        console.log(rows);
-                        if (rows.length === 0) {
-                            callback(null,false); //no está el usuario con el password proporcionado
-                        }
-                        else {
-                            console.log(rows);
-                            // console.log("DATOS DAO: "+rows[0].id+"/"+rows[0].username+"/"+rows[0].email+"/"+rows[0].password);
-                            callback(null,rows[0].imagen);
-                        }
+                        if (rows.length === 0) callback(null,false); //no está el usuario con el password proporcionado
+                        else callback(null,rows[0].imagen);
                     }
             });
         }

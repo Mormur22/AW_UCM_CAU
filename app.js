@@ -624,16 +624,16 @@ app.get("/logout", (request, response) => {
     response.redirect("/");
 });
 
-/********************** TODO *********************/
-// Editar aviso: Asignar/Cerrar/Borrar
-app.post("/notice/:idAvi", function(request, response) {
-    const idAvi = request.params.idAvi;
-    const mode = request.body.mode;
-    console.log("Recibida petición de modificación de aviso (idAvi = " + idAvi + ", mode = " + mode + ").");
-    if(mode === "assign") {
-        const idTec = request.body.technician;
-        console.log("ASSIGN idTec = ", idTec);
-    }
+// Asignar aviso (recibir formulario)
+app.post("/notice/assign", function(request, response) {
+    const idAvi = request.body.idAvi;
+    const idTec = request.body.idTec;
+    daoAvi.setTechnicianNotify(idAvi, idTec, 
+        function(err, techList) {
+            if(err) response.send(false);
+            else response.send(true);
+        }
+    );
 });
 
 // Uso de un middleware para la gestion de errores 404 (Not Found)

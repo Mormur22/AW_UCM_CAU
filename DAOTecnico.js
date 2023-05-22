@@ -151,6 +151,7 @@ class DAO_Tecnico {
      * Devuelve el nombre de un técnico.
      * @param idTec El id del técnico del que se quiere obtener el nombre.
      * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, String result) .
+     * Ejecuta la consulta: "SELECT nombre FROM UCM_AW_CAU_TEC_Tecnicos WHERE idTec = $idTec;".
      */
     getTechnicianName(idTec, callback) {
         this.pool.getConnection(
@@ -199,6 +200,13 @@ class DAO_Tecnico {
         );
     }
 
+    /**
+     * Desactiva la cuenta de un técnico.
+     * @param idTec  El id del técnico cuya cuenta se quiere desactivar. 
+     * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, Tecnico result) .
+     * Tecnico = { idTec: Number, email: String, password: String, nombre: String, perfil: String, imagen: String, desactivado: Boolean, numEmp: String } .
+     * Ejecuta la consulta: "UPDATE UCM_AW_CAU_TEC_Tecnicos SET desactivado = 1 WHERE idTec = $idTec;".
+     */
     cancelTechnician(idTec,callback) {
         this.pool.getConnection(
             function(err, connection) {

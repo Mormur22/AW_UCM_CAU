@@ -46,7 +46,6 @@ function cancelTechnician(id) {
                             title: "ERROR",
                             content: "No puede borrar su propio usuario."
                         });
-
                     }
                     else{
                         $.ajax({

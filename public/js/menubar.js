@@ -42,6 +42,7 @@ function  loadIncomingNotifies() {
         }).done(function(data) {
             dataContainer.empty();
             dataContainer.html(data);
+            $("#tab_avi").data("option", 1);
         }).fail(function(jqXHR, textStatus) {
             dataContainer.empty()
             dataContainer.html("&nbsp;&nbsp;&nbsp;Error al intentar recuperar los datos.");
@@ -59,6 +60,7 @@ function  loadMyOpenNotifies() {
         }).done(function(data) {
             dataContainer.empty();
             dataContainer.html(data);
+            $("#tab_avi").data("option", 2);
         }).fail(function(jqXHR, textStatus) {
             dataContainer.empty()
             dataContainer.html("&nbsp;&nbsp;&nbsp;Error al intentar recuperar los datos.");
@@ -76,6 +78,7 @@ function  loadMyHistoricNotifies() {
         }).done(function(data) {
             dataContainer.empty();
             dataContainer.html(data);
+            $("#tab_avi").data("option", 3);
         }).fail(function(jqXHR, textStatus) {
             dataContainer.empty()
             dataContainer.html("&nbsp;&nbsp;&nbsp;Error al intentar recuperar los datos.");
@@ -93,6 +96,7 @@ function  loadAllUsers() {
         }).done(function(data) {
             dataContainer.empty();
             dataContainer.html(data);
+            $("#tab_avi").data("option", 4);
         }).fail(function(jqXHR, textStatus) {
             dataContainer.empty()
             dataContainer.html("&nbsp;&nbsp;&nbsp;Error al intentar recuperar los datos.");

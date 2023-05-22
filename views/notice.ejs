@@ -41,11 +41,10 @@
                                         </div>
                                     </div>
                                     <% } %>
-                                    <input type="hidden" name="mode" value="<%= mode %>" />
                                     <div id="noticeBtn" class="form-group text-end mb-4 p-4"> 
                                         <button id="noticeBack_btn" class="btn btn-outline-primary btn-lg ms-4"  type="button" data-bs-dismiss="modal" aria-label="Close" data-backdrop="false">Volver</button>
                                         <% if(mode === "assign") { %>
-                                        <button id="noticeBack_btn" class="btn btn-outline-primary btn-lg ms-4" type="submit">Asignar técnico</button>
+                                        <button id="noticeBack_btn" class="btn btn-outline-primary btn-lg ms-4" type="button" onclick=<% __append('"') %>sendAssign(<%= notify.id %>)<% __append('"') %>>Asignar técnico</button>
                                         <% } if(mode === "edit") { %>
                                         <button id="noticeClose_btn" class="btn btn-outline-primary btn-lg ms-4" type="submit">Terminar aviso</button>
                                         <% } if(mode === "cancel") { %>

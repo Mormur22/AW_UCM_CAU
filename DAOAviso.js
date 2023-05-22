@@ -48,6 +48,40 @@ class DAO_Aviso {
     }
 
     /**
+     * Asigna un técnico a un aviso.
+     * @param idAvi El id del aviso al que se le quiere asignar un técnico.
+     * @param idTec El id del técnico que se le quiere asignar un .
+     * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, Aviso result).
+     * Aviso = { idAvi: Number, tipo: String, categoria: String, subcategoria: String, fecha: Date, observaciones: String, comentario: String, cerrado: Boolean, cancelado: Boolean, idUsu: Number, idTec: Number } .
+     * Ejecuta la consulta "UPDATE UCM_AW_CAU_AVI_Avisos SET idTec = $idTec WHERE idAvi = $idAvi;".
+     */
+    setTechnicianNotify(idAvi, idTec, callback) {
+        this.pool.getConnection(
+            function(err, connection) {
+                if(err) {
+                    callback(new Error("Error de conexión a la base de datos"), false);
+                }
+                else {
+                    connection.query("UPDATE UCM_AW_CAU_AVI_Avisos SET idTec = ? WHERE idAvi = ?;", [idTec, idAvi],
+                        function(err, rows) {
+                            if(rows.affectedRows != 1) {
+                                connection.release();
+                                if(rows.affectedRows == 0) callback(new Error("Error al intentar asignar al técnico (idAvi="+idAvi+" no encontrado)."),null);
+                                else callback(new Error("Error al intentar asignar al técnico ("+rows.affectedRows+" filas modificadas)."),null);
+                            }
+                            else{
+                                connection.release();
+                                if(err) callback(new Error("No se ha podido asignar al técnico al avisos solicitado (idAvi="+idAvi+", idTec="+idTec+")."), null);
+                                else callback(null, rows);
+                            }
+                        }
+                    );
+                }
+            }
+        );
+    }
+
+    /**
      * Devuelve los datos de un aviso.
      * @param idAvi  El id del aviso cuyos datos se quieren obtener.
      * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, Aviso result).

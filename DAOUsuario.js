@@ -7,7 +7,7 @@ class DAO_Usuario {
 
     /**
      * Constrictor de la clase 'DAO'.
-     * Crea un objeto con los métodos necesarios para realizar las operaciones de gestión en la BD.
+     * Crea un objeto con los métodos necesarios para realizar las operaciones de gestión de usuarios estándar en la BD.
      * @param pool Pool de conexiones que se usará para conectarse a la BD.
      */
     constructor(pool) {
@@ -15,9 +15,10 @@ class DAO_Usuario {
     }
     
     /**
-     * Método que comprueba las tablas de la base de datos.
-     * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, String result).
-     * result: Cadena de texto con información del número de filas en cada tabla.
+     * Método que comprueba si existe un nombre de usuario en la BD.
+     * @param nombre Nombre de usuario a comprobar.
+     * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, Boolean result).
+     * Ejecuta la consulta: "SELECT * FROM UCM_AW_CAU_USU_Usuarios where nombre = $nombre;".
      */
     existeNombreUsuario(nombre, callback){
         this.pool.getConnection(function(err,connection){
@@ -32,7 +33,7 @@ class DAO_Usuario {
                     if(err) callback(new Error("Error de acceso a la base de datos"));
                     else{
                         if (result.length==1) callback(null,true);
-                        else callback(null,false);
+                        else callback(null, false);
                     }
                 });
             }
@@ -135,7 +136,7 @@ class DAO_Usuario {
      * @param idUsu El id del usuario cuyos datos se quieren obtener.
      * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, Usuario result) .
      * Usuario = { idUsu: Number, email: String, password: String, nombre: String, perfil: String, imagen: String, desactivado: Boolean, reputacion: Number } .
-     * Ejecuta la consulta: "SELECT * FROM UCM_AW_CAU_USU_Usuarios WHERE desactivado = 0;".
+     * Ejecuta la consulta: "SELECT * FROM UCM_AW_CAU_USU_Usuarios WHERE idUsu = $idUsu;".
      */
     getUser(idUsu, callback) {
         this.pool.getConnection(
@@ -184,6 +185,13 @@ class DAO_Usuario {
         );
     }
     
+    /**
+     * Desactiva la cuenta de un usuario estándar.
+     * @param idUsu El id del usuario cuya cuenta se quiere desactivar. 
+     * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, Usuario result) .
+     * Usuario = { idUsu: Number, email: String, password: String, nombre: String, perfil: String, imagen: String, desactivado: Boolean, reputacion: Number } .
+     * Ejecuta la consulta: "UPDATE UCM_AW_CAU_USU_Usuarios SET desactivado = 1 WHERE idUsu = $idUsu;".
+     */
     cancelUser(idUsu, callback) {
         this.pool.getConnection(
             function(err, connection) {
@@ -202,7 +210,7 @@ class DAO_Usuario {
                                 connection.query("UPDATE UCM_AW_CAU_AVI_Avisos SET idUsu = NULL WHERE idUsu = ?;", [idUsu],
                                     function(err, rows) {
                                         connection.release();
-                                        if(err) callback(new Error("No se ha podido modificar los avisos del usuario estándar(idUus="+idUso+")."), null);
+                                        if(err) callback(new Error("No se ha podido modificar los avisos del usuario estándar (idUsu="+idUsu+")."), null);
                                         else callback(null, rows);
                                     }
                                 );

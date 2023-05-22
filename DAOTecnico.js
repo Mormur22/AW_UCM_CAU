@@ -80,8 +80,7 @@ class DAO_Tecnico {
             }
         });
     }
-
-   
+    
     registroTecnico(usuario,img,callback){
         this.pool.getConnection(function(err,connection){
             if(err){
@@ -153,7 +152,7 @@ class DAO_Tecnico {
      * @param idTec El id del técnico del que se quiere obtener el nombre.
      * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, String result) .
      */
-    getTechnicianName(idTec,callback) {
+    getTechnicianName(idTec, callback) {
         this.pool.getConnection(
             function(err, connection) {
                 if(err) {

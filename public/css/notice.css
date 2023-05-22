@@ -1,0 +1,76 @@
+#noticeIcon {
+    margin-left: 5px;
+    margin-right: 15px;
+    height: 50px;
+}
+
+#noticeType {
+    font-family: Candara;
+    font-size: 40pt;
+}
+
+#noticeIdLabel {
+    margin-right: 20px;
+    font-family: "Source Sans Pro Light";
+    font-size: 32pt;
+}
+
+#noticeId {
+    font-family: "Source Sans Pro ExtraLight";
+    font-size: 32pt;
+}
+
+#noticeLabel {
+    margin-right: 15px;
+    font-family: "Arial Black";
+    font-size: 20pt;
+    color: #121212;
+}
+
+#noticeDate {
+    font-family: "Orator Std";
+    font-size: 20pt;
+}
+
+#noticeCategory {
+    font-family: Candara;
+    font-size: 20pt;
+}
+
+#noticeCategorySeparator {
+    margin-left: 15px;
+    margin-right: 15px;
+    font-family: Arial;
+    font-size: 20pt;
+}
+
+#noticeSubcategory {
+    font-family: "Candara Light";
+    font-size: 20pt;
+}
+
+#noticeUser {
+    font-family: "Noto Sans";
+    font-size: 20pt;
+}
+
+#noticeProfile {
+    font-family: Rubic;
+    font-size: 20pt;
+}
+
+#noticeObservation {
+    font-family: "Noto Sans Light";
+    font-size: 18pt;
+}
+
+#noticeTech_txt, #noticeTech_sel {
+    font-family: "Noto Sans";
+    font-size: 20pt;
+}
+
+#noticeComm_txt, #noticeComm_ta {
+    font-family: "Noto Sans Light";
+    font-size: 18pt;
+    color: navy;
+}

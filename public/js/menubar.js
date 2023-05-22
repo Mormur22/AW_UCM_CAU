@@ -7,7 +7,7 @@ function option(op) {
     const newOp = Number(op);
     if(newOp>0 && newOp<=numOp) {
         if(actualOp != newOp) {
-            $( "#opcion"+newOp ).attr("data-showin", "foreground" );
+            $( "#opcion" + newOp ).attr("data-showin", "foreground" );
             if(actualOp>0 && actualOp<=numOp) $( "#opcion"+actualOp ).attr("data-showin", "background" );
             actualOp = newOp;
             loadData(newOp);

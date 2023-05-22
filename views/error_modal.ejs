@@ -1,0 +1,19 @@
+                <div id="noticeModal" class="modal fade"  data-backdrop=""  tabindex="-1" aria-labelledby="noticeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-body mx-4">
+                                <div id="error_modal" class="container-fluid text-center px-4">
+                                    <h1 class="display-1 lead mt-4">ERROR <% if(code !== undefined && code !== null) { %><kbd><%= code %></kbd><% } %></h1>
+                                    <% if(status !== undefined && status !== null) { %><h6 class="display-6 mb-5"><%= status %></h6><% } %>
+                                    <% if(message !== undefined && message !== null) { %><p class="mb-5" style="font-family: Cambria; font-size: 2rem"><%= message %></p><% } %>
+                                    <% if(stack !== undefined && stack !== null) { %>
+                                    <div class="mark my-4 pt-3 pb-0">
+                                        <p class="display-6">Pila de ejecución:</p>
+                                        <pre class="text-start font-monospace mark fs-7 px-5"><%= stack %></pre>
+                                    </div>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>

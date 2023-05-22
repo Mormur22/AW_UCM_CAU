@@ -1,73 +1,60 @@
 /* APLICACIONES WEB. Práctica obligatoria: UCM-CAU - El Centro de Atencion a Usuarios. Grupo 33: Daniel Compán López de Lacalle y Alejandro Moreno Murillo */
 'use strict'
 
-// watch front-end changes
-const livereload = require("livereload");
-const connectLivereload = require("connect-livereload");
-const multer = require("multer");
-// open livereload high port and start to watch public directory for changes
-const liveReloadServer = livereload.createServer();
+// Librerias
+//const livereload = require("livereload"); // watch front-end changes
+//const connectLivereload = require("connect-livereload");
+//const liveReloadServer = livereload.createServer(); // open livereload high port and start to watch public directory for changes
 const express = require("express");
-//Libreria que vamos a usar
-const app = express();
-const config = require("./config");//Configuracion bbd y puerto
+const path = require("path");
+const bodyParser = require("body-parser");
+const { body, validationResult } = require('express-validator');
+const multer = require("multer");
+const session = require("express-session");
+const mysqlSession = require("express-mysql-session");
+const { Console } = require("console");
+
+ // File Modules
+const config = require("./config"); // Configuracion BD y puerto
 const mysql = require("mysql");
 const DAOGen = require("./DAOGeneral");
 const DAOUsu = require("./DAOUsuario");
 const DAOTec = require("./DAOTecnico");
 const DAOAvi = require("./DAOAviso");
-const bodyParser = require("body-parser");
-const { body, validationResult } = require('express-validator');
+const Util = require("./util.js");
+const Hardcode = require("./hardcode.js");
+
+// Creación de la aplicación express
+const app = express();
+app.set("view engine", "ejs");  // Configurar EJS como motor de plantillas
+app.set("views", path.join(__dirname, "views"));  // Se indica a express donde se encuentan las plantillas
 
 const PORT = process.env.PORT || config.puerto;
 const pool = mysql.createPool(config.mysqlConfig);
+
 // Crear las instancias DAO
 const daoGen= new DAOGen(pool);
 const daoUsu = new DAOUsu(pool);
 const daoTec = new DAOTec(pool);
 const daoAvi = new DAOAvi(pool);
-//Para validar errores en formularios.
-
-//Configuracion de las vistas y usos
-const path = require("path");  // core module
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
-app.use(express.static(__dirname + '/public'));
-app.use(connectLivereload());
-app.use(bodyParser.urlencoded({ extended:true}));
-app.use(express.json());
-
-const Util = require("./util.js"); // File Module
-const Hardcode = require("./hardcode.js"); // File Module
-
-
 // Crear un objeto Util
 const util = new Util();
-
 // Crear un objeto Hardcode
 const hardcode = new Hardcode();
-
-const user_data = hardcode.tecnicoSession(1);
+//const user_data = hardcode.tecnicoSession(1);
 //const user_data = hardcode.usuarioSession(1);
 
-// Creación de la aplicación express
-
-
-
-
-//Ubicacion Archivos estaticos
-app.use(express.static(path.join(__dirname, "public")));
-liveReloadServer.watch(path.join(__dirname, "public"), path.join(__dirname, "views"));
 //--------------------------------------------------------------------
 
-app.use(express.json());//Devuelve middleware que solo analiza json y solo mira las solicitudes donde el encabezado Content-Type coincide con la opción de tipo.
-app.use(express.urlencoded({extended: true}));//Devuelve middleware que solo analiza cuerpos codificados en URL y solo mira las solicitudes donde el encabezado Content-Type coincide con la opción de tipo
-//Se indica a express donde se encuentan las vistas
+app.use(express.static(path.join(__dirname, "public")));  // Ubicacion Archivos estaticos
+app.use(express.json()); // Devuelve middleware que solo analiza json y solo mira las solicitudes donde el encabezado Content-Type coincide con la opción de tipo.
+app.use(express.urlencoded({extended: true})); // Devuelve middleware que solo analiza cuerpos codificados en URL y solo mira las solicitudes donde el encabezado Content-Type coincide con la opción de tipo
+//liveReloadServer.watch(path.join(__dirname, "public"), path.join(__dirname, "views"));
+//app.use(connectLivereload());
+app.use(bodyParser.urlencoded({ extended:true}));
 
 //---------------------------------Sesion---------------------------------
-const session = require("express-session");
-const mysqlSession = require("express-mysql-session");
-const { Console } = require("console");
+
 const MySQLStore = mysqlSession(session);
 const sessionStore = new MySQLStore(config.mysqlConfig);
 const middlewareSession = session({
@@ -337,7 +324,7 @@ app.post("/registro", multerFactory.single('foto'),(request,response) => {
                             else {
                                 //no existe el usuario con el nombre de correo
                                 if(!existeCorreo){   
-                                    daoUsu.registroUsuario(request.body.correo, imagen, function(err,insertId){
+                                    daoUsu.registroUsuario(request.body, imagen, function(err,insertId){
                                     if(err) {
                                         response.status(500); 
                                                         response.render("signup", { title: "ERROR",
@@ -380,9 +367,6 @@ app.post("/registro", multerFactory.single('foto'),(request,response) => {
             response.redirect("/");
         }
 });
-
-
-console.log
 
 app.get("/main", function(request, response) {
     response.status(200);
@@ -464,12 +448,12 @@ app.post("/crearAviso", function(request, response){
         observaciones: request.body.observaciones,
         idUsu: request.session.iduser,
     };
-    console.log(aviso);
     daoAvi.createNotify(aviso, function(err, result){
         response.redirect("/main");
     });
 });
-    
+
+// Avisos entrantes
 app.get("/tables/notifies", function(request, response) {
     daoAvi.getOpenNotifies(
         function(err, result) {
@@ -478,6 +462,7 @@ app.get("/tables/notifies", function(request, response) {
         } );
 });
 
+// Mis avisos
 app.get("/tables/mynotifies", function(request, response) {
     if(request.session.isTechnician) {
         daoAvi.getTechnicianOpenNotifies(request.session.iduser,
@@ -495,6 +480,7 @@ app.get("/tables/mynotifies", function(request, response) {
     }
 });
 
+// Historico de avisos
 app.get("/tables/historic", function(request, response) {
     if(request.session.isTechnician) {
         daoAvi.getTechnicianClosedNotifies(request.session.iduser,
@@ -512,6 +498,7 @@ app.get("/tables/historic", function(request, response) {
     }
 });
 
+// Gestion de usuarios
 app.get("/tables/users", function(request, response) {
     daoTec.getAllTechnicians(
         function(err,trows) {
@@ -525,29 +512,150 @@ app.get("/tables/users", function(request, response) {
     );
 });
 
-app.get("/logout",(request, response) => {
+// Borrar técnico
+app.post("/user/cancelTechnician/:idTec", (request, response) => {
+    daoTec.cancelTechnician(request.params.idTec, function(err,res){
+        if(err) response.send(false);
+        else response.send(true);
+    });
+});
+
+// Borrar usuario
+app.post("/user/cancelUser/:idUsu", (request, response) => {
+    daoUsu.cancelUser(request.params.idUsu, function(err,res){
+        if(err) response.send(false);
+        else response.send(true);
+    });
+});
+
+// Ver Aviso
+app.get("/notice/view/:idAvi", (request, response) => {
+    if(request.session.isTechnician) {
+        daoAvi.getNotify(request.params.idAvi,
+            function(err, aviso) {
+                if(err) response.render("error_modal", { code: 500, status: "Internal Server Error", message: "No se ha encontrado el aviso solicitado en la BD.", stack: null });
+                else {
+                    daoUsu.getUser(aviso.idUsu,
+                        function(err, usuario) {
+                            if(err) response.render("error_modal", { code: 500, status: "Internal Server Error", message: "No se ha encontrado el usuario del aviso solicitado en la BD.", stack: null });
+                            else {
+                                if(aviso.idTec !== null) {
+                                    daoTec.getTechnicianName(aviso.idTec , 
+                                        function(err, nombreTec) {
+                                            response.render("notice", { mode: "view", user: usuario.nombre, profile: util.toProfileText(usuario.perfil, true), notify: util.toModalHtmlNotify(aviso), technician: nombreTec });
+                                        }
+                                    );
+                                }
+                                else {
+                                    response.render("notice", { mode: "view", user: usuario.nombre, profile: util.toProfileText(usuario.perfil, true), notify: util.toModalHtmlNotify(aviso), technician: null });
+                                }
+                            }
+                        }
+                    );
+                }
+            }
+        )
+    }
+    else {
+        daoAvi.getNotify(request.params.idAvi,
+            function(err, aviso) {
+                if(err) response.render("error_modal", { code: 500, status: "Internal Server Error", message: "No se ha encontrado el aviso solicitado en la BD.", stack: null });
+                else {
+                    if(request.session.iduser === aviso.idUsu) {
+                        if(aviso.idTec !== null) {
+                            daoTec.getTechnicianName(aviso.idTec , 
+                                function(err, nombreTec) {
+                                    response.render("notice", { mode: "view", user: request.session.name, profile: util.toProfileText(request.session.profile, true), notify: util.toModalHtmlNotify(aviso), technician: nombreTec });
+                                }
+                            );
+                        }
+                        else {
+                            response.render("notice", { mode: "view", user: request.session.name, profile: util.toProfileText(request.session.profile, true), notify: util.toModalHtmlNotify(aviso), technician: null });
+                        }
+                    }
+                    else response.render("error_modal", { code: 500, status: "Forbidden", message: "Permiso denegado. El aviso solicitado es de otro usuario.", stack: null });
+                }
+            }
+        )
+    }
+});
+
+// Asignar aviso (mostrar)
+app.get("/notice/assign/:idAvi", (request, response) => {
+    if(request.session.isTechnician) {
+        daoAvi.getNotify(request.params.idAvi,
+            function(err, aviso) {
+                if(err) response.render("error_modal", { code: 500, status: "Internal Server Error", message: "No se ha encontrado el aviso solicitado en la BD.", stack: null });
+                else {
+                    daoUsu.getUser(aviso.idUsu,
+                        function(err, usuario) {
+                            if(err) response.render("error_modal", { code: 500, status: "Internal Server Error", message: "No se ha encontrado el usuario del aviso solicitado en la BD.", stack: null });
+                            else {
+                                if(aviso.idTec !== null) response.render("error_modal", { code: 500, status: "Internal Server Error", message: "El aviso solicitado ya está asignado.", stack: null });
+                                else {
+                                    response.render("notice", { mode: "assign", user: usuario.nombre, profile: util.toProfileText(usuario.perfil, true), notify: util.toModalHtmlNotify(aviso), technician: null });
+                                }
+                            }
+                        }
+                    );
+                }
+            }
+        )       
+    }
+    else  response.render("error_modal", { code: 500, status: "Forbidden", message: "Permiso denegado. No tiene permiso para realizar esta acción.", stack: null });
+});
+
+// Devolver la lista de técnicos para el combo box (<select>) del modal de aviso en modo de asignación
+app.get("/technician_list", (request, response) => {
+    if(request.session.isTechnician) {
+        daoTec.getAllTechnicians(
+            function(err, techList) {
+                if(err) response.send({ idTec: 0, nombre: "ERROR" });
+                else response.send(techList.map(t => { return { idTec: t.idTec, nombre: t.nombre } } ));
+            }
+        );
+    }
+});
+
+// Logout
+app.get("/logout", (request, response) => {
     response.status(200);
     request.session.destroy();
     response.redirect("/");
 });
 
-app.post("/user/cancelTechnician/:idTec",(request, response) => {
-    daoTec.cancelTechnician(request.params.idTec,function(err,res){
-        if(err) response.send(false);
-        else response.send(true);
-    });
+/********************** TODO *********************/
+// Editar aviso: Asignar/Cerrar/Borrar
+app.post("/notice/:idAvi", function(request, response) {
+    const idAvi = request.params.idAvi;
+    const mode = request.body.mode;
+    console.log("Recibida petición de modificación de aviso (idAvi = " + idAvi + ", mode = " + mode + ").");
+    if(mode === "assign") {
+        const idTec = request.body.technician;
+        console.log("ASSIGN idTec = ", idTec);
+    }
 });
 
-app.post("/user/cancelUser/:idUsu",(request, response) => {
-    daoUsu.cancelUser(request.params.idUsu,function(err,res){
-        if(err) response.send(false);
-        else response.send(true);
-    });
+// Uso de un middleware para la gestion de errores 404 (Not Found)
+app.use((request, response) => {
+    response.status(404);
+    response.render("error", { code: 404, status: "Not Found", message: "La página solicitada (" + request.url + ") no existe.", stack: null });
 });
 
-// Uso del middleware Static para servir todos los ficheros estáticos (.html, .css, .jpg, png, ...) de la carpeta public y sus subdirectorios
-app.use(express.static(path.join(__dirname, "public")));
-
+// Uso de un middleware de error para la gestion de errores 500 (Internal Server Error)
+app.use((error, request, response, next) => {
+    response.status(500);
+    let msg;
+    let stus;
+    let stck;
+    if(error.status === undefined || error.status === null || error.status === "") stus = "Internal Server Error";
+    else stus = error.status;
+    if(error.message === undefined || error.message === null || error.message === "") msg = "Se ha producido un error inesperado en el servidor.";
+    else msg = error.message;
+    if(error.stack === undefined || error.stack === null || error.stack === "") stck = null;
+    else stck = error.stack;
+    response.render("error", { code: 500, status: stus, message: msg, stack: stck });
+});
 
 // Escuchar peticiones
 app.listen(3000, function(err){

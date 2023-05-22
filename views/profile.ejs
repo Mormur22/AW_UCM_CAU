@@ -1,68 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <!--  This file has been downloaded from bootdey.com @bootdey on twitter -->
-    <!--  All snippets are MIT license http://bootdey.com/license -->
-    <title>bs4 profile header card - Bootdey.com</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/profile.css" media="screen"/>
-    
+<html lang="es">
+    <head>
+        <!--  This file has been downloaded from bootdey.com @bootdey on twitter -->
+        <!--  All snippets are MIT license http://bootdey.com/license -->
+        <title>UCM-CAU - Perfil</title>
+        <meta charset="utf-8" />
+        <!-- Importar BootStrap Stylesheet -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Importar jQuery JavaScript -->
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <!-- Importar BootStrap JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+        <!-- Hojas de estilos personalizadas -->
+        <link rel="stylesheet" href="/css/profile.css" media="screen"/>
+    </head>
+    <body>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 
-</head>
-<body>
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-
-<div class="modal fade" id="modal-perfil" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal-perfil-label" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Perfil</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="container profile-page">
-                    <div class="row">
-                        <div class="col">
-                            <div class="card profile-header">
-                                <div class="body">
-                                    <div class="row" style="width: 100%;">
-                                        <div class="col-lg-4 col-md-4 col-12">
-                                            <div class="profile-image"> <img src="/imagen" alt=""> </div>
+    <div class="modal fade" id="modal-perfil" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal-perfil-label" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Perfil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container profile-page">
+                        <div class="row">
+                            <div class="col">
+                                <div class="card profile-header">
+                                    <div class="body">
+                                        <div class="row" style="width: 100%;">
+                                            <div class="col-lg-4 col-md-4 col-12">
+                                                <div class="profile-image"> <img src="/imagen" alt=""> </div>
+                                            </div>
+                                            <div class="col-lg-8 col-md-8 col-12">
+                                                <h4 class="m-t-0 m-b-0 nombre" style="font-size:xx-large"><strong><%=name%></strong></h4><br>
+                                                <span class="perfil-font" ><strong>Fecha de creación:</strong> <%=fecha%></span><br>
+                                                <span class="perfil-font" ><strong>Perfil: </strong><%=perfil%></span><br>
+                                                <span class="perfil-font" ><strong>Contraseña: </strong>*******</span><br>
+                                                <span class="perfil-font" ><strong>Nombre para mostrar: </strong><%=name%></span><br>
+                                            </div>                
                                         </div>
-                                        <div class="col-lg-8 col-md-8 col-12">
-                                            <h4 class="m-t-0 m-b-0 nombre" style="font-size:xx-large"><strong><%=name%></strong></h4><br>
-                                            <span class="perfil-font" ><strong>Fecha de creación:</strong> <%=fecha%></span><br>
-                                            <span class="perfil-font" ><strong>Perfil: </strong><%=perfil%></span><br>
-                                            <span class="perfil-font" ><strong>Contraseña: </strong>*******</span><br>
-                                            <span class="perfil-font" ><strong>Nombre para mostrar: </strong><%=name%></span><br>
-                                        </div>                
-                                    </div>
 
-                                    <div class="row" style="margin-top:5rem">
-                                        <div class="col-lg-8 col-md-8 col-12">
-                                            <span class="perfil-font"><strong>Avisos Realizados/Gestionados: </strong><%=numAvisos%></span><br>
-                                            <span class="perfil-font"><strong>Incidencias: </strong><%=numInc%></span><br>
-                                            <span class="perfil-font"><strong>Sugerencias: </strong><%=numSug%></span><br>
-                                            <span class="perfil-font"><strong>Felicitaciones: </strong><%=numFel%></span><br>
-                                        </div>                
-                                    </div>
+                                        <div class="row" style="margin-top:5rem">
+                                            <div class="col-lg-8 col-md-8 col-12">
+                                                <span class="perfil-font"><strong>Avisos Realizados/Gestionados: </strong><%=numAvisos%></span><br>
+                                                <span class="perfil-font"><strong>Incidencias: </strong><%=numInc%></span><br>
+                                                <span class="perfil-font"><strong>Sugerencias: </strong><%=numSug%></span><br>
+                                                <span class="perfil-font"><strong>Felicitaciones: </strong><%=numFel%></span><br>
+                                            </div>                
+                                        </div>
 
-                                </div>                    
+                                    </div>                    
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-</body>
+    </body>
 </html>

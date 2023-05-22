@@ -5,7 +5,7 @@
         <meta charset="utf-8" />
         <!-- Importar BootStrap Stylesheet -->
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Importar estilo de jquery-confirm -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
@@ -18,22 +18,16 @@
         <link rel="stylesheet" href="\css\users.css" />
         <link rel="stylesheet" href="\css\profile.css" />
         <link rel="stylesheet" href="\css\CrearAviso.css" />
+        <link rel="stylesheet" href="\css\notice.css" />
     </head>
     <body>
         <div id="ppal">
 <%- include("header.ejs"); %>
 <%- include("searchbar.ejs"); %>
 <%- include("menubar.ejs"); %>
-<% if(!isTechnician) { %>
-            <div class=row id="crearA" style="margin-top:1rem; margin-right:4rem;justify-content:right;">
-                <div class="col-auto">
-                    <%- include("crearAviso.ejs"); %>
-                </div>
-            </div>
-<% } %>
         </div>
         <!-- Importar BootStrap JavaScript -->
-        <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" type="text/javascript" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> -->
+        <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" type="text/javascript" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script> -->
         <!-- Importar jQuery JavaScript -->
         <script src="https://code.jquery.com/jquery-3.6.1.js" type="text/javascript" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
         <!-- Importar jquery-confirm (necesario jQuery y Bootstrap) -->
@@ -42,6 +36,6 @@
         <script src="\js\menubar.js" type="text/javascript"></script>
         <script src="\js\notifies.js" type="text/javascript"></script>
         <script src="\js\users.js" type="text/javascript"></script>
-        <script src="\js\categorias.js" type="text/javascript"></script>
+        <script src="\js\categories.js" type="text/javascript"></script>
     </body>
 </html>

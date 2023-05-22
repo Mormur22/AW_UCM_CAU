@@ -13,28 +13,13 @@ class DAO_Usuario {
     constructor(pool) {
         this.pool = pool;
     }
-
-    /**
-     * Método que comprueba la conexión a la base de datos.
-     * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, Boolean result).
-     * result = 'true' si ha podido conectarse. 'false' si no.
-    */
-    testConnection(callback) {
-        this.pool.getConnection(
-            function(err, connection) {
-                connection.release();
-                if(err) callback(new Error("Error de conexión a la base de datos"), false);
-                else callback(null, true);
-            }
-        );
-    }
     
     /**
      * Método que comprueba las tablas de la base de datos.
      * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, String result).
      * result: Cadena de texto con información del número de filas en cada tabla.
      */
-    existeNombreUsuario(nombre,callback){
+    existeNombreUsuario(nombre, callback){
         this.pool.getConnection(function(err,connection){
             if(err){
                 reject(new Error("Error de conexión a la base de datos"));
@@ -60,7 +45,7 @@ class DAO_Usuario {
     True --> El usuario/correo existe
     False --> No Existe
     */
-    existeCorreoUsuario(correo,callback){
+    existeCorreoUsuario(correo, callback){
         this.pool.getConnection(function(err,connection){
             if(err){
                 callback(new Error("Error de conexión a la base de datos"));
@@ -104,7 +89,7 @@ class DAO_Usuario {
     }
 
     
-    loginUsuario(email, password,callback) {
+    loginUsuario(email, password, callback) {
         this.pool.getConnection(function(err, connection) {
             if (err) callback(new Error("Error de conexión a la base de datos"));
             else {
@@ -144,6 +129,35 @@ class DAO_Usuario {
         }
         });
     }
+
+    /**
+     * Devuelve los datos de un usuario.
+     * @param idUsu El id del usuario cuyos datos se quieren obtener.
+     * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, Usuario result) .
+     * Usuario = { idUsu: Number, email: String, password: String, nombre: String, perfil: String, imagen: String, desactivado: Boolean, reputacion: Number } .
+     * Ejecuta la consulta: "SELECT * FROM UCM_AW_CAU_USU_Usuarios WHERE desactivado = 0;".
+     */
+    getUser(idUsu, callback) {
+        this.pool.getConnection(
+            function(err, connection) {
+                if(err) {
+                    callback(new Error("Error de conexión a la base de datos"), false);
+                }
+                else {
+                    connection.query("SELECT * FROM UCM_AW_CAU_USU_Usuarios WHERE idUsu = ?;", [idUsu],
+                        function(err, rows) {
+                            connection.release();
+                            if(err) callback(new Error("No se ha podido recuperar datos de la tabla UCM_AW_CAU_USU_Usuarios"), null);
+                            else{
+                                if(rows.length === 0) callback(new Error("No se ha encontrado ningún usuario con idUsu = " + idUsu), null);
+                                else callback(null, rows[0]);
+                            }
+                        }
+                    );
+                }
+            }
+        );
+    }    
     
     /**
      * Devuelve todos los usuarios estándar.
@@ -161,7 +175,7 @@ class DAO_Usuario {
                     connection.query("SELECT * FROM UCM_AW_CAU_USU_Usuarios WHERE desactivado = 0;", [],
                         function(err, rows) {
                             connection.release();
-                            if(err) callback(new Error("No se ha podido recuperar datos de la tabla UCM_AW_CAU_TEC_Tecnicos"), null);
+                            if(err) callback(new Error("No se ha podido recuperar datos de la tabla UCM_AW_CAU_USU_Usuarios"), null);
                             else callback(null, rows);
                         }
                     );
@@ -170,7 +184,7 @@ class DAO_Usuario {
         );
     }
     
-    cancelUser(idUsu,callback) {
+    cancelUser(idUsu, callback) {
         this.pool.getConnection(
             function(err, connection) {
                 if(err) {

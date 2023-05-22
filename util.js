@@ -1,35 +1,242 @@
 "use strict";
 
+const perfiles = ["alumno", "pas", "pdi", "aa"];
+const perfiles_texto = ["Alumno", "PAS", "PDI", "Antiguo Alumno"];
+const perfiles_texto_extendido = ["Alumno", "Personal de Administración y Servicios (PAS)", "Personal Docente e Investigador (PDI)", "Antiguo Alumno"];
+
+const categoriasSug = ["administracion", "comunicaciones", "conectividad", "docencia", "web"];
+const categoriasInc = ["administracion", "comunicaciones", "conectividad", "docencia", "web"];
+const categoriasFel = ["archivo", "asesoria_juridica", "biblioteca", "centro_informacion", "departamentos_docentes", "inspeccion_servicios", "oficina_gestion", "administracion", "informatica", "documentacion", "imprenta", "cafeteria", "universidad"];
+const categorias = ["administracion", "comunicaciones", "conectividad", "docencia", "web", "archivo", "asesoria_juridica", "biblioteca", "centro_informacion", "departamentos_docentes", "inspeccion_servicios", "oficina_gestion", "administracion", "informatica", "documentacion", "imprenta", "cafeteria", "universidad"];
+
+const categoriasSug_texto = ["Administracion Digital", "Comunicaciones", "Conectividad", "Docencia e", "Web"];
+const categoriasInc_texto = ["Administracion Digital", "Comunicaciones", "Conectividad", "Docencia e", "Web"];
+const categoriasFel_texto = ["Archivo Universitario", "Asesoría Jurídica", "Biblioteca", "Centro de Información", "Departamentos docentes", "Inspección de Servicios", "Oficina de Gestión de Infraestructuras y Mantenimiento", "Servicio de Administración", "Servicios Informáticos", "Servicio de Documentación", "Servicio de Imprenta", "Servicio de Cafetería", "Toda la Universidad"];
+const categorias_texto = ["Administracion Digital", "Comunicaciones", "Conectividad", "Docencia e", "Web", "Archivo Universitario", "Asesoría Jurídica", "Biblioteca", "Centro de Información", "Departamentos docentes", "Inspección de Servicios", "Oficina de Gestión de Infraestructuras y Mantenimiento", "Servicio de Administración", "Servicios Informáticos", "Servicio de Documentación", "Servicio de Imprenta", "Servicio de Cafetería", "Toda la Universidad"];
+
+const subcategoriasSug = {
+    administracion: ["certificado_digital", "certificado_electronico", "registro_electronico", "sede_electronica", "portafirmas"],
+    comunicaciones: ["correo_electronico", "google_meet","cuenta_alumno", "cuenta_personal", "cuenta_generica"],
+    conectividad: ["cuenta_sara", "conexion_cable", "cortafuegos", "dns", "vpn", "wifi_eduroam", "wifi_visitantes"],
+    docencia: ["aula_virtual", "blackboard_collaborate", "listado_clase", "moodle", "cursos_online"],
+    web: ["analitica_web", "certificado_ssl", "hosting", "portal_eventos", "redirecciones_web"]
+};
+
+const subcategoriasInc = {
+    administracion: ["certificado_digital", "certificado_electronico", "registro_electronico", "sede_electronica", "portafirmas"],
+    comunicaciones: ["correo_electronico", "google_meet","cuenta_alumno", "cuenta_personal", "cuenta_generica"],
+    conectividad: ["cuenta_sara", "conexion_cable", "cortafuegos", "dns", "vpn", "wifi_eduroam", "wifi_visitantes"],
+    docencia: ["aula_virtual", "blackboard_collaborate", "listado_clase", "moodle", "cursos_online"],
+    web: ["analitica_web", "certificado_ssl", "hosting", "portal_eventos", "redirecciones_web"]
+};
+
+const subcategorias= ["certificado_digital", "certificado_electronico", "registro_electronico", "sede_electronica", "portafirmas", "correo_electronico", "google_meet","cuenta_alumno", "cuenta_personal", "cuenta_generica", "cuenta_sara", "conexion_cable", "cortafuegos", "dns", "vpn", "wifi_eduroam", "wifi_visitantes", "aula_virtual", "blackboard_collaborate", "listado_clase", "moodle", "cursos_online", "analitica_web", "certificado_ssl", "hosting", "portal_eventos", "redirecciones_web"];
+
+const subcategoriasSug_texto = {
+    administracion: ["Certificado digital de personal física", "Certificado electrónico de empleado público", "Registro electrónico", "Sede electrónica", "Portafirmas"],
+    comunicaciones: ["Correo electrónico", "Google Meet", "Cuenta de Alumno", "Cuenta de personal", "Cuenta genérica"],
+    conectividad: ["Cuenta de la Red SARA", "Conexión por cable en despachos", "Cortafuegos corporativo", "Resolución de nombres de dominio (DNS)", "VPN Acceso remoto", "Wifi Eduroam (ssid: eduroam)", "Wifi para visitantes (ssid: UCM-Visitantes)"],
+    docencia: ["Aula Virtual", "Blackboard Collaborate", "Listados de clase", "Moodle: Aula Global", "Plataforma de cursos online Privados"],
+    web: ["Analítica Web", "Emisión de certificados SSL", "Hosting: alojamiento de páginas web", "Portal de eventos", "Redirecciones web"]
+};
+
+const subcategoriasInc_texto = {
+    administracion: ["Certificado digital de personal física", "Certificado electrónico de empleado público", "Registro electrónico", "Sede electrónica", "Portafirmas"],
+    comunicaciones: ["Correo electrónico", "Google Meet", "Cuenta de Alumno", "Cuenta de personal", "Cuenta genérica"],
+    conectividad: ["Cuenta de la Red SARA", "Conexión por cable en despachos", "Cortafuegos corporativo", "Resolución de nombres de dominio (DNS)", "VPN Acceso remoto", "Wifi Eduroam (ssid: eduroam)", "Wifi para visitantes (ssid: UCM-Visitantes)"],
+    docencia: ["Aula Virtual", "Blackboard Collaborate", "Listados de clase", "Moodle: Aula Global", "Plataforma de cursos online Privados"],
+    web: ["Analítica Web", "Emisión de certificados SSL", "Hosting: alojamiento de páginas web", "Portal de eventos", "Redirecciones web"]
+};
+
+const subcategorias_texto = ["Certificado digital de personal física", "Certificado electrónico de empleado público", "Registro electrónico", "Sede electrónica", "Portafirmas", "Correo electrónico", "Google Meet", "Cuenta de Alumno", "Cuenta de personal", "Cuenta genérica", "Cuenta de la Red SARA", "Conexión por cable en despachos", "Cortafuegos corporativo", "Resolución de nombres de dominio (DNS)", "VPN Acceso remoto", "Wifi Eduroam (ssid: eduroam)", "Wifi para visitantes (ssid: UCM-Visitantes)", "Aula Virtual", "Blackboard Collaborate", "Listados de clase", "Moodle: Aula Global", "Plataforma de cursos online Privados", "Analítica Web", "Emisión de certificados SSL", "Hosting: alojamiento de páginas web", "Portal de eventos", "Redirecciones web"];
+
+
+
 /**
  * Clase que implementa metodos de utilidad.
  */
 class Util {
+
+    /**
+     * Devuelve una lista con los posibles valores que puede tomar el campo 'perfil' de la tabla 'UCM_AW_CAU_USU_Usuarios' de la BD.
+     * @returns Lista con los posibles perfiles que puede tener un usuario.
+     */
+    static profiles() {
+        return(perfiles)
+    }
+
+    /**
+     * Devuelve una lista con los posibles perfiles en texto plano que puede tener un usuario.
+     * @param extended OPCIONAL. Si se establece a 'true' se devuelven los perfiles de forma completa, en vez de solo las siglas.
+     * @returns Lista con los posibles perfiles en texto plano que puede tener un usuario.
+     */
+    static profilesText(extended=false) {
+        if(extended) return(perfiles_texto);
+        else return(perfiles_texto_extendido);
+    }
     
     /**
-     * Devuelve un objeto Date a partir de una fecha en formato SQL.
-     * @param sqldate Cadena de texto con la fecha en formato SQL.
-     * @returns Objeto Date con la fecha indicada como parámetro.
+     * Devuelve el texto plano de un perfil.
+     * @param perfil Valor del campo 'perfil' de la tabla 'UCM_AW_CAU_USU_Usuarios' de la BD.
+     * @param extended OPCIONAL. Si se establece a 'true' se devuelve el perfile de forma completa, en vez de solo las siglas.
+     * @returns Texto plano del perfil introducido. Si no existe se devuelve 'null'.
      */
-    dateSQL2JS(sqldate) {
-        return new Date(Date.parse(sqldate.replace(/-/g, '/')));
+    toProfileText(perfil, extended=false) {
+        for(let i = 0; i < Math.max(perfiles.length, perfiles_texto.length, perfiles_texto_extendido.length); i++) {
+            if(perfiles[i] === perfil){
+                if(extended) return(perfiles_texto_extendido[i]);
+                else return(perfiles_texto[i]);
+            }
+        }
+        return(null)
+    }
+
+    /**
+     * Devuelve una lista con los posibles valores que puede tomar el campo "categoria" de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
+     * @param tipo Valor del campo 'tipo' ( "incidencia" / "sugerencia" / "felicitacion" ) de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
+     * @returns Lista con las posibles categorias que puede tener un aviso para el tipo indicado. Si no se indica el tipo se devuelven todas.
+     */
+    static categories(tipo=null) {
+        switch(tipo) {
+            case "sugerencia":
+                return(categoriasSug);
+            case "incidencia":
+                return(categoriasInc);
+            case "felicitacion":
+                return(categoriasFel);
+            default:
+                return(categorias);
+        }
+    }
+
+    /**
+     * Devuelve una lista con las posibles categorias en texto plano que puede tener un aviso.
+     * @param tipo Valor del campo 'tipo' ( "incidencia" / "sugerencia" / "felicitacion" ) de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
+     * @returns Lista con las posibles categorias en texto plano que puede tener un aviso para el tipo indicado. Si no se indica el tipo se devuelven todas.
+     */
+    static categoriesText(tipo=null) {
+        switch(tipo) {
+            case "sugerencia":
+                return(categoriasSug_texto);
+            case "incidencia":
+                return(categoriasInc_texto);
+            case "felicitacion":
+                return(categoriasFel_texto);
+            default:
+                return(categorias_texto);
+        }
+    }
+
+    /**
+     * Devuelve el texto plano de una categoria.
+     * @param categoria Valor del campo 'categoria' de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
+     * @returns Texto plano de la categoria introducida. Si no existe se devuelve 'null'.
+     */
+    toCategoryText(categoria) {
+        for(let i = 0; i < Math.max(categorias.length, categorias_texto.length); i++) {
+            if(categorias[i] === categoria) return(categorias_texto[i])
+        }
+        return(null)
+    }
+
+    /**
+     * Devuelve una lista con los posibles valores que puede tomar el campo "subcategoria" de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
+     * @param tipo Valor del campo 'tipo' ( "incidencia" / "sugerencia" / "felicitacion" ) de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
+     * @param categoria Valor del campo 'categoria' de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
+     * @returns Lista con las posibles suncategorias que puede tener un aviso para el tipo y categoria indicado. Si no se indica el tipo o categoria se devuelven todas.
+     */
+    static subcategories(tipo=null, categoria=null) {
+        switch(tipo) {
+            case "sugerencia":
+                if(subcategoriasSug[categoria] === undefined || subcategoriasSug[categoria] === null) return(subcategoriasSug);
+                else return(subcategoriasSug[categoria]);
+            case "incidencia":
+                if(subcategoriasInc[categoria] === undefined || subcategoriasInc[categoria] === null) return(subcategoriasInc);
+                else return(subcategoriasInc[categoria]);
+            case "felicitacion":
+                return([]);
+            default:
+                return(subcategorias);
+        }
+    }
+
+    /**
+     * Devuelve una lista con las posibles sucategorias en texto plano que puede tener un aviso.
+     * @param tipo Valor del campo 'tipo' ( "incidencia" / "sugerencia" / "felicitacion" ) de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
+     * @param categoria Valor del campo 'categoria' de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
+     * @returns Lista con las posibles sunbcategorias en texto plano que puede tener un aviso para el tipo y categoria indicado. Si no se indica el tipo o categoria se devuelven todas.
+     */
+    static subcategoriesText(tipo=null, categoria=null) {
+        switch(tipo) {
+            case "sugerencia":
+                if(subcategoriasSug_texto[categoria] === undefined || subcategoriasSug[categoria] === null) return(subcategoriasSug_texto);
+                else return(subcategoriasSug_texto[categoria]);
+            case "incidencia":
+                if(subcategoriasInc_texto[categoria] === undefined || subcategoriasInc_texto[categoria] === null) return(subcategoriasInc_texto);
+                else return(subcategoriasInc_texto[categoria]);
+            case "felicitacion":
+                return([]);
+            default:
+                return(subcategorias_texto);
+        }
+    }
+
+    /**
+     * Devuelve el texto plano de una subcategoria.
+     * @param subcategoria Valor del campo 'subcategoria' de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
+     * @returns Texto plano de la subcategoria introducida. Si no existe se devuelve 'null'.
+     */
+    toSubcategoryText(subcategoria) {
+        for(let i = 0; i < Math.max(subcategorias.length, subcategorias_texto.length); i++) {
+            if(subcategorias[i] === subcategoria) return(subcategorias_texto[i])
+        }
+        return(null)
+    }
+
+    /**
+     * Devuelve el tipo de un aviso en texto plano.
+     * @param tipo Valor del campo 'tipo' ( "incidencia" / "sugerencia" / "felicitacion" ) de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
+     * @returns Cadena de texto con el tipo de un aviso en texto plano. En caso de que no se introduzca un tipo correcto se devuelve "Error".
+     */
+    getNotifyType(tipo) {
+        switch(tipo) {
+            case "sugerencia":
+                return("Sugerencia");
+            case "incidencia":
+                return("Incidencia");
+            case "felicitacion":
+                return("Felicitación");
+            default:
+                return("Error");
+        }
     }
 
     /**
      * Devuelve la clase BootStrap asociada a un aviso.
      * @param tipo Valor del campo 'tipo' ( "incidencia" / "sugerencia" / "felicitacion" ) de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
-     * @returns Devuelve la clase (atributo HTML 'class') de la fila de una tabla BootStrap que le corresponde a un aviso según de qué tipo sea.
+     * @param classType OPCIONAL. Indica qué tipo concreto de la clase (atributo HTML 'class') BootStrap se quiere obtener (general, border, bg, table).
+     * @returns Devuelve la clase (atributo HTML 'class') BootStrap que le corresponde a un aviso según el tipo de aviso que sea. Si no se especifica un clase Bootstrap comcreta con 'classType' se devuelve un objeto con todas las clases BootStrap.
      */
-    getNotifyHtmlClass(tipo) {
-        if(tipo === undefined || tipo === null || tipo === "null" || typeof(tipo) !== "string" ) return("table-light");
-        switch(tipo){
-            case "incidencia":
-                return("table-danger");
+    getNotifyHtmlClass(tipo, classType = null) {
+        let htmlClasses = {};
+        switch(tipo) {
             case "sugerencia":
-                return("table-warning");
+                htmlClasses = { color: "warning", border: "border-warning", bg: "bg-warning", table: "table-warning"};
+                break;
+            case "incidencia":
+                htmlClasses = { color: "danger", border: "border-danger", bg: "bg-danger", table: "table-danger"};
+                break;
             case "felicitacion":
-                return("table-success");
+                htmlClasses = { color: "success", border: "border-success", bg: "bg-success", table: "table-success"};
+                break;
             default:
-                return("table-light");
+                htmlClasses = { color: "light", border: "border-black", bg: "bg-light", table: "table-light"};
+                break;
+        }
+        if(classType === undefined || classType === null || classType === "null" || typeof(classType) !== "string") return(htmlClasses);
+        else{
+            if(htmlClasses[classType] === undefined) return(htmlClasses.color);
+            else return(htmlClasses[classType]);
         }
     }
 
@@ -41,15 +248,24 @@ class Util {
     getNotifyImageURL(tipo) {
         if(tipo === undefined || tipo === null || tipo === "null" || typeof(tipo) !== "string" ) return("img\\icons\\desconocido.png");
         switch(tipo){
-            case "incidencia":
-                return("img\\icons\\incidencia.png");
             case "sugerencia":
                 return("img\\icons\\sugerencia.png");
+            case "incidencia":
+                return("img\\icons\\incidencia.png");
             case "felicitacion":
                 return("img\\icons\\felicitacion.png");
             default:
                 return("img\\icons\\desconocido.png");
         }
+    }
+
+    /**
+     * Devuelve un objeto Date a partir de una fecha en formato SQL.
+     * @param sqldate Cadena de texto con la fecha en formato SQL.
+     * @returns Objeto Date con la fecha indicada como parámetro.
+     */
+    dateSQL2JS(sqldate) {
+        return new Date(Date.parse(sqldate.replace(/-/g, '/')));
     }
 
     /**
@@ -116,11 +332,11 @@ class Util {
                 return([-1, 1, 1]);
             case 2:
                 if(idTec === myIdTec) return([1, -1, 1]);
-                else return([-1, 0, 1]);
+                else return([-1, 0, 0]);
             case 3:
-                return([1, -1, 1]);
+                return([1, -1, -1]);
             case 4:
-                return([1, -1, 0]);
+                return([1, -1, -1]);
             default:
                 return([-1,-1,-1])
         }
@@ -146,7 +362,7 @@ class Util {
         const estado = this.getNotifyState(aviso);
         const htmlNotify = {
             id: aviso.idAvi,
-            htmlClass: this.getNotifyHtmlClass(aviso.tipo),
+            htmlClass: this.getNotifyHtmlClass(aviso.tipo, "table"),
             imageURL: this.getNotifyImageURL(aviso.tipo),
             date: aviso.fecha.toLocaleDateString(),
             resume: this.getNotifyResume(aviso.observaciones),
@@ -155,7 +371,7 @@ class Util {
         }
         return htmlNotify;
     }
-
+    
     /**
      * Devuelve la información necesaria para mostrarle un aviso abierto a un usuario estándar.
      * @param aviso Los datos del aviso sacados de la BD
@@ -163,14 +379,13 @@ class Util {
      */
     toUserHtmlOpenNotify(aviso) {
         if(aviso === undefined || aviso === null || aviso === "null" || typeof(aviso) != "object" || Array.isArray(aviso) ) return {};
-        const estado = this.getNotifyState(aviso);
         const htmlNotify = {
             id: aviso.idAvi,
-            htmlClass: this.getNotifyHtmlClass(aviso.tipo),
+            htmlClass: this.getNotifyHtmlClass(aviso.tipo, "table"),
             imageURL: this.getNotifyImageURL(aviso.tipo),
             date: aviso.fecha.toLocaleDateString(),
             resume: this.getNotifyResume(aviso.observaciones),
-            state: estado,
+            state: this.getNotifyState(aviso),
             name: aviso.nombre,
             actions: [1, -1, -1]
         }
@@ -184,15 +399,36 @@ class Util {
      */
     toUserHtmlClosedNotify(aviso) {
         if(aviso === undefined || aviso === null || aviso === "null" || typeof(aviso) != "object" || Array.isArray(aviso) ) return {};
-        const estado = this.getNotifyState(aviso);
         const htmlNotify = {
             id: aviso.idAvi,
-            htmlClass: this.getNotifyHtmlClass(aviso.tipo),
+            htmlClass: this.getNotifyHtmlClass(aviso.tipo, "table"),
             imageURL: this.getNotifyImageURL(aviso.tipo),
             date: aviso.fecha.toLocaleDateString(),
             resume: this.getNotifyResume(aviso.observaciones),
-            state: estado,
+            state: this.getNotifyState(aviso),
             actions: [1, -1, -1]
+        }
+        return htmlNotify;
+    }
+
+    /**
+     * Devuelve la información necesaria para mostrarle un aviso.
+     * @param aviso Los datos del aviso sacados de la BD
+     * @returns Devuelve un objeto con la información necesaria para mostrar un aviso en el modal de aviso.
+     */
+    toModalHtmlNotify(aviso) {
+        if(aviso === undefined || aviso === null || aviso === "null" || typeof(aviso) != "object" || Array.isArray(aviso) ) return {};
+        const htmlNotify = {
+            id: aviso.idAvi,
+            type: this.getNotifyType(aviso.tipo),
+            htmlClasses: this.getNotifyHtmlClass(aviso.tipo),
+            imageURL: this.getNotifyImageURL(aviso.tipo),
+            category: this.toCategoryText(aviso.categoria),
+            subcategory: this.toSubcategoryText(aviso.subcategoria),
+            date: aviso.fecha.toLocaleDateString(),
+            observation: aviso.observaciones,
+            comment: aviso.comentario,
+            state: this.getNotifyState(aviso)
         }
         return htmlNotify;
     }

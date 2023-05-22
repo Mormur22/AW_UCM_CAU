@@ -14,14 +14,14 @@ class DAO_Aviso {
         this.pool = pool;
     }
 
-    createNotify(aviso,callback){
+    createNotify(aviso, callback) {
         this.pool.getConnection(
             function(err, connection) {
                 if(err) {
                     callback(new Error("Error de conexión a la base de datos"), false);
                 }
                 else {
-                    let fecha =new Date().toISOString().replace('T', ' ').substr(0, 19);
+                    let fecha =new Date().toISOString().replace('T', ' ').substring(0, 19);
                     if(aviso.subcategoria === "NULL"){
                         connection.query("INSERT INTO UCM_AW_CAU_AVI_Avisos (tipo, categoria, subcategoria, fecha, observaciones, cerrado, cancelado, idUsu) VALUES (?, ?, NULL, ?, ?, ?, ?, ?);", 
                             [aviso.tipo, aviso.categoria, fecha, aviso.observaciones, 0, 0, aviso.idUsu],
@@ -45,6 +45,35 @@ class DAO_Aviso {
                 }
             }
         );
+    }
+
+    /**
+     * Devuelve los datos de un aviso.
+     * @param idAvi  El id del aviso cuyos datos se quieren obtener.
+     * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, Aviso result).
+     * Aviso = { idAvi: Number, tipo: String, categoria: String, subcategoria: String, fecha: Date, observaciones: String, comentario: String, cerrado: Boolean, cancelado: Boolean, idUsu: Number, idTec: Number } .
+     * Ejecuta la consulta "SELECT * FROM UCM_AW_CAU_AVI_Avisos WHERE idAvi = $idAvi;".
+     */
+    getNotify(idAvi, callback) {
+        this.pool.getConnection(
+            function(err, connection) {
+                if(err) {
+                    callback(new Error("Error de conexión a la base de datos"), false);
+                }
+                else {
+                    connection.query("SELECT * FROM UCM_AW_CAU_AVI_Avisos WHERE idAvi = ?;", [idAvi],
+                        function(err, rows) {
+                            connection.release();  
+                            if(err) callback(new Error("No se ha podido recuperar datos de la tabla UCM_AW_CAU_AVI_Avisos"), null);
+                            else{
+                                if(rows.length === 0) callback(new Error("No se ha encontrado ningún aviso con idAvi = " + idAvi), null);
+                                else callback(null, rows[0]);
+                            }
+                        }
+                    );
+                }
+            }
+        )
     }
 
     /**
@@ -77,7 +106,7 @@ class DAO_Aviso {
      * @param myIdUsu El id del usuarioa estándar que está usando la applicaión.
      * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, [Aviso , ... , Aviso] result) .
      * Aviso = { idAvi: Number, tipo: String, categoria: String, subcategoria: String, fecha: Date, observaciones: String, comentario: String, cerrado: Boolean, cancelado: Boolean, idUsu: Number, idTec: Number } + TEC.nombre .
-     * Ejecuta la consulta "SELECT AVI.idAvi, AVI.tipo, AVI.categoria, AVI.subcategoria, AVI.fecha, AVI.observaciones, AVI.comentario, AVI.cerrado, AVI.cancelado, AVI.idUsu, AVI.idTec FROM UCM_AW_CAU_AVI_Avisos AVI WHERE AVI.cerrado = 0 AND AVI.cancelado = 0 AND AVI.idUsu = ?;"
+     * Ejecuta la consulta "SELECT AVI.idAvi, AVI.tipo, AVI.categoria, AVI.subcategoria, AVI.fecha, AVI.observaciones, AVI.comentario, AVI.cerrado, AVI.cancelado, AVI.idUsu, AVI.idTec FROM UCM_AW_CAU_AVI_Avisos AVI WHERE AVI.cerrado = 0 AND AVI.cancelado = 0 AND AVI.idUsu = $idUsu;"
      */
     getUserOpenNotifies(myIdUsu, callback) {
         this.pool.getConnection(
@@ -131,7 +160,7 @@ class DAO_Aviso {
                     callback(new Error("Error de conexión a la base de datos"), false);
                 }
                 else {
-                    connection.query("SELECT tipo FROM UCM_AW_CAU_AVI_Avisos WHERE idTec = ?;", [myIdTec],
+                    connection.query("SELECT * FROM UCM_AW_CAU_AVI_Avisos WHERE idTec = ?;", [myIdTec],
                         function(err, rows) {
                             connection.release();
                             if(err) callback(new Error("No se ha podido recuperar datos de la tabla UCM_AW_CAU_AVI_Avisos"), null);

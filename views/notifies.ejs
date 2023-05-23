@@ -28,8 +28,13 @@
                                     <img class="ticon" src="img\icons\tecnico-gris.png" />
                                     <% } %>
                                     <% if(row.actions[2] === 1) { %>
-                                    <img class="ticon ficon" src="img\icons\papelera.png" onclick=<% __append('"') %>cancelNotify(<%= row.id %>)<% __append('"') %> />
+                                    <img class="ticon ficon" src="img\icons\lapiz.png" onclick=<% __append('"') %>closeNotify(<%= row.id %>)<% __append('"') %> />
                                     <% } else if(row.actions[2] === 0) { %>
+                                    <img class="ticon" src="img\icons\lapiz-gris.png" />
+                                    <% } %>
+                                    <% if(row.actions[3] === 1) { %>
+                                    <img class="ticon ficon" src="img\icons\papelera.png" onclick=<% __append('"') %>cancelNotify(<%= row.id %>)<% __append('"') %> />
+                                    <% } else if(row.actions[3] === 0) { %>
                                     <img class="ticon" src="img\icons\papelera-gris.png" />
                                     <% } %>
                                 </td>

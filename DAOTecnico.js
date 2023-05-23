@@ -156,9 +156,7 @@ class DAO_Tecnico {
     getTechnicianName(idTec, callback) {
         this.pool.getConnection(
             function(err, connection) {
-                if(err) {
-                    callback(new Error("Error de conexión a la base de datos"), false);
-                }
+                if(err) callback(new Error("Error de conexión a la base de datos"), null);
                 else {
                     connection.query("SELECT nombre FROM UCM_AW_CAU_TEC_Tecnicos WHERE idTec = ?;", [idTec],
                         function(err, rows) {
@@ -184,9 +182,7 @@ class DAO_Tecnico {
     getAllTechnicians(callback) {
         this.pool.getConnection(
             function(err, connection) {
-                if(err) {
-                    callback(new Error("Error de conexión a la base de datos"), false);
-                }
+                if(err) callback(new Error("Error de conexión a la base de datos"), null);
                 else {
                     connection.query("SELECT * FROM UCM_AW_CAU_TEC_Tecnicos WHERE desactivado=0;", [],
                         function(err, rows) {
@@ -203,30 +199,27 @@ class DAO_Tecnico {
     /**
      * Desactiva la cuenta de un técnico.
      * @param idTec  El id del técnico cuya cuenta se quiere desactivar. 
-     * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, Tecnico result) .
-     * Tecnico = { idTec: Number, email: String, password: String, nombre: String, perfil: String, imagen: String, desactivado: Boolean, numEmp: String } .
+     * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, Boolean result) .
      * Ejecuta la consulta: "UPDATE UCM_AW_CAU_TEC_Tecnicos SET desactivado = 1 WHERE idTec = $idTec;".
      */
     cancelTechnician(idTec,callback) {
         this.pool.getConnection(
             function(err, connection) {
-                if(err) {
-                    callback(new Error("Error de conexión a la base de datos"), null);
-                }
+                if(err) callback(new Error("Error de conexión a la base de datos"), false);
                 else {
                     connection.query("UPDATE UCM_AW_CAU_TEC_Tecnicos SET desactivado = 1 WHERE idTec = ?;", [idTec],
                         function(err, rows) {
                             if(rows.affectedRows != 1) {
                                 connection.release();
-                                if(rows.affectedRows == 0) callback(new Error("Error al intentar desactivar el técnico (idTec="+idTec+" no encontrado)."),null);
-                                else callback(new Error("Error al intentar desactivar el técnico ("+rows.affectedRows+" filas modificadas)."),null);
+                                if(rows.affectedRows == 0) callback(new Error("Error al intentar desactivar el técnico (idTec="+idTec+" no encontrado)."), false);
+                                else callback(new Error("Error al intentar desactivar el técnico ("+rows.affectedRows+" filas modificadas)."), false);
                             }
                             else{
                                 connection.query("UPDATE UCM_AW_CAU_AVI_Avisos SET idTec = NULL WHERE idTec = ?;", [idTec],
                                     function(err, rows) {
                                         connection.release();
-                                        if(err) callback(new Error("No se ha podido modificar los avisos del técnico (idTec="+idTec+")."), null);
-                                        else callback(null, rows);
+                                        if(err) callback(new Error("No se ha podido modificar los avisos del técnico (idTec="+idTec+")."), false);
+                                        else callback(null, true);
                                     }
                                 );
                             }

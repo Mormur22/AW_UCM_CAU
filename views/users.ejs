@@ -12,7 +12,7 @@
                         </thead>
                         <tbody>
                             <% if(Array.isArray(rows) && rows.length > 0 ) rows.forEach( function(row) { %>
-                            <tr id="<%= 'usu' + row.i %>" class="row_usu <%= 'usu_' + row.type %> table-info" data-id="<%= row.id %>" data-type="<%= row.type %>" >
+                            <tr id="<%= 'usu' + row.i %>" class="row_usu <%= 'usu_' + row.type %> table-info" data-id="<%= row.id %>" data-name="<%= row.name %>" data-type="<%= row.type %>" >
                                 <td class="text-center align-middle"><%= row.date %></td>
                                 <td class="text-center align-middle"><%= row.name %></td>
                                 <td class="text-center align-middle"><%= row.role.toUpperCase() %></td>

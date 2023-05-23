@@ -323,32 +323,32 @@ class Util {
      * @param idTec Id del técnico que tiene asignado el aviso.
      * @param myIdTec El id del técnico que está usando la applicaión.
      * @returns Devuelve un array con las posibles acciones que se pueden realizar sobre un aviso.
-     * actions = [view, assign, cancel]. Cada una con valores: -1 (not present) / 0 (disable) / 1 (enable) .
+     * actions = [view, assign, close, cancel]. Cada una con valores: -1 (not present) / 0 (disable) / 1 (enable) .
      */
     getNotifyTechnicianActions(state, idTec, myIdTec) {
-        if(state === undefined || state === null || state === "null" || typeof(state) !== "number") return([-1,-1,-1]);
+        if(state === undefined || state === null || state === "null" || typeof(state) !== "number") return([-1, -1, -1, -1]);
         switch(state){
             case 1:
-                return([-1, 1, 1]);
+                return([-1, 1, -1, 1]);
             case 2:
-                if(idTec === myIdTec) return([1, -1, 1]);
-                else return([-1, 0, 0]);
+                if(idTec === myIdTec) return([-1, -1, 1, 1]);
+                else return([1, -1, -1, 0]);
             case 3:
-                return([1, -1, -1]);
+                return([1, -1, -1, -1]);
             case 4:
-                return([1, -1, -1]);
+                return([1, -1, -1, -1]);
             default:
-                return([-1,-1,-1])
+                return([-1, -1, -1, -1]);
         }
     }
     
     /**
      * Devuelve las acciones que un usario normal puede realizar con sus avisos (solo verlos).
      * @returns Devuelve un array con las posibles acciones que se pueden realizar sobre un aviso propio.
-     * actions = [view, assign, cancel]. Cada una con valores: -1 (not present) / 0 (disable) / 1 (enable) .
+     * actions = [view, assign, close, cancel]. Cada una con valores: -1 (not present) / 0 (disable) / 1 (enable) .
      */
-    getUserTechnicianActions() {
-        return([1, -1, -1]);
+    getNotifyUserActions() {
+        return([1, -1, -1, -1]);
     }
 
     /**
@@ -387,7 +387,7 @@ class Util {
             resume: this.getNotifyResume(aviso.observaciones),
             state: this.getNotifyState(aviso),
             name: aviso.nombre,
-            actions: [1, -1, -1]
+            actions: this.getNotifyUserActions()
         }
         return htmlNotify;
     }
@@ -406,13 +406,13 @@ class Util {
             date: aviso.fecha.toLocaleDateString(),
             resume: this.getNotifyResume(aviso.observaciones),
             state: this.getNotifyState(aviso),
-            actions: [1, -1, -1]
+            actions: this.getNotifyUserActions()
         }
         return htmlNotify;
     }
 
     /**
-     * Devuelve la información necesaria para mostrarle un aviso.
+     * Devuelve la información necesaria para mostrar un aviso.
      * @param aviso Los datos del aviso sacados de la BD
      * @returns Devuelve un objeto con la información necesaria para mostrar un aviso en el modal de aviso.
      */

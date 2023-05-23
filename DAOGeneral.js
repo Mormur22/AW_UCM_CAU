@@ -22,9 +22,7 @@ class DAO_General {
     testConnection(callback) {
         this.pool.getConnection(
             function(err, connection) {
-                if(err) {
-                    callback(new Error("Error de conexión a la base de datos"), false);
-                }
+                if(err) callback(new Error("Error de conexión a la base de datos"), false);
                 else {
                     // Devolver la conexión al pool y llamar a la función de callback cone éxito
                     connection.release();
@@ -43,15 +41,13 @@ class DAO_General {
         let str = "Comprobación del estado de la BD:\n";
         this.pool.getConnection(
             function(err, connection) {
-                if(err) {
-                    callback(new Error("Error de conexión a la base de datos"), false);
-                }
+                if(err) callback(new Error("Error de conexión a la base de datos"), null);
                 else {
                     connection.query("SELECT * FROM UCM_AW_CAU_EMP_Empleados;", [],
                         function(err, rows) {
                             if(err) {
                                 connection.release();
-                                callback(new Error("No se ha podido recuperar datos de la tabla UCM_AW_CAU_EMP_Empleados"));
+                                callback(new Error("No se ha podido recuperar datos de la tabla UCM_AW_CAU_EMP_Empleados"), null);
                             }
                             else{
                                 str = str + " · " + rows.length + " filas en la tabla UCM_AW_CAU_EMP_Empleados.\n";
@@ -59,7 +55,7 @@ class DAO_General {
                                     function(err, rows) {
                                         if(err) {
                                             connection.release();
-                                            callback(new Error("No se ha podido recuperar datos de la tabla UCM_AW_CAU_USU_Usuarios"));
+                                            callback(new Error("No se ha podido recuperar datos de la tabla UCM_AW_CAU_USU_Usuarios"), null);
                                         }
                                         else{
                                             str = str + " · " + rows.length + " filas en la tabla UCM_AW_CAU_USU_Usuarios.\n";
@@ -67,20 +63,16 @@ class DAO_General {
                                                 function(err, rows) {
                                                     if(err) {
                                                         connection.release();
-                                                        callback(new Error("No se ha podido recuperar datos de la tabla UCM_AW_CAU_TEC_Tecnicos"));
+                                                        callback(new Error("No se ha podido recuperar datos de la tabla UCM_AW_CAU_TEC_Tecnicos"), null);
                                                     }
                                                     else{
                                                         str = str + " · " + rows.length + " filas en la tabla UCM_AW_CAU_TEC_Tecnicos.\n";
                                                         connection.query("SELECT * FROM UCM_AW_CAU_AVI_Avisos;", [],
                                                             function(err, rows) {
-                                                                if(err) {
-                                                                    connection.release();
-                                                                    callback(new Error("No se ha podido recuperar datos de la tabla UCM_AW_CAU_AVI_Avisos"));
-                                                                }
+                                                                connection.release();
+                                                                if(err) callback(new Error("No se ha podido recuperar datos de la tabla UCM_AW_CAU_AVI_Avisos"), null);
                                                                 else{
                                                                     str = str + " · " + rows.length + " filas en la tabla UCM_AW_CAU_AVI_Avisos.\n";
-                                                                    // Devolver la conexión al pool y llamar a la función de callback cone éxito
-                                                                    connection.release();
                                                                     callback(null, str);
                                                                 }
                                                             }

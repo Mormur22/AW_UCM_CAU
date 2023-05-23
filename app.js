@@ -514,17 +514,15 @@ app.get("/tables/users", function(request, response) {
 
 // Borrar técnico
 app.post("/user/cancelTechnician/:idTec", (request, response) => {
-    daoTec.cancelTechnician(request.params.idTec, function(err,res){
-        if(err) response.send(false);
-        else response.send(true);
+    daoTec.cancelTechnician(request.params.idTec, function(err, res) {
+        response.send(res);
     });
 });
 
 // Borrar usuario
 app.post("/user/cancelUser/:idUsu", (request, response) => {
-    daoUsu.cancelUser(request.params.idUsu, function(err,res){
-        if(err) response.send(false);
-        else response.send(true);
+    daoUsu.cancelUser(request.params.idUsu, function(err,res) {
+        response.send(res);
     });
 });
 
@@ -539,15 +537,14 @@ app.get("/notice/view/:idAvi", (request, response) => {
                         function(err, usuario) {
                             if(err) response.render("error_modal", { code: 500, status: "Internal Server Error", message: "No se ha encontrado el usuario del aviso solicitado en la BD.", stack: null });
                             else {
-                                if(aviso.idTec !== null) {
+                                if(aviso.idTec === null) response.render("notice", { mode: "view", user: usuario.nombre, profile: util.toProfileText(usuario.perfil, true), notify: util.toModalHtmlNotify(aviso), technician: null });
+                                else {
                                     daoTec.getTechnicianName(aviso.idTec , 
                                         function(err, nombreTec) {
-                                            response.render("notice", { mode: "view", user: usuario.nombre, profile: util.toProfileText(usuario.perfil, true), notify: util.toModalHtmlNotify(aviso), technician: nombreTec });
+                                            if(err) response.render("error_modal", { code: 500, status: "Internal Server Error", message: "No se ha podido recuperar el nombre del técnico asignado al aviso solicitado.", stack: null });
+                                            else response.render("notice", { mode: "view", user: usuario.nombre, profile: util.toProfileText(usuario.perfil, true), notify: util.toModalHtmlNotify(aviso), technician: nombreTec });
                                         }
-                                    );
-                                }
-                                else {
-                                    response.render("notice", { mode: "view", user: usuario.nombre, profile: util.toProfileText(usuario.perfil, true), notify: util.toModalHtmlNotify(aviso), technician: null });
+                                    );                                   
                                 }
                             }
                         }
@@ -561,19 +558,18 @@ app.get("/notice/view/:idAvi", (request, response) => {
             function(err, aviso) {
                 if(err) response.render("error_modal", { code: 500, status: "Internal Server Error", message: "No se ha encontrado el aviso solicitado en la BD.", stack: null });
                 else {
-                    if(request.session.iduser === aviso.idUsu) {
-                        if(aviso.idTec !== null) {
+                    if(request.session.iduser !== aviso.idUsu) response.render("error_modal", { code: 500, status: "Forbidden", message: "Permiso denegado. El aviso solicitado es de otro usuario.", stack: null });
+                    else {
+                        if(aviso.idTec === null) response.render("notice", { mode: "view", user: request.session.name, profile: util.toProfileText(request.session.profile, true), notify: util.toModalHtmlNotify(aviso), technician: null });
+                        else {
                             daoTec.getTechnicianName(aviso.idTec , 
                                 function(err, nombreTec) {
-                                    response.render("notice", { mode: "view", user: request.session.name, profile: util.toProfileText(request.session.profile, true), notify: util.toModalHtmlNotify(aviso), technician: nombreTec });
+                                    if(err) response.render("error_modal", { code: 500, status: "Internal Server Error", message: "No se ha podido recuperar el nombre del técnico asignado al aviso solicitado.", stack: null });
+                                    else response.render("notice", { mode: "view", user: request.session.name, profile: util.toProfileText(request.session.profile, true), notify: util.toModalHtmlNotify(aviso), technician: nombreTec });
                                 }
-                            );
-                        }
-                        else {
-                            response.render("notice", { mode: "view", user: request.session.name, profile: util.toProfileText(request.session.profile, true), notify: util.toModalHtmlNotify(aviso), technician: null });
+                            );                           
                         }
                     }
-                    else response.render("error_modal", { code: 500, status: "Forbidden", message: "Permiso denegado. El aviso solicitado es de otro usuario.", stack: null });
                 }
             }
         )
@@ -617,23 +613,74 @@ app.get("/technician_list", (request, response) => {
     }
 });
 
+// Asignar aviso (recibir formulario)
+app.post("/notice/assign", function(request, response) {
+    if(request.session.isTechnician) {
+        const idAvi = request.body.idAvi;
+        const idTec = request.body.idTec;
+        daoAvi.setTechnicianNotify(idAvi, idTec, 
+            function(err, techList) {
+                if(err) response.send(false);
+                else response.send(true);
+            }
+        );
+    }
+    else response.send(false);
+});
+
+// Cerrar aviso (mostrar)
+app.get("/notice/close/:idAvi", (request, response) => {
+    if(request.session.isTechnician) {
+        daoAvi.getNotify(request.params.idAvi,
+            function(err, aviso) {
+                if(err) response.render("error_modal", { code: 500, status: "Internal Server Error", message: "No se ha encontrado el aviso solicitado en la BD.", stack: null });
+                else {
+                    daoUsu.getUser(aviso.idUsu,
+                        function(err, usuario) {
+                            if(err) response.render("error_modal", { code: 500, status: "Internal Server Error", message: "No se ha encontrado el usuario del aviso solicitado en la BD.", stack: null });
+                            else {
+                                if(aviso.idTec === null) response.render("error_modal", { code: 500, status: "Internal Server Error", message: "El aviso solicitado no está asignado.", stack: null });
+                                else {
+                                    if(request.session.iduser !== aviso.idTec) response.render("error_modal", { code: 500, status: "Forbidden", message: "Permiso denegado. El aviso solicitado está asignado a otro técnico.", stack: null });
+                                    else {
+                                        daoTec.getTechnicianName(aviso.idTec , 
+                                            function(err, nombreTec) {
+                                                if(err) response.render("error_modal", { code: 500, status: "Internal Server Error", message: "No se ha podido recuperar el nombre del técnico asignado al aviso solicitado.", stack: null });
+                                                else response.render("notice", { mode: "close", user: usuario.nombre, profile: util.toProfileText(usuario.perfil, true), notify: util.toModalHtmlNotify(aviso), technician: nombreTec });
+                                            }
+                                        );
+                                    }                             
+                                }
+                            }
+                        }
+                    );
+                }
+            }
+        )
+    }
+    else response.render("error_modal", { code: 500, status: "Forbidden", message: "Permiso denegado. No tiene permiso para realizar esta acción.", stack: null });
+});
+
+// Cerrar aviso (recibir formulario)
+app.post("/notice/close", function(request, response) {
+    if(request.session.isTechnician) {
+        const idAvi = request.body.idAvi;
+        const comment = request.body.comment;
+        daoAvi.closeNotify(idAvi, request.session.iduser, comment,
+            function(err, result) {
+                if(err) response.send(false);
+                else response.send(true);
+            }
+        );
+    }
+    else response.send(false);
+});
+
 // Logout
 app.get("/logout", (request, response) => {
     response.status(200);
     request.session.destroy();
     response.redirect("/");
-});
-
-// Asignar aviso (recibir formulario)
-app.post("/notice/assign", function(request, response) {
-    const idAvi = request.body.idAvi;
-    const idTec = request.body.idTec;
-    daoAvi.setTechnicianNotify(idAvi, idTec, 
-        function(err, techList) {
-            if(err) response.send(false);
-            else response.send(true);
-        }
-    );
 });
 
 // Uso de un middleware para la gestion de errores 404 (Not Found)

@@ -22,18 +22,16 @@ class DAO_Usuario {
      */
     existeNombreUsuario(nombre, callback){
         this.pool.getConnection(function(err,connection){
-            if(err){
-                reject(new Error("Error de conexión a la base de datos"));
-            }
-            else{
+            if(err) callback(new Error("Error de conexión a la base de datos"), false);
+            else {
                 const existeName = "SELECT * FROM UCM_AW_CAU_USU_Usuarios where nombre = ?;";
                 connection.query(existeName,[nombre],
                 function(err, result){
                     connection.release();
-                    if(err) callback(new Error("Error de acceso a la base de datos"));
+                    if(err) callback(new Error("Error de acceso a la base de datos"), false);
                     else{
-                        if (result.length==1) callback(null,true);
-                        else callback(null, false);
+                        if (result.length==0) callback(null, false);
+                        else callback(null, true);
                     }
                 });
             }
@@ -141,9 +139,7 @@ class DAO_Usuario {
     getUser(idUsu, callback) {
         this.pool.getConnection(
             function(err, connection) {
-                if(err) {
-                    callback(new Error("Error de conexión a la base de datos"), false);
-                }
+                if(err) callback(new Error("Error de conexión a la base de datos"), null);
                 else {
                     connection.query("SELECT * FROM UCM_AW_CAU_USU_Usuarios WHERE idUsu = ?;", [idUsu],
                         function(err, rows) {
@@ -169,9 +165,7 @@ class DAO_Usuario {
     getAllUsers(callback) {
         this.pool.getConnection(
             function(err, connection) {
-                if(err) {
-                    callback(new Error("Error de conexión a la base de datos"), false);
-                }
+                if(err) callback(new Error("Error de conexión a la base de datos"), null);
                 else {
                     connection.query("SELECT * FROM UCM_AW_CAU_USU_Usuarios WHERE desactivado = 0;", [],
                         function(err, rows) {
@@ -188,30 +182,27 @@ class DAO_Usuario {
     /**
      * Desactiva la cuenta de un usuario estándar.
      * @param idUsu El id del usuario cuya cuenta se quiere desactivar. 
-     * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, Usuario result) .
-     * Usuario = { idUsu: Number, email: String, password: String, nombre: String, perfil: String, imagen: String, desactivado: Boolean, reputacion: Number } .
+     * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, Boolean result) .
      * Ejecuta la consulta: "UPDATE UCM_AW_CAU_USU_Usuarios SET desactivado = 1 WHERE idUsu = $idUsu;".
      */
     cancelUser(idUsu, callback) {
         this.pool.getConnection(
             function(err, connection) {
-                if(err) {
-                    callback(new Error("Error de conexión a la base de datos"), null);
-                }
+                if(err) callback(new Error("Error de conexión a la base de datos"), false);
                 else {
                     connection.query("UPDATE UCM_AW_CAU_USU_Usuarios SET desactivado = 1 WHERE idUsu = ?;", [idUsu],
                         function(err, rows) {
                             if(rows.affectedRows != 1) {
                                 connection.release();
-                                if(rows.affectedRows == 0) callback(new Error("Error al intentar desactivar el usuario estándar (idUsu="+idUsu+" no encontrado)."),null);
-                                else callback(new Error("Error al intentar desactivar el usuario estándar ("+rows.affectedRows+" filas modificadas)."),null);
+                                if(rows.affectedRows == 0) callback(new Error("Error al intentar desactivar el usuario estándar (idUsu="+idUsu+" no encontrado)."), false);
+                                else callback(new Error("Error al intentar desactivar el usuario estándar ("+rows.affectedRows+" filas modificadas)."), false);
                             }
                             else{
                                 connection.query("UPDATE UCM_AW_CAU_AVI_Avisos SET idUsu = NULL WHERE idUsu = ?;", [idUsu],
                                     function(err, rows) {
                                         connection.release();
-                                        if(err) callback(new Error("No se ha podido modificar los avisos del usuario estándar (idUsu="+idUsu+")."), null);
-                                        else callback(null, rows);
+                                        if(err) callback(new Error("No se ha podido modificar los avisos del usuario estándar (idUsu="+idUsu+")."), false);
+                                        else callback(null, true);
                                     }
                                 );
                             }

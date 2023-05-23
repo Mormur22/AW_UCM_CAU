@@ -29,14 +29,14 @@
                                             <% } %>
                                         </div>
                                     </div>
-                                    <% if((mode === "view" && notify.comment !== null) || (mode === "edit")  || (mode === "cancel")) { %> 
+                                    <% if((mode === "view" && notify.comment !== null) || (mode === "close")  || (mode === "cancel")) { %> 
                                     <div id="noticeComment" class="row border border-black mb-4 p-2">
                                         <div class="text-start mb-2"><span id="noticeLabel">Comentario del Técnico:</span></div>
                                         <div  id="noticeCommWrap" class="text-start p-2">
                                             <% if(mode === "view"){ %>
                                             <span id="noticeComm_txt"><%= notify.comment %></span>
                                             <% } else { %>
-                                            <textarea id="noticeComm_ta" class="form-control mr-4" rows="6" name="comment">La cuenta ha sido creada. A partir de ahora podéis utilizar la cuenta ciberseguridad.ii@ucm.es . La clave de entrada es 121345. Recordad cambiarla la primera vez que entréis. Gracias por utilizar este servicio.</textarea>
+                                            <textarea id="noticeComm_ta" class="form-control mr-4" rows="6" name="comment"></textarea>
                                             <% } %>
                                         </div>
                                     </div>
@@ -45,8 +45,8 @@
                                         <button id="noticeBack_btn" class="btn btn-outline-primary btn-lg ms-4"  type="button" data-bs-dismiss="modal" aria-label="Close" data-backdrop="false">Volver</button>
                                         <% if(mode === "assign") { %>
                                         <button id="noticeBack_btn" class="btn btn-outline-primary btn-lg ms-4" type="button" onclick=<% __append('"') %>sendAssign(<%= notify.id %>)<% __append('"') %>>Asignar técnico</button>
-                                        <% } if(mode === "edit") { %>
-                                        <button id="noticeClose_btn" class="btn btn-outline-primary btn-lg ms-4" type="submit">Terminar aviso</button>
+                                        <% } if(mode === "close") { %>
+                                        <button id="noticeClose_btn" class="btn btn-outline-primary btn-lg ms-4" type="button" onclick=<% __append('"') %>sendClose(<%= notify.id %>)<% __append('"') %> disabled>Terminar aviso</button>
                                         <% } if(mode === "cancel") { %>
                                         <button id="noticeCancel_btn" class="btn btn-outline-primary btn-lg ms-4" type="submit">Eliminar aviso</button>
                                         <% } %>

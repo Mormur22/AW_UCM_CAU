@@ -8,6 +8,7 @@
                                     <div class="col text-end my-auto"><span id="noticeIdLabel" class="text-uppercase">Aviso</span><span id="noticeId"><%= notify.id %></span></div>
                                 </div>
                                 <div id="noticeInfo" class="row <%= notify.htmlClasses.bg %> mb-4 p-2">
+                                    <div class="text-start mb-2"><span id="noticeLabel">Estado:</span><span id="noticeState" class="text-uppercase"><%= notify.stateName %></span></div>
                                     <div class="text-start mb-2"><span id="noticeLabel">Fecha:</span><span id="noticeDate"><%= notify.date %></span></div>
                                     <div class="text-start mb-2"><span id="noticeLabel">Categoría:</span><span id="noticeCategory"><%= notify.category %></span><span id="noticeCategorySeparator"><% if(notify.subcategory !== null){ %>|</span><span id="noticeSubcategory"><%= notify.subcategory %></span><% } %></div>
                                     <div class="text-start mb-2"><span id="noticeLabel">Usuario:</span><span id="noticeUser"><%= user %></span></div>
@@ -15,7 +16,7 @@
                                 </div>
                                 <div id="noticeObserv" class="row border <%= notify.htmlClasses.border %> mb-4 p-2">
                                     <div class="text-start mb-2"><span id="noticeLabel">Observaciones:</span></div>
-                                    <div class="text-start mb-2 p-2"><span id="noticeObservation"><%= notify.observation %></span></div>
+                                    <div class="text-start mb-2 p-2"><span id="noticeObservation"><%- notify.observation %></span></div>
                                 </div>
                                 <form id="notice_frm" method ="POST" action="javascript:sendForm(<%= notify.id %>)">
                                     <div id="noticeTechnician" class="row mb-4 p-2">
@@ -29,12 +30,12 @@
                                             <% } %>
                                         </div>
                                     </div>
-                                    <% if((mode === "view" && notify.comment !== null) || (mode === "close")  || (mode === "cancel")) { %> 
+                                    <% if((mode === "view" && notify.comment !== null && notify.comment !== "") || (mode === "close")  || (mode === "cancel")) { %> 
                                     <div id="noticeComment" class="row border border-black mb-4 p-2">
                                         <div class="text-start mb-2"><span id="noticeLabel">Comentario del Técnico:</span></div>
                                         <div  id="noticeCommWrap" class="text-start p-2">
                                             <% if(mode === "view"){ %>
-                                            <span id="noticeComm_txt"><%= notify.comment %></span>
+                                            <span id="noticeComm_txt"><%- notify.comment %></span>
                                             <% } else { %>
                                             <textarea id="noticeComm_ta" class="form-control mr-4" rows="6" name="comment"></textarea>
                                             <% } %>
@@ -44,11 +45,11 @@
                                     <div id="noticeBtn" class="form-group text-end mb-4 p-4"> 
                                         <button id="noticeBack_btn" class="btn btn-outline-primary btn-lg ms-4"  type="button" data-bs-dismiss="modal" aria-label="Close" data-backdrop="false">Volver</button>
                                         <% if(mode === "assign") { %>
-                                        <button id="noticeBack_btn" class="btn btn-outline-primary btn-lg ms-4" type="button" onclick=<% __append('"') %>sendAssign(<%= notify.id %>)<% __append('"') %>>Asignar técnico</button>
+                                        <button id="noticeAssign_btn" class="btn btn-outline-primary btn-lg ms-4" type="button" onclick=<% __append('"') %>sendAssign(<%= notify.id %>)<% __append('"') %>>Asignar técnico</button>
                                         <% } if(mode === "close") { %>
-                                        <button id="noticeClose_btn" class="btn btn-outline-primary btn-lg ms-4" type="button" onclick=<% __append('"') %>sendClose(<%= notify.id %>)<% __append('"') %> disabled>Terminar aviso</button>
+                                        <button id="noticeClose_btn" class="btn btn-outline-primary btn-lg ms-4" type="button" onclick=<% __append('"') %>sendClose(<%= notify.id %>)<% __append('"') %>>Terminar aviso</button>
                                         <% } if(mode === "cancel") { %>
-                                        <button id="noticeCancel_btn" class="btn btn-outline-primary btn-lg ms-4" type="submit">Eliminar aviso</button>
+                                        <button id="noticeCancel_btn" class="btn btn-outline-primary btn-lg ms-4" type="submit" onclick=<% __append('"') %>sendCancel(<%= notify.id %>)<% __append('"') %>>Eliminar aviso</button>
                                         <% } %>
                                     </div>
                                 </form>

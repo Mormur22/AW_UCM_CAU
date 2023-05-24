@@ -27,6 +27,11 @@
     color: #121212;
 }
 
+#noticeState {
+    font-family: "Century Gothic";
+    font-size: 20pt;
+}
+
 #noticeDate {
     font-family: "Orator Std";
     font-size: 20pt;

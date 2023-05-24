@@ -260,6 +260,19 @@ class Util {
     }
 
     /**
+     * Convert newlines ('\n') into line break (<br>).
+     * @param str String to parse.
+     * @param isXhtml If 'true' use XHTML way: changes '\n' into '<br />'. If 'false' changes '\n' into '<br>'
+     * @returns Parsed string.
+     * Source: https://www.npmjs.com/package/nl2br
+     */
+    nl2br(str, isXhtml) {
+        if(str === undefined || str === null || str === "null" || typeof(str) !== "string") return str;
+        var breakTag = (isXhtml || typeof isXhtml === 'undefined') ? '<br />' : '<br>';
+        return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+    };
+
+    /**
      * Devuelve un objeto Date a partir de una fecha en formato SQL.
      * @param sqldate Cadena de texto con la fecha en formato SQL.
      * @returns Objeto Date con la fecha indicada como parámetro.
@@ -318,6 +331,26 @@ class Util {
     }
 
     /**
+     * Devuelve el nombre del estado de un aviso.
+     * @param state Estado del aviso (1-4).
+     * @returns Nombre del estado del aviso: 1 ('Abierto')  / 2 ('Asignado') / 3 ('Cerrado') / 4 ('Borrado') / otro ('Desconocido') .
+     */
+    getStateName(state) {
+        switch(state){
+            case 1:
+                return("Abierto");
+            case 2:
+                return("Asignado");
+            case 3:
+                return("Cerrado");
+            case 4:
+                return("Borrado");
+            default:
+                return("Desconocido");
+        }
+    }
+
+    /**
      * Devuelve las acciones que un técnico puede realizar con los avisos dependiendo del estado en el que estén.
      * @param state Estado del aviso: 1 (open)  / 2 (assigned) / 3 (closed) / 4 (cancelled) .
      * @param idTec Id del técnico que tiene asignado el aviso.
@@ -332,7 +365,7 @@ class Util {
                 return([-1, 1, -1, 1]);
             case 2:
                 if(idTec === myIdTec) return([-1, -1, 1, 1]);
-                else return([1, -1, -1, 0]);
+                else return([-1, 0, -1, 0]);
             case 3:
                 return([1, -1, -1, -1]);
             case 4:
@@ -418,6 +451,7 @@ class Util {
      */
     toModalHtmlNotify(aviso) {
         if(aviso === undefined || aviso === null || aviso === "null" || typeof(aviso) != "object" || Array.isArray(aviso) ) return {};
+        const estado = this.getNotifyState(aviso);
         const htmlNotify = {
             id: aviso.idAvi,
             type: this.getNotifyType(aviso.tipo),
@@ -426,9 +460,10 @@ class Util {
             category: this.toCategoryText(aviso.categoria),
             subcategory: this.toSubcategoryText(aviso.subcategoria),
             date: aviso.fecha.toLocaleDateString(),
-            observation: aviso.observaciones,
-            comment: aviso.comentario,
-            state: this.getNotifyState(aviso)
+            observation: this.nl2br(aviso.observaciones),
+            comment: this.nl2br(aviso.comentario),
+            state: estado,
+            stateName: this.getStateName(estado),
         }
         return htmlNotify;
     }
@@ -457,7 +492,7 @@ class Util {
 
     /**
      * Devuelve un array de datos comunes de usuario estándar o técnico.
-     * @param  args Array de objetos, o un solo objeto, con los datos de un usuario estándar o técnico recuperados de la BD.
+     * @param args Array de objetos, o un solo objeto, con los datos de un usuario estándar o técnico recuperados de la BD.
      * @returns Array de objetos 'Common' con los datos comunes de un usuario estándar o un técnico más las propiedades 'isTechnician' (Boolean) e 'i' (Number) .
      * Common = { id: Number, fecha: Date, email: String, password: String, nombre: String, perfil: String, imagen: String, desactivado: Boolean, isTechnician: Boolean, i: Number } .
      */

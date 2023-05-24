@@ -11,8 +11,8 @@ function viewMyNotify(id){
             modalContainer.html(data);
             openModal();
         }).fail(function(jqXHR, textStatus) {
-            alet("Error al intentar recuperar los datos.");
-        });;
+            alert("Error al intentar recuperar los datos.");
+        });
     });
 }; 
 
@@ -27,8 +27,8 @@ function viewNotify(id) {
             modalContainer.html(data);
             openModal();
         }).fail(function(jqXHR, textStatus) {
-            alet("Error al intentar recuperar los datos.");
-        });;
+            alert("Error al intentar recuperar los datos.");
+        });
     });
 }
 
@@ -41,27 +41,11 @@ function assignNotify(id) {
         }).done(function(data) {
             modalContainer.empty();
             modalContainer.html(data);
+            enableButtonWithTechnician("noticeAssign_btn");
             loadTechnicianList( () => { openModal(); } );
         }).fail(function(jqXHR, textStatus) {
-            alet("Error al intentar recuperar los datos.");
-        });;
-    });
-}
-
-function loadTechnicianList(callback) {
-    $( document ).ready(function() {
-        const dataContainer = $("#noticeTech_sel");
-        $.ajax({
-            url: "/technician_list",
-            dataType: "json"
-        }).done(function(data) {
-            dataContainer.empty();
-            data.forEach(t => { dataContainer.append('<option value="' + t.idTec + '">' + t.nombre + '</option>'); });
-            if(typeof callback === "function") callback();
-        }).fail(function(jqXHR, textStatus) {
-            dataContainer.empty()
-            dataContainer.html('<option value="0">ERROR</option>');
-        });;
+            alert("Error al intentar recuperar los datos.");
+        });
     });
 }
 
@@ -97,7 +81,6 @@ function sendAssign(id) {
                               },
                             dataType: "json"
                         }).done(function(data) {
-                            console.log(data);
                             if(data === true) $.alert({
                                     title: "Confirmación",
                                     content: "Técnico asignado correctamente.",
@@ -133,21 +116,12 @@ function closeNotify(id) {
         }).done(function(data) {
             modalContainer.empty();
             modalContainer.html(data);
-            enableButtonWithComment("#noticeClose_btn");
+            enableButtonWithComment("noticeClose_btn"); // NOTA: Para permitir que se cierre un aviso sin comentario del técnico, comentar esta línea.
             openModal();
         }).fail(function(jqXHR, textStatus) {
-            alet("Error al intentar recuperar los datos.");
-        });;
+            alert("Error al intentar recuperar los datos.");
+        });
     });
-}
-
-function enableButtonWithComment(button) {
-    $("#noticeComm_ta").on("input",
-        function () {
-            if($("#noticeComm_ta").val() === "" ) $(button).prop('disabled', true);
-            else $(button).prop("disabled", false);
-        }
-    );
 }
 
 function sendClose(id) {
@@ -175,7 +149,6 @@ function sendClose(id) {
                             },
                         dataType: "json"
                     }).done(function(data) {
-                        console.log(data);
                         if(data === true) $.alert({
                                 title: "Confirmación",
                                 content: "Aviso cerrado correctamente.",
@@ -201,16 +174,109 @@ function sendClose(id) {
     });
 }
 
-function test() {
-    alert("OK");
-}
-
 function cancelNotify(id) {
-    alert("Cancelar aviso " + id);
+    $( document ).ready(function() {
+        const modalContainer = $("#modal");
+        $.ajax({
+            url: "/notice/cancel/"+id,
+            dataType: "html"
+        }).done(function(data) {
+            modalContainer.empty();
+            modalContainer.html(data);
+            enableButtonWithComment("noticeCancel_btn");
+            openModal();
+        }).fail(function(jqXHR, textStatus) {
+            alert("Error al intentar recuperar los datos.");
+        });
+    });
 }
 
-function sendForm(id) {
-    alert("Enviar formulario");
+function sendCancel(id) {
+    $.confirm({
+        title: "<img src='/img/icons/advertencia-azul.png' width='100' height='100'><br/><br/>Confirmar eliminación",
+        content: "¿Desea borrar el aviso " + id + "?",
+        type: "orange", // "red" / "orange" / "green" / "blue" / "dark" / "purple"
+        theme: "supervan", // "light" / "dark" / "modern" / "supervan" / "material" / "bootstrap"
+        animation: "scale",
+        closeAnimation: "scale",
+        animationSpeed: 1000,
+        autoClose: "cancelBtn|8000",
+        escapeKey: "cancelBtn",
+        closeIcon: "cancelBtn",
+        buttons: {
+            confirmBtn: {
+                text: 'Borrar',
+                action: function () {
+                    $.ajax({
+                        url: "/notice/cancel",
+                        method: "POST",
+                        data: {
+                            idAvi: id,
+                            comment: $("#noticeComm_ta").val()
+                            },
+                        dataType: "json"
+                    }).done(function(data) {
+                        if(data === true) $.alert({
+                                title: "Confirmación",
+                                content: "Aviso borrado correctamente.",
+                                onClose: function(){
+                                    closeModal();
+                                    reloadTable();
+                                }
+                            });
+                        else $.alert({
+                            title: "Error",
+                            content: "No se pudo borrar el aviso."
+                        });
+                    });
+                }
+            },
+            cancelBtn: {
+                text: 'Cancelar',
+                action: function () {
+                    $.alert('Acción cancelada');
+                }
+            }
+        }
+    });
+}
+
+function loadTechnicianList(callback) {
+    $( document ).ready(function() {
+        const dataContainer = $("#noticeTech_sel");
+        $.ajax({
+            url: "/technician_list",
+            dataType: "json"
+        }).done(function(data) {
+            dataContainer.empty();
+            dataContainer.append('<option value="0" selected disabled>Seleccione un técnico</option>');
+            data.forEach(t => { dataContainer.append('<option value="' + t.idTec + '">' + t.nombre + '</option>'); });
+            if(typeof callback === "function") callback();
+        }).fail(function(jqXHR, textStatus) {
+            dataContainer.empty()
+            dataContainer.html('<option value="0">ERROR</option>');
+        });;
+    });
+}
+
+function enableButtonWithTechnician(buttonId) {
+    $("#" + buttonId).prop('disabled', true);
+    $("#noticeTech_sel").on("input",
+        function () {
+            if($("#noticeTech_sel").val() === "0" ) $("#" + buttonId).prop('disabled', true);
+            else $("#" + buttonId).prop("disabled", false);
+        }
+    );
+}
+
+function enableButtonWithComment(buttonId) {
+    $("#" + buttonId).prop('disabled', true);
+    $("#noticeComm_ta").on("input",
+        function () {
+            if($("#noticeComm_ta").val() === "" ) $("#" + buttonId).prop('disabled', true);
+            else $("#" + buttonId).prop("disabled", false);
+        }
+    );
 }
 
 function openModal() {

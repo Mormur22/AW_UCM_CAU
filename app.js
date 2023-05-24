@@ -676,6 +676,54 @@ app.post("/notice/close", function(request, response) {
     else response.send(false);
 });
 
+// Borrar aviso (mostrar)
+app.get("/notice/cancel/:idAvi", (request, response) => {
+    if(request.session.isTechnician) {
+        daoAvi.getNotify(request.params.idAvi,
+            function(err, aviso) {
+                if(err) response.render("error_modal", { code: 500, status: "Internal Server Error", message: "No se ha encontrado el aviso solicitado en la BD.", stack: null });
+                else {
+                    daoUsu.getUser(aviso.idUsu,
+                        function(err, usuario) {
+                            if(err) response.render("error_modal", { code: 500, status: "Internal Server Error", message: "No se ha encontrado el usuario del aviso solicitado en la BD.", stack: null });
+                            else {
+                                if(aviso.idTec === null) response.render("notice", { mode: "cancel", user: usuario.nombre, profile: util.toProfileText(usuario.perfil, true), notify: util.toModalHtmlNotify(aviso), technician: null });
+                                else {
+                                    if(request.session.iduser !== aviso.idTec) response.render("error_modal", { code: 500, status: "Forbidden", message: "Permiso denegado. El aviso solicitado está asignado a otro técnico.", stack: null });
+                                    else {
+                                        daoTec.getTechnicianName(aviso.idTec , 
+                                            function(err, nombreTec) {
+                                                if(err) response.render("error_modal", { code: 500, status: "Internal Server Error", message: "No se ha podido recuperar el nombre del técnico asignado al aviso solicitado.", stack: null });
+                                                else response.render("notice", { mode: "cancel", user: usuario.nombre, profile: util.toProfileText(usuario.perfil, true), notify: util.toModalHtmlNotify(aviso), technician: nombreTec });
+                                            }
+                                        );
+                                    }                             
+                                }
+                            }
+                        }
+                    );
+                }
+            }
+        )
+    }
+    else response.render("error_modal", { code: 500, status: "Forbidden", message: "Permiso denegado. No tiene permiso para realizar esta acción.", stack: null });
+});
+
+// Borrar aviso (recibir formulario)
+app.post("/notice/cancel", function(request, response) {
+    if(request.session.isTechnician) {
+        const idAvi = request.body.idAvi;
+        const comment = request.body.comment;
+        daoAvi.cancelNotify(idAvi, request.session.iduser, comment,
+            function(err, result) {
+                if(err) response.send(false);
+                else response.send(true);
+            }
+        );
+    }
+    else response.send(false);
+});
+
 // Logout
 app.get("/logout", (request, response) => {
     response.status(200);

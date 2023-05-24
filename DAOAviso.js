@@ -80,10 +80,10 @@ class DAO_Aviso {
             }
         );
     }
-
+    
     /**
-     * Asigna el comentarioo del técnico a un aviso y lo cierra.
-     * @param idAvi El id del aviso al que se le quiere asignar el comentario del técnico.
+     * Asigna el comentario del técnico a un aviso y lo cierra.
+     * @param idAvi El id del aviso al que se le quiere asignar el comentario del técnico y cerrar.
      * @param idTec El id del técnico cuyo comentario se quiere asignar al aviso.
      * @param comment El comentario que se quiere asignar al aviso.
      * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, Boolean result).
@@ -131,11 +131,11 @@ class DAO_Aviso {
                                                         function(err, rows) {
                                                             connection.release();
                                                             if(rows.affectedRows != 1) {
-                                                                if(rows.affectedRows == 0) callback(new Error("Error al intentar asignar el comentario dal técnico (idAvi=" + idAvi + " no encontrado)."), false);
-                                                                else callback(new Error("Error al intentar asignar el comentario dal técnico (" + rows.affectedRows  +" filas modificadas)."), false);
+                                                                if(rows.affectedRows == 0) callback(new Error("Error al intentar asignar el comentario dal técnico y cerrar el aviso solicitado (idAvi=" + idAvi + " no encontrado)."), false);
+                                                                else callback(new Error("Error al intentar asignar el comentario dal técnico y cerrar el aviso solicitado (" + rows.affectedRows  +" filas modificadas)."), false);
                                                             }
                                                             else{
-                                                                if(err) callback(new Error("No se ha podido asignar el comentario del técnico al avisos solicitado (idAvi=" + idAvi + ", idTec=" + idTec + ")."), false);
+                                                                if(err) callback(new Error("No se ha podido asignar el comentario del técnico y cerrar el aviso solicitado (idAvi=" + idAvi + ", idTec=" + idTec + ")."), false);
                                                                 else callback(null, true);
                                                             }
                                                         }
@@ -153,6 +153,85 @@ class DAO_Aviso {
         );
     }
 
+    /**
+     * Asigna el comentario del técnico a un aviso y lo cancela.
+     * @param idAvi El id del aviso al que se le quiere asignar el comentario del técnico y cancelar.
+     * @param idTec El id del técnico cuyo comentario se quiere asignar al aviso.
+     * @param comment El comentario que se quiere asignar al aviso.
+     * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, Boolean result).
+     * Ejecuta la consulta "UPDATE UCM_AW_CAU_AVI_Avisos SET comentario = $comentario, cancelado = 1, idTec = $idTec WHERE idAvi = &idAvi;".
+     */
+    cancelNotify(idAvi, idTec, comment, callback) {
+        this.pool.getConnection(
+            function(err, connection) {
+                if(err) callback(new Error("Error de conexión a la base de datos"), false);
+                else {
+                    connection.query("SELECT * FROM UCM_AW_CAU_AVI_Avisos WHERE idAvi = ?;", [idAvi],
+                        function(err, rows) { 
+                            if(err){
+                                connection.release();  
+                                callback(new Error("No se ha podido recuperar datos de la tabla UCM_AW_CAU_AVI_Avisos"), false);
+                            }
+                            else{
+                                if(rows.length === 0) {
+                                    connection.release();  
+                                    callback(new Error("No se ha encontrado ningún aviso con idAvi = " + idAvi), false);
+                                }
+                                else{
+                                    const aviso = rows[0];
+                                    if(aviso.idTec !== null && aviso.idTec !== idTec) {
+                                        connection.release();
+                                        callback(new Error("El aviso con idAvi = " + idAvi + " está asignado a otro técnico con idTec = " + aviso.idTec + ", sin embargo la solicitud se ha hecho para el técnico con idTec = " + idTec), false);
+                                    }
+                                    else {
+                                        if(aviso.cerrado === 1) {
+                                            connection.release();
+                                            callback(new Error("El aviso con idAvi = " + idAvi + " está cerrado"), false);
+                                        }
+                                        else {
+                                            if(aviso.cancelado === 1) {
+                                                connection.release();
+                                                callback(new Error("El aviso con idAvi = " + idAvi + " ya está cancelado"), false);
+                                            }
+                                            else {
+                                                connection.query("SELECT nombre FROM UCM_AW_CAU_TEC_Tecnicos WHERE idTec = ?;", [idTec],
+                                                    function(err, rows) {
+                                                        if(err) callback(new Error("No se ha podido recuperar los datos del técnico de la tabla UCM_AW_CAU_TEC_Tecnicos"), null);
+                                                        else{
+                                                            if(rows.length === 0) callback(new Error("No se ha encontrado ningún técnico con idTec = " + idTec), null);
+                                                            else{
+                                                                const nombre = rows[0].nombre;
+                                                                const comentario = "Este aviso ha sido eliminado por el técnico " + nombre + " debido a:\n\n" + comment;
+                                                                connection.query("UPDATE UCM_AW_CAU_AVI_Avisos SET comentario = ?, cancelado = 1, idTec = ? WHERE idAvi = ?;", [comentario, idTec, idAvi],
+                                                                function(err, rows) {
+                                                                        connection.release();
+                                                                        if(rows.affectedRows != 1) {
+                                                                            if(rows.affectedRows == 0) callback(new Error("Error al intentar asignar el comentario dal técnico y cancelar el aviso solicitado (idAvi=" + idAvi + " no encontrado)."), false);
+                                                                            else callback(new Error("Error al intentar asignar el comentario dal técnico y cancelar el aviso solicitado (" + rows.affectedRows  +" filas modificadas)."), false);
+                                                                        }
+                                                                        else{
+                                                                            if(err) callback(new Error("No se ha podido asignar el comentario del técnico y cancelar el aviso solicitado (idAvi=" + idAvi + ", idTec=" + idTec + ")."), false);
+                                                                            else callback(null, true);
+                                                                        }
+                                                                    }
+                                                                );
+                                                            }
+                                                        }
+                                                    }
+                                                );
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    );
+                }
+            }
+        );
+    }
+    
     /**
      * Devuelve un aviso.
      * @param idAvi El id del aviso cuyos datos se quieren obtener.

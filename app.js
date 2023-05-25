@@ -390,7 +390,7 @@ app.get("/main", function(request, response) {
                 response.locals.numInc = avisosData.numInc;
                 response.locals.numSug = avisosData.numSug;
                 response.locals.numFel = avisosData.numFel;
-                response.render("main",{msgRegistro: false});
+                response.render("main",{msgRegistro: false, isTechnician: response.locals.isTechnician});
             }
         });
     
@@ -407,11 +407,41 @@ app.get("/main", function(request, response) {
                 response.locals.numInc = avisosData.numInc;
                 response.locals.numSug = avisosData.numSug;
                 response.locals.numFel = avisosData.numFel;
-                response.render("main",{msgRegistro: false});
+                response.render("main",{msgRegistro: false, isTechnician: response.locals.isTechnician});
             }
         });
     }
 });
+
+
+app.get('/search', function(request, response) {
+    let searchText = request.query.text;
+    let searchUsers = request.query.users;
+    let isTechnician = request.query.isTechnician;
+
+    if (searchUsers === 'true') {
+        // Si searchUsers es verdadero, realiza la búsqueda en la tabla de usuarios
+        daoUsu.buscarUsuarioPorNombre(searchText, function(err, result) {
+            if (err) {
+                console.log(err);
+                response.status(500).send('Error en la búsqueda de usuarios.');
+            } else {
+                response.status(200).send(result);
+            }
+        });
+    } else {
+        // Si searchUsers es falso, realiza la búsqueda en la tabla de avisos
+        daoAvi.buscarAvisoPorDescripcion(searchText, function(err, result) {
+            if (err) {
+                console.log(err);
+                response.status(500).send('Error en la búsqueda de avisos.');
+            } else {
+                response.status(200).send(result);
+            }
+        });
+    }
+});
+
 
 app.get("/imagen", function(request, response) {
     if(request.session.isTechnician){

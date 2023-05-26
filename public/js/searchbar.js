@@ -1,22 +1,25 @@
-// search.js
+function search() {
+    const searchTextElement = document.getElementById("txt_search");
+    const isUserSearchElement = document.getElementById("chk_users");
+    const tab_aviElement= document.getElementById("tab_avi");
+    const searchText = searchTextElement ? searchTextElement.value : '';
+    const isUserSearch = isUserSearchElement ? isUserSearchElement.checked : false;
+    const option= tab_aviElement ? $("#tab_avi").data("option") : 0;
 
-function search(isTechnician) {
-    const searchText = document.getElementById("txt_search").value;
-    const isUserSearch = document.getElementById("chk_users").checked;
-    isTechnician = (isTechnician === 'true'); // Convertir el string a booleano
+    const dataContainer = $("#data");
     $.ajax({
         url: "/search",
         method: "POST",
         data: {
             searchText: searchText,
             isUserSearch: isUserSearch,
-            isTechnician: isTechnician
+            option: option // Descomenta esto si lo necesitas
         },
         dataType: "html"
     }).done(function(data) {
-        // Manejar la respuesta del servidor
-        // Actualizar la vista con los resultados de búsqueda
+        dataContainer.empty();
+        dataContainer.html(data);
     }).fail(function(jqXHR, textStatus) {
-        // Manejar errores en caso de que falle la llamada AJAX
+        alert("Error recuperando datos");
     });
 }

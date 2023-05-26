@@ -414,31 +414,89 @@ app.get("/main", function(request, response) {
 });
 
 
-app.get('/search', function(request, response) {
-    let searchText = request.query.text;
-    let searchUsers = request.query.users;
-    let isTechnician = request.query.isTechnician;
+app.post('/search', function(request, response) {
+
+    console.log("peticion de busqueda");
+    const searchText = request.body.searchText;
+    const searchUsers = request.body.isUserSearch;
+    const option = Number(request.body.option);
+    const isTechnician = request.session.isTechnician;
+
+    console.log(option);
+    console.log(searchText+" "+searchUsers);
+    
 
     if (searchUsers === 'true') {
-        // Si searchUsers es verdadero, realiza la búsqueda en la tabla de usuarios
-        daoUsu.buscarUsuarioPorNombre(searchText, function(err, result) {
+        daoTec.buscarUsuarioPorNombreApellido(searchText, function(err, result) {
             if (err) {
                 console.log(err);
-                response.status(500).send('Error en la búsqueda de usuarios.');
+                response.status(500).json({ error: 'Error en la búsqueda de usuarios.' });
             } else {
-                response.status(200).send(result);
+                const rows = result.map( c => util.toHtmlCommon(c) );
+                response.status(200).json(rows);
             }
         });
     } else {
-        // Si searchUsers es falso, realiza la búsqueda en la tabla de avisos
-        daoAvi.buscarAvisoPorDescripcion(searchText, function(err, result) {
-            if (err) {
-                console.log(err);
-                response.status(500).send('Error en la búsqueda de avisos.');
-            } else {
-                response.status(200).send(result);
-            }
-        });
+        // Aquí podríamos tener una lógica para diferentes tipos de tablas
+        switch (option) {
+
+            case 0:
+                console.log(option+"caso0");
+                response.send("<p> Error </p>");
+                break;
+
+            case 1:
+                daoAvi.buscarAvisoPorDescripcionOpenNotifies(searchText, function(err, result) {
+                    if (err) {
+                        console.log(err);
+                        //response.status(500).json({ error: 'Error en la búsqueda de avisos abiertos.' });
+                    } else {
+
+                        if(request.session.isTechnician) {
+                            daoAvi.getTechnicianOpenNotifies(request.session.iduser,
+                                function(err, result) {
+                                    const rows = result.map( a => util.toTechnicianHtmlNotify(a, request.session.iduser) );
+                                    response.render("notifies", { rows: rows });
+                                } );
+                        }
+                        else {
+                            daoAvi.getUserOpenNotifies(request.session.iduser,
+                                function(err, result) {
+                                    const rows = result.map( a => util.toUserHtmlOpenNotify(a) );
+                                    response.render("mynotifies", { rows: rows });
+                                } );
+                        }
+                    }
+                });
+                break;
+            case 2:
+                daoAvi.buscarAvisoPorDescripcionClosedNotifies(searchText, function(err, result) {
+                    if (err) {
+                        console.log(err);
+                        //response.status(500).json({ error: 'Error en la búsqueda de avisos cerrados.' });
+                    } else {
+                       
+                    }
+                });
+                break;
+            case 3:
+                // Supongamos que tienes una función para buscar en los avisos del usuario
+                daoAvi.buscarAvisoPorDescripcionMyNotifies(searchText, request.session.iduser, function(err, result) {
+                    if (err) {
+                        console.log(err);
+                        //response.status(500).json({ error: 'Error en la búsqueda de mis avisos.' });
+                    } else {
+                        const rows = isTechnician ? result.map( a => util.toTechnicianHtmlNotify(a, request.session.iduser) ) 
+                                                  : result.map( a => util.toUserHtmlOpenNotify(a) );
+                        response.status(200).json(rows);
+                    }
+                });
+                break;
+
+            default:
+                //response.status(400).json({ error: 'Tipo de tabla no válido' });
+                break;
+        }
     }
 });
 
@@ -485,6 +543,7 @@ app.post("/crearAviso", function(request, response){
 
 // Avisos entrantes
 app.get("/tables/notifies", function(request, response) {
+   
     daoAvi.getOpenNotifies(
         function(err, result) {
             const rows = result.map( a => util.toTechnicianHtmlNotify(a, request.session.iduser) );
@@ -494,6 +553,7 @@ app.get("/tables/notifies", function(request, response) {
 
 // Mis avisos
 app.get("/tables/mynotifies", function(request, response) {
+    
     if(request.session.isTechnician) {
         daoAvi.getTechnicianOpenNotifies(request.session.iduser,
             function(err, result) {

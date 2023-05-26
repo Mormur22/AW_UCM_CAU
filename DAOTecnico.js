@@ -146,6 +146,28 @@ class DAO_Tecnico {
         }
         });
     }
+
+    
+    buscarUsuarioPorNombreApellido(nombre, callback) {
+        this.pool.getConnection(function(err, connection) {
+            if (err) {
+                callback(new Error("Error de conexión a la base de datos"));
+            }
+            else {
+                const sql = "SELECT * FROM UCM_AW_CAU_USU_Usuarios WHERE (nombre LIKE 'Javier%') or (nombre LIKE '%Torres');";
+                connection.query(sql, [`%${nombre}%`, `%${nombre}%`], function(err, rows) {
+                    connection.release(); // devolver al pool la conexión
+                    if (err) {
+                        callback(new Error("Error de acceso a la base de datos"));
+                    }
+                    else {
+                        callback(null, rows);
+                    }
+                });
+            }
+        });
+    }
+    
     
     /**
      * Devuelve el nombre de un técnico.

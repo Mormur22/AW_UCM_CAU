@@ -439,7 +439,25 @@ app.get("/imagen", function(request, response) {
         });
     }
 });
-//style="margin-top:25rem; margin-right:2.5rem;justify-content:right;"
+
+// Devolver la lista de categorias para el combo box (<select>) del modal de crear aviso
+app.get("/category_list/:typeAvi", (request, response) => {
+    const perfil= request.session.profile;
+    const tipo = request.params.typeAvi;
+    const categories = util.getProfileCategories(perfil, tipo);
+    response.send(categories.map( c => { return { value: c , text: util.toCategoryText(c) } } ));
+});
+
+// Devolver la lista de subcategorias para el combo box (<select>) del modal de crear aviso
+app.post("/subcategory_list", (request, response) => {
+    const perfil= request.session.profile;
+    const tipo = request.body.typeAvi;
+    const categoria = request.body.category;
+    const subcategories = util.getProfileSubcategories(perfil, tipo, categoria);
+    response.send(subcategories.map( c => { return { value: c , text: util.toSubcategoryText(c) } } ));
+});
+
+// Crear nuevo aviso
 app.post("/crearAviso", function(request, response){
     const aviso ={
         tipo: request.body.tipo,

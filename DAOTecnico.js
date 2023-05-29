@@ -173,8 +173,6 @@ class DAO_Tecnico {
     }
     
     
-    
-    
     /**
      * Devuelve el nombre de un técnico.
      * @param idTec El id del técnico del que se quiere obtener el nombre.

@@ -424,7 +424,6 @@ app.post('/search', function(request, response) {
 
     console.log(option);
     console.log(searchText+" "+searchUsers);
-    
 
     if (searchUsers === 'true') {
         daoTec.buscarUsuarioPorNombreApellido(searchText, function(err, result) {
@@ -444,61 +443,95 @@ app.post('/search', function(request, response) {
                 console.log(option+"caso0");
                 response.send("<p> Error </p>");
                 break;
-
+            
+            //avisos entrantes del tecnico
             case 1:
-                daoAvi.buscarAvisoPorDescripcionOpenNotifies(searchText, function(err, result) {
+                daoAvi.buscarAvisoPorDescripcion(searchText, function(err, result) {
                     if (err) {
                         console.log(err);
-                        //response.status(500).json({ error: 'Error en la búsqueda de avisos abiertos.' });
+                        response.send("<p> Error </p>");
+                        response.status(500).json({ error: 'Error en la búsqueda de avisos.' });
                     } else {
-
-                        if(request.session.isTechnician) {
-                            daoAvi.getTechnicianOpenNotifies(request.session.iduser,
-                                function(err, result) {
-                                    const rows = result.map( a => util.toTechnicianHtmlNotify(a, request.session.iduser) );
-                                    response.render("notifies", { rows: rows });
-                                } );
-                        }
-                        else {
-                            daoAvi.getUserOpenNotifies(request.session.iduser,
-                                function(err, result) {
-                                    const rows = result.map( a => util.toUserHtmlOpenNotify(a) );
-                                    response.render("mynotifies", { rows: rows });
-                                } );
-                        }
+                        const rows = result.map( a => util.toTechnicianHtmlNotify(a, request.session.iduser) );
+                        response.render("notifies", { rows: rows });
                     }
                 });
                 break;
+            
+            //misavisos
             case 2:
-                daoAvi.buscarAvisoPorDescripcionClosedNotifies(searchText, function(err, result) {
-                    if (err) {
-                        console.log(err);
-                        //response.status(500).json({ error: 'Error en la búsqueda de avisos cerrados.' });
-                    } else {
-                       
-                    }
-                });
+
+                if(request.session.isTechnician) {
+                    daoAvi.buscarMisAvisosTecnicoPorDescripcion(request.session.iduser,searchText,
+                        function(err, result) {
+                            if (err) {
+                                console.log(err);
+                                response.send("<p> Error </p>");
+                                response.status(500).json({ error: 'Error en la búsqueda de avisos.' });
+                            }
+                            else{
+                            const rows = result.map( a => util.toTechnicianHtmlNotify(a, request.session.iduser) );
+                            response.render("notifies", { rows: rows });
+                            }
+                        });
+                }
+                else {
+                    daoAvi.buscarMisAvisosUsuarioPorDescripcion(request.session.iduser,searchText,
+                        function(err, result) {
+
+                            if (err) {
+                                console.log(err);
+                                response.send("<p> Error </p>");
+                                response.status(500).json({ error: 'Error en la búsqueda de avisos.' });
+                            }
+                            else{
+                                const rows = result.map( a => util.toUserHtmlOpenNotify(a) );
+                                response.render("mynotifies", { rows: rows });
+                            }
+                        });
+                }
                 break;
+
+                //historico de avisos
             case 3:
-                // Supongamos que tienes una función para buscar en los avisos del usuario
-                daoAvi.buscarAvisoPorDescripcionMyNotifies(searchText, request.session.iduser, function(err, result) {
-                    if (err) {
-                        console.log(err);
-                        //response.status(500).json({ error: 'Error en la búsqueda de mis avisos.' });
-                    } else {
-                        const rows = isTechnician ? result.map( a => util.toTechnicianHtmlNotify(a, request.session.iduser) ) 
-                                                  : result.map( a => util.toUserHtmlOpenNotify(a) );
-                        response.status(200).json(rows);
-                    }
-                });
+                if(request.session.isTechnician) {
+                    daoAvi.buscarHistoricoAvisostecnicoPorDescripcion(request.session.iduser,searchText,
+                        function(err, result) {
+                            if (err) {
+                                console.log(err);
+                                response.send("<p> Error </p>");
+                                response.status(500).json({ error: 'Error en la búsqueda de avisos.' });
+                            }
+                            else{
+                                const rows = result.map( a => util.toTechnicianHtmlNotify(a, request.session.iduser) );
+                                response.render("notifies", { rows: rows });
+                            }
+                        });
+                }
+                else {
+                    daoAvi.buscarHistoricoAvisosUsuarioPorDescripcion(request.session.iduser,searchText,
+                        function(err, result) {
+                            if (err) {
+                                console.log(err);
+                                response.send("<p> Error </p>");
+                                response.status(500).json({ error: 'Error en la búsqueda de avisos.' });
+                            }
+                            else{
+                                const rows = result.map( a => util.toUserHtmlClosedNotify(a) );
+                                response.render("notifies", { rows: rows });
+                            }
+                        });
+                }
                 break;
 
             default:
-                //response.status(400).json({ error: 'Tipo de tabla no válido' });
-                break;
+                response.status(400).json({ error:
+                    'Opción de búsqueda inválida.' });
+                    break;
+            }
         }
-    }
-});
+    });
+    
 
 
 app.get("/imagen", function(request, response) {

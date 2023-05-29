@@ -426,6 +426,89 @@ class DAO_Aviso {
         );
     }
 
+    //busca avisos entrantes por descripción
+    buscarAvisoPorDescripcion(descripcion, callback) {
+        this.pool.getConnection((err, connection) => {
+            if(err) callback(new Error("Error de conexión a la base de datos"), null);
+            else {
+                connection.query("SELECT * FROM UCM_AW_CAU_AVI_Avisos WHERE observaciones LIKE ? AND cerrado = 0 AND cancelado = 0", ['%' + descripcion + '%'],
+                    (err, rows) => {
+                        connection.release();
+                        if(err) callback(new Error("Error en la consulta"), null);
+                        else callback(null, rows);
+                    }
+                );
+            }
+        });
+    }
+
+    //busca los avisos abiertos del usuario o tecnico asociado al id que se pasa por parámetro por descripción
+    buscarMisAvisosUsuarioPorDescripcion(idUsu, descripcion, callback) {
+        this.pool.getConnection((err, connection) => {
+            if(err) callback(new Error("Error de conexión a la base de datos"), null);
+            else {
+                connection.query("SELECT AVI.idAvi, AVI.tipo, AVI.categoria, AVI.subcategoria, AVI.fecha, AVI.observaciones, AVI.comentario, AVI.cerrado, AVI.cancelado, AVI.idUsu, AVI.idTec, TEC.nombre FROM UCM_AW_CAU_AVI_Avisos AVI LEFT JOIN UCM_AW_CAU_TEC_Tecnicos TEC ON AVI.idTec = TEC.idTec WHERE AVI.cerrado = 0 AND AVI.cancelado = 0 AND AVI.idUsu = ? AND AVI.observaciones LIKE ?;", [idUsu, '%' + descripcion + '%'],
+                    (err, rows) => {
+                        connection.release();
+                        if(err) callback(new Error("Error en la consulta"), null);
+                        else callback(null, rows);
+                    }
+                );
+            }
+        });
+    }
+
+
+        //busca los avisos abiertos del usuario o tecnico asociado al id que se pasa por parámetro por descripción
+    buscarMisAvisosTecnicoPorDescripcion(idTec, descripcion, callback) {
+         this.pool.getConnection((err, connection) => {
+            if(err) callback(new Error("Error de conexión a la base de datos"), null);
+
+            else {
+                console.log('parametros:',idTec,descripcion)
+                connection.query("SELECT * FROM UCM_AW_CAU_AVI_Avisos WHERE idTec = ? AND observaciones LIKE ? AND cerrado = 0 AND cancelado = 0", [idTec, '%' + descripcion + '%'],
+                    (err, rows) => {
+                        connection.release();
+                        if(err) callback(new Error("Error en la consulta"), null);
+                        else callback(null, rows);
+                    }
+                );
+            }
+        });
+    }
+
+    //busca los avisos cerrados del historico por descripción
+
+    buscarHistoricoAvisosUsuarioPorDescripcion(idUsu, descripcion, callback) {
+        this.pool.getConnection((err, connection) => {
+            if(err) callback(new Error("Error de conexión a la base de datos"), null);
+            else {
+                connection.query("SELECT * FROM UCM_AW_CAU_AVI_Avisos WHERE idUsu = ? AND observaciones LIKE ? AND (cerrado = 1 OR cancelado = 1)", [idUsu, '%' + descripcion + '%'],
+                    (err, rows) => {
+                        connection.release();
+                        if(err) callback(new Error("Error en la consulta"), null);
+                        else callback(null, rows);
+                    }
+                );
+            }
+        });
+    }
+
+    buscarHistoricoAvisostecnicoPorDescripcion(idTec, descripcion, callback) {
+        this.pool.getConnection((err, connection) => {
+            if(err) callback(new Error("Error de conexión a la base de datos"), null);
+            else {
+                connection.query("SELECT * FROM UCM_AW_CAU_AVI_Avisos WHERE idTec = ? AND observaciones LIKE ? AND (cerrado = 1 OR cancelado = 1)", [idTec, '%' + descripcion + '%'],
+                    (err, rows) => {
+                        connection.release();
+                        if(err) callback(new Error("Error en la consulta"), null);
+                        else callback(null, rows);
+                    }
+                );
+            }
+        });
+    }
+
 }
 
 module.exports = DAO_Aviso;

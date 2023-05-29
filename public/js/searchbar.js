@@ -6,6 +6,12 @@ function search() {
     const isUserSearch = isUserSearchElement ? isUserSearchElement.checked : false;
     const option= tab_aviElement ? $("#tab_avi").data("option") : 0;
 
+    // Comprobar si searchText está vacío
+    if(searchText.trim() === '') {
+        return; // Detener la ejecución de la función si searchText está vacío
+    }
+
+    
     const dataContainer = $("#data");
     $.ajax({
         url: "/search",

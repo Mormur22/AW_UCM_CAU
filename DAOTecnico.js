@@ -109,7 +109,7 @@ class DAO_Tecnico {
                 callback(new Error("Error de conexión a la base de datos"));
             }
             else {
-                connection.query("SELECT * FROM UCM_AW_CAU_TEC_Tecnicos WHERE email = ? AND password= ?;" ,
+                connection.query("SELECT * FROM UCM_AW_CAU_TEC_Tecnicos WHERE email = ? AND password= ? AND desactivado=0;" ,
                     [email,password],
                     function(err, rows) {
                         connection.release(); // devolver al pool la conexión

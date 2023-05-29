@@ -441,8 +441,34 @@ app.post('/search', function(request, response) {
         switch (option) {
 
             case 0:
-                console.log(option+"caso0");
-                response.send("<p> Error </p>");
+                if(request.session.isTechnician) {
+                    daoAvi.buscarHistoricoAvisostecnicoPorDescripcion(request.session.iduser,searchText,
+                        function(err, result) {
+                            if (err) {
+                                console.log(err);
+                                response.send("<p> Error </p>");
+                                response.status(500).json({ error: 'Error en la búsqueda de avisos.' });
+                            }
+                            else{
+                                const rows = result.map( a => util.toTechnicianHtmlNotify(a, request.session.iduser) );
+                                response.render("notifies", { rows: rows });
+                            }
+                        });
+                }
+                else {
+                    daoAvi.buscarHistoricoAvisosUsuarioPorDescripcion(request.session.iduser,searchText,
+                        function(err, result) {
+                            if (err) {
+                                console.log(err);
+                                response.send("<p> Error </p>");
+                                response.status(500).json({ error: 'Error en la búsqueda de avisos.' });
+                            }
+                            else{
+                                const rows = result.map( a => util.toUserHtmlClosedNotify(a) );
+                                response.render("notifies", { rows: rows });
+                            }
+                        });
+                }
                 break;
             
             //avisos entrantes del tecnico
@@ -526,9 +552,35 @@ app.post('/search', function(request, response) {
                 break;
 
             default:
-                response.status(400).json({ error:
-                    'Opción de búsqueda inválida.' });
-                    break;
+                if(request.session.isTechnician) {
+                    daoAvi.buscarHistoricoAvisostecnicoPorDescripcion(request.session.iduser,searchText,
+                        function(err, result) {
+                            if (err) {
+                                console.log(err);
+                                response.send("<p> Error </p>");
+                                response.status(500).json({ error: 'Error en la búsqueda de avisos.' });
+                            }
+                            else{
+                                const rows = result.map( a => util.toTechnicianHtmlNotify(a, request.session.iduser) );
+                                response.render("notifies", { rows: rows });
+                            }
+                        });
+                }
+                else {
+                    daoAvi.buscarHistoricoAvisosUsuarioPorDescripcion(request.session.iduser,searchText,
+                        function(err, result) {
+                            if (err) {
+                                console.log(err);
+                                response.send("<p> Error </p>");
+                                response.status(500).json({ error: 'Error en la búsqueda de avisos.' });
+                            }
+                            else{
+                                const rows = result.map( a => util.toUserHtmlClosedNotify(a) );
+                                response.render("notifies", { rows: rows });
+                            }
+                        });
+                }
+                break;
             }
         }
     });

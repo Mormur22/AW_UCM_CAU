@@ -50,7 +50,42 @@ const subcategoriasInc_texto = {
 
 const subcategorias_texto = ["Certificado digital de personal física", "Certificado electrónico de empleado público", "Registro electrónico", "Sede electrónica", "Portafirmas", "Correo electrónico", "Google Meet", "Cuenta de Alumno", "Cuenta de personal", "Cuenta genérica", "Cuenta de la Red SARA", "Conexión por cable en despachos", "Cortafuegos corporativo", "Resolución de nombres de dominio (DNS)", "VPN Acceso remoto", "Wifi Eduroam (ssid: eduroam)", "Wifi para visitantes (ssid: UCM-Visitantes)", "Aula Virtual", "Blackboard Collaborate", "Listados de clase", "Moodle: Aula Global", "Plataforma de cursos online Privados", "Analítica Web", "Emisión de certificados SSL", "Hosting: alojamiento de páginas web", "Portal de eventos", "Redirecciones web"];
 
+const permisosCategoriaAlumno = [1,1,1,1,1];
+const permisosCategoriaPAS = [1,1,1,1,1];
+const permisosCategoriaPDI = [1,1,1,1,1];
+const permisosCategoriaAA = [1,1,0,0,1];
 
+const permisosSubCategoriaAlumno = {
+    administracion: [1,0,1,1,0],
+    comunicaciones: [1,1,1,0,0],
+    conectividad: [0,0,1,0,1,1,0],
+    docencia: [1,0,0,1,1],
+    web: [0,0,0,1,0]
+};
+
+const permisosSubCategoriaPAS = {
+    administracion: [1,1,1,1,1],
+    comunicaciones: [1,1,0,1,1],
+    conectividad: [1,1,1,1,1,1,1],
+    docencia: [0,1,1,1,0],
+    web: [1,1,1,1,1]
+};
+
+const permisosSubCategoriaPDI = {
+    administracion: [1,1,1,1,1],
+    comunicaciones: [1,1,0,1,1],
+    conectividad: [0,1,1,0,1,1,1],
+    docencia: [1,1,1,1,1],
+    web: [1,1,1,1,1]
+};
+
+const permisosSubCategoriaAA= {
+    administracion: [0,0,1,1,0],
+    comunicaciones: [1,1,1,0,0],
+    conectividad: [0,0,0,0,0,0,0],
+    docencia: [0,0,0,0,0],
+    web: [0,0,0,1,0]
+};
 
 /**
  * Clase que implementa metodos de utilidad.
@@ -94,36 +129,23 @@ class Util {
     /**
      * Devuelve una lista con los posibles valores que puede tomar el campo "categoria" de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
      * @param tipo Valor del campo 'tipo' ( "incidencia" / "sugerencia" / "felicitacion" ) de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
-     * @returns Lista con las posibles categorias que puede tener un aviso para el tipo indicado. Si no se indica el tipo se devuelven todas.
+     * @param textMode Si vale 'true' se devuelven las categorias en texto plano. Si vale 'false' (valor por defecto) se devuelven los valores que puede tomar el campo "categoria" de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
+     * @returns Lista con las posibles categorias que puede tener un aviso para el tipo indicado. Si no se indica el tipo se devuelven todas (opción por defecto).
      */
-    static categories(tipo=null) {
+    static categories(tipo=null, textMode=false) {
         switch(tipo) {
             case "sugerencia":
-                return(categoriasSug);
+                if(textMode) return(categoriasSug_texto);
+                else return(categoriasSug);
             case "incidencia":
-                return(categoriasInc);
+                if(textMode) return(categoriasInc_texto);
+                else return(categoriasInc);
             case "felicitacion":
-                return(categoriasFel);
+                if(textMode) return(categoriasFel_texto);
+                else return(categoriasFel);
             default:
-                return(categorias);
-        }
-    }
-
-    /**
-     * Devuelve una lista con las posibles categorias en texto plano que puede tener un aviso.
-     * @param tipo Valor del campo 'tipo' ( "incidencia" / "sugerencia" / "felicitacion" ) de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
-     * @returns Lista con las posibles categorias en texto plano que puede tener un aviso para el tipo indicado. Si no se indica el tipo se devuelven todas.
-     */
-    static categoriesText(tipo=null) {
-        switch(tipo) {
-            case "sugerencia":
-                return(categoriasSug_texto);
-            case "incidencia":
-                return(categoriasInc_texto);
-            case "felicitacion":
-                return(categoriasFel_texto);
-            default:
-                return(categorias_texto);
+                if(textMode) return(categorias_texto);
+                else return(categorias);
         }
     }
 
@@ -143,41 +165,34 @@ class Util {
      * Devuelve una lista con los posibles valores que puede tomar el campo "subcategoria" de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
      * @param tipo Valor del campo 'tipo' ( "incidencia" / "sugerencia" / "felicitacion" ) de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
      * @param categoria Valor del campo 'categoria' de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
+     * @param textMode Si vale 'true' se devuelven las subcategorias en texto plano. Si vale 'false' (valor por defecto) se devuelven los valores que puede tomar el campo "subcategoria" de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
      * @returns Lista con las posibles suncategorias que puede tener un aviso para el tipo y categoria indicado. Si no se indica el tipo o categoria se devuelven todas.
      */
-    static subcategories(tipo=null, categoria=null) {
+    static subcategories(tipo=null, categoria=null, textMode=false) {
         switch(tipo) {
             case "sugerencia":
-                if(subcategoriasSug[categoria] === undefined || subcategoriasSug[categoria] === null) return(subcategoriasSug);
-                else return(subcategoriasSug[categoria]);
+                if(subcategoriasSug[categoria] === undefined || subcategoriasSug[categoria] === null) {
+                    if(textMode) return(subcategoriasSug_texto);
+                    else return(subcategoriasSug);
+                }
+                else {
+                    if(textMode) return(subcategoriasSug_texto[categoria]);
+                    else return(subcategoriasSug[categoria]);
+                }
             case "incidencia":
-                if(subcategoriasInc[categoria] === undefined || subcategoriasInc[categoria] === null) return(subcategoriasInc);
-                else return(subcategoriasInc[categoria]);
+                if(subcategoriasInc[categoria] === undefined || subcategoriasInc[categoria] === null) {
+                    if(textMode) return(subcategoriasInc_texto);
+                    else return(subcategoriasInc);
+                }
+                else {
+                    if(textMode) return(subcategoriasInc_texto[categoria]);
+                    else return(subcategoriasInc[categoria]);
+                }
             case "felicitacion":
                 return([]);
             default:
-                return(subcategorias);
-        }
-    }
-
-    /**
-     * Devuelve una lista con las posibles sucategorias en texto plano que puede tener un aviso.
-     * @param tipo Valor del campo 'tipo' ( "incidencia" / "sugerencia" / "felicitacion" ) de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
-     * @param categoria Valor del campo 'categoria' de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
-     * @returns Lista con las posibles sunbcategorias en texto plano que puede tener un aviso para el tipo y categoria indicado. Si no se indica el tipo o categoria se devuelven todas.
-     */
-    static subcategoriesText(tipo=null, categoria=null) {
-        switch(tipo) {
-            case "sugerencia":
-                if(subcategoriasSug_texto[categoria] === undefined || subcategoriasSug[categoria] === null) return(subcategoriasSug_texto);
-                else return(subcategoriasSug_texto[categoria]);
-            case "incidencia":
-                if(subcategoriasInc_texto[categoria] === undefined || subcategoriasInc_texto[categoria] === null) return(subcategoriasInc_texto);
-                else return(subcategoriasInc_texto[categoria]);
-            case "felicitacion":
-                return([]);
-            default:
-                return(subcategorias_texto);
+                if(textMode) return(subcategorias_texto);
+                else return(subcategorias);
         }
     }
 
@@ -191,6 +206,109 @@ class Util {
             if(subcategorias[i] === subcategoria) return(subcategorias_texto[i])
         }
         return(null)
+    }
+
+    /**
+     * Devuelve una lista con las categorias que puede tener un aviso según el tipo de aviso y de usuario.
+     * @param perfil Tipo del usuario. Valor del campo 'perfil' de la tabla 'UCM_AW_CAU_USU_Usuarios' de la BD ( "alumno" / "pas" / "pdi" / "aa" ).
+     * @param tipo Tipo de aviso. Valor del campo 'tipo' la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD ( "incidencia" / "sugerencia" / "felicitacion" ).
+     * @returns Lista con las posibles categorias que puede tener un aviso del tipo indicado puesto por un usuario del tipo especificado.
+     */
+    getProfileCategories(perfil, tipo, textMode=false) {
+        switch(tipo) {
+            case "sugerencia":
+                switch(perfil) {
+                    case "alumno":
+                        if(textMode) return categoriasSug_texto.filter( (c,i) => permisosCategoriaAlumno[i] ? true : false );
+                        else return categoriasSug.filter( (c,i) => permisosCategoriaAlumno[i] ? true : false );
+                    case "pas":
+                        if(textMode) return categoriasSug_texto.filter( (c,i) => permisosCategoriaPAS[i] ? true : false );
+                        else return categoriasSug.filter( (c,i) => permisosCategoriaPAS[i] ? true : false );
+                    case "pdi":
+                        if(textMode) return categoriasSug_texto.filter( (c,i) => permisosCategoriaPDI[i] ? true : false );
+                        else return categoriasSug.filter( (c,i) => permisosCategoriaPDI[i] ? true : false );
+                    case "aa":
+                        if(textMode) return categoriasSug_texto.filter( (c,i) => permisosCategoriaAA[i] ? true : false );
+                        else return categoriasSug.filter( (c,i) => permisosCategoriaAA[i] ? true : false );
+                    default:
+                        return [];
+                }
+            case "incidencia":
+                switch(perfil) {
+                    case "alumno":
+                        if(textMode) return categoriasInc_texto.filter( (c,i) => permisosCategoriaAlumno[i] ? true : false );
+                        else return categoriasInc.filter( (c,i) => permisosCategoriaAlumno[i] ? true : false );
+                    case "pas":
+                        if(textMode) categoriasInc_texto.filter( (c,i) => permisosCategoriaPAS[i] ? true : false );
+                        else return categoriasInc.filter( (c,i) => permisosCategoriaPAS[i] ? true : false );
+                    case "pdi":
+                        if(textMode) categoriasInc_texto.filter( (c,i) => permisosCategoriaPDI[i] ? true : false );
+                        else return categoriasInc.filter( (c,i) => permisosCategoriaPDI[i] ? true : false );
+                    case "aa":
+                        if(textMode) categoriasInc_texto.filter( (c,i) => permisosCategoriaAA[i] ? true : false );
+                        else return categoriasInc.filter( (c,i) => permisosCategoriaAA[i] ? true : false );
+                    default:
+                        return [];
+                }
+            case "felicitacion":
+                if(perfil === "alumno" || perfil === "pas" || perfil === "pdi" || perfil === "aa") {
+                    if(textMode) return categoriasFel_texto;
+                    else return categoriasFel;
+                }
+                else return [];
+            default:
+                return [];
+        }
+    }
+
+    /**
+     * Devuelve una lista con las subcategorias que puede tener un aviso según el tipo de aviso, la categoria del aviso y el tipo de usuario.
+     * @param perfil Tipo del usuario. Valor del campo 'perfil' de la tabla 'UCM_AW_CAU_USU_Usuarios' de la BD ( "alumno" / "pas" / "pdi" / "aa" ).
+     * @param tipo Tipo de aviso. Valor del campo 'tipo' la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD ( "incidencia" / "sugerencia" / "felicitacion" ).
+     * @param categoria Valor del campo 'categoria' de la tabla 'UCM_AW_CAU_AVI_Avisos' de la BD.
+     * @returns Lista con las posibles subcategorias que puede tener un aviso del tipo y categoria indicados puesto por un usuario del tipo especificado.
+     */
+    getProfileSubcategories(perfil, tipo, categoria=null, textMode=false) {
+        switch(tipo) {
+            case "sugerencia":
+                switch(perfil) {
+                    case "alumno":
+                        if(textMode) return subcategoriasSug_texto[categoria].filter( (c,i) => permisosSubCategoriaAlumno[categoria][i] ? true : false );
+                        else return subcategoriasSug[categoria].filter( (c,i) => permisosSubCategoriaAlumno[categoria][i] ? true : false );
+                    case "pas":
+                        if(textMode) return subcategoriasSug_texto[categoria].filter( (c,i) => permisosSubCategoriaPAS[categoria][i] ? true : false );
+                        else return subcategoriasSug[categoria].filter( (c,i) => permisosSubCategoriaPAS[categoria][i] ? true : false );
+                    case "pdi":
+                        if(textMode) return subcategoriasSug_texto[categoria].filter( (c,i) => permisosSubCategoriaPDI[categoria][i] ? true : false );
+                        else return subcategoriasSug[categoria].filter( (c,i) => permisosSubCategoriaPDI[categoria][i] ? true : false );
+                    case "aa":
+                        if(textMode) return subcategoriasSug_texto[categoria].filter( (c,i) => permisosSubCategoriaAA[categoria][i] ? true : false );
+                        else return subcategoriasSug[categoria].filter( (c,i) => permisosSubCategoriaAA[categoria][i] ? true : false );
+                    default:
+                        return [];
+                }
+            case "incidencia":
+                switch(perfil) {
+                    case "alumno":
+                        if(textMode) return subcategoriasInc_texto[categoria].filter( (c,i) => permisosSubCategoriaAlumno[categoria][i] ? true : false );
+                        else return subcategoriasInc[categoria].filter( (c,i) => permisosSubCategoriaAlumno[categoria][i] ? true : false );
+                    case "pas":
+                        if(textMode) return subcategoriasInc_texto[categoria].filter( (c,i) => permisosSubCategoriaPAS[categoria][i] ? true : false );
+                        else return subcategoriasInc[categoria].filter( (c,i) => permisosSubCategoriaPAS[categoria][i] ? true : false );
+                    case "pdi":
+                        if(textMode) return subcategoriasInc_texto[categoria].filter( (c,i) => permisosSubCategoriaPDI[categoria][i] ? true : false );
+                        else return subcategoriasInc[categoria].filter( (c,i) => permisosSubCategoriaPDI[categoria][i] ? true : false );
+                    case "aa":
+                        if(textMode) return subcategoriasInc_texto[categoria].filter( (c,i) => permisosSubCategoriaAA[categoria][i] ? true : false );
+                        else return subcategoriasInc[categoria].filter( (c,i) => permisosSubCategoriaAA[categoria][i] ? true : false );
+                    default:
+                        return [];
+                }
+            case "felicitacion":
+                return [];
+            default:
+                return [];
+        }
     }
 
     /**

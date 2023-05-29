@@ -255,7 +255,7 @@ function loadTechnicianList(callback) {
         }).fail(function(jqXHR, textStatus) {
             dataContainer.empty()
             dataContainer.html('<option value="0">ERROR</option>');
-        });;
+        });
     });
 }
 

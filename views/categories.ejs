@@ -1,0 +1,123 @@
+<button class="btn btn-primary btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#crearAvisoModal" >Crear nuevo aviso</button>
+
+<div id="crearAvisoModal" class="modal fade" data-backdrop="" tabindex="-1" aria-labelledby="crearAvisoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 id="crearAvisoModalLabel" class="modal-title fs-4" >Crear nuevo aviso</h1>
+                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close" data-backdrop="false"></button>
+            </div>
+            <div class="modal-body">
+                <div class="fs-5 mb-4">Elija el tipo de aviso:</div>
+                <div class="row text-center">
+                    <div class="col-4">
+                        <button id="sugModalBtn" class="btn btn-primary" type="button" data-bs-dismiss="modal" aria-label="Close" data-backdrop="false" onclick="showModal('sugerenciaModal')">Sugerencia</button>
+                    </div>
+                    <div class="col-4">
+                        <button id="incModalBtn" class="btn btn-primary" type="button" data-bs-dismiss="modal" aria-label="Close" data-backdrop="false" onclick="showModal('incidenciaModal')">Incidencia</button>
+                    </div>
+                    <div class="col-4">
+                        <button id="felModalBtn" class="btn btn-primary" type="button" data-bs-dismiss="modal" aria-label="Close" data-backdrop="false" onclick="showModal('felicitacionModal')">Felicitación</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="sugerenciaModal" class="modal modal-lg fade" data-backdrop="" tabindex="-1" aria-labelledby="sugerenciaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 id="sugerenciaModalLabel" class="modal-title fs-5">Nueva sugerencia</h1>
+                <button id="sugerenciaModalClose" class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close" data-backdrop="false"></button>
+            </div>
+            <div class="modal-body px-5">
+                <form action="/crearAviso" name="crarAviso" method="POST" enctype="application/x-www-form-urlencoded">
+                    <input type="hidden" name="tipo" value="sugerencia" />
+                    <div class="row">
+                        <label for="categoriaSug" class="col-form-label mt-3">Categoria:</label>
+                        <select id="categoriaSug" class="form-control mt-2" name="categoria" size="1">
+                            <option value="" selected disabled>Seleccione una categoria</option>
+                        </select>
+                        <label for="subcategoriaSug" class="col-form-label mt-4">Subcategoria:</label>
+                        <select id="subcategoriaSug" class="form-control mt-2" name="subcategoria" size="1">
+                            <option value="" selected disabled>Seleccione una subcategoria</option>
+                        </select>
+                        <div class="mt-4 mb-4">
+                            <label for="observacionesSug" class="col-form-label">Observaciones:</label>
+                            <textarea id="observacionesSug" class="form-control mt-2" rows="6" name="observaciones"></textarea>
+                        </div>
+                        <div class="text-end mt-3 mb-3">
+                            <button class="btn btn-primary" type="submit" >Crear sugerencia</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="incidenciaModal" class="modal modal-lg fade" data-backdrop="" tabindex="-1" aria-labelledby="incidenciaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 id="incidenciaModalLabel" class="modal-title fs-5">Nueva incidencia</h1>
+                <button id="incidenciaModalClose" class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close" data-backdrop="false"></button>
+            </div>
+            <div class="modal-body px-5">
+                <form action="/crearAviso" name="crarAviso" method="POST" enctype="application/x-www-form-urlencoded">
+                    <input type="hidden" name="tipo" value="incidencia" />
+                    <div class="row">
+                        <label for="categoriaInc" class="col-form-label mt-3">Categoria:</label>
+                        <select id="categoriaInc" class="form-control mt-2" name="categoria" size="1">
+                            <option value="" selected disabled>Seleccione una categoria</option>
+                        </select>
+                        <label for="subcategoriaInc" class="col-form-label mt-4">Subcategoria:</label>
+                        <select id="subcategoriaInc" class="form-control mt-2" name="subcategoria" size="1">
+                            <option value="" selected disabled>Seleccione una subcategoria</option>
+                        </select>
+                        <div class="mt-4 mb-4">
+                            <label for="observacionesInc" class="col-form-label">Observaciones:</label>
+                            <textarea id="observacionesInc" class="form-control mt-2" rows="6" name="observaciones"></textarea>
+                        </div>
+                        <div class="text-end mt-3 mb-3">
+                            <button class="btn btn-primary" type="submit" >Crear incidencia</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="felicitacionModal" class="modal modal-lg fade" data-backdrop="" tabindex="-1" aria-labelledby="felicitacionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h1 id="felicitacionModalLabel" class="modal-title fs-5">Nueva felicitación</h1>
+              <button id="felicitacionModalClose" class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close" data-backdrop="false"></button>
+            </div>
+            <div class="modal-body px-5">
+                <form action="/crearAviso" name="crarAviso" method="POST" enctype="application/x-www-form-urlencoded">
+                    <input type="hidden" name="tipo" value="felicitacion" />
+                    <div class="row">
+                        <label for="categoriaFel" class="col-form-label mt-3">Categoria:</label>
+                        <select id="categoriaFel" class="form-control mt-2" name="categoria" size="1">
+                            <option value="" selected disabled>Seleccione una categoria/option>
+                        </select>
+                        <input type="hidden" name="subcategoria" value="NULL" />
+                        <div class="mt-4 mb-4">
+                            <label for="observacionesFel" class="col-form-label">Observaciones:</label>
+                            <textarea id="observacionesFel" class="form-control mt-2" rows="6" name="observaciones"></textarea>
+                        </div>
+                        <div class="text-end mt-3 mb-3">
+                            <button class="btn btn-primary" type="submit" >Crear felicitación</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

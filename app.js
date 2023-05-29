@@ -429,10 +429,11 @@ app.post('/search', function(request, response) {
         daoTec.buscarUsuarioPorNombreApellido(searchText, function(err, result) {
             if (err) {
                 console.log(err);
+                response.send("<p> Error </p>");
                 response.status(500).json({ error: 'Error en la búsqueda de usuarios.' });
             } else {
                 const rows = result.map( c => util.toHtmlCommon(c) );
-                response.status(200).json(rows);
+                response.render("users", { rows: rows });
             }
         });
     } else {

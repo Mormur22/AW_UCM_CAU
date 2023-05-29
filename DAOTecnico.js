@@ -81,23 +81,26 @@ class DAO_Tecnico {
         });
     }
     
-    registroTecnico(usuario,img,callback){
-        this.pool.getConnection(function(err,connection){
-            if(err){
-                 callback(new Error("Error de conexión a la base de datos"));
-            }
-            else{
-                let fecha =new Date().toISOString().replace('T', ' ').substr(0, 19);
-                const valor="INSERT INTO UCM_AW_CAU_TEC_Tecnicos (nombre,fecha,email, password,perfil,desactivado,numEmp,imagen) VALUES (?,?,?,?,?,?,?,?);";
-                connection.query(valor,[usuario.username,fecha,usuario.correo, usuario.password,usuario.perfil,false,usuario.numEmp,img],
-                function(err2, result2){
-                    connection.release(); //devolver el pool de conexiones.
-                    if(err2) callback(new Error("Error de acceso a la base de datos"));
-                    else{     
-                        if(result2.affectedRows) callback(null,result2.insertId);
-                        else callback(new Error("Error en el registro de usuario"));
-                    }
-                });
+    registroTecnico(usuario, imagen, callback) {
+        this.pool.getConnection(function(err, connection) {
+            if (err) {
+                callback(new Error("Error de conexión a la base de datos"));
+            } else {
+                let fecha = new Date().toISOString().replace('T', ' ').substr(0, 19);
+                const valor = "INSERT INTO UCM_AW_CAU_TEC_Tecnicos (nombre, fecha, email, password, perfil, desactivado, numEmp, imagen, mime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+                connection.query(valor, [usuario.username, fecha, usuario.correo, usuario.password, usuario.perfil, false, usuario.numEmp, imagen.data, imagen.mime],
+                    function(err2, result2) {
+                        connection.release();
+                        if (err2) {
+                            callback(new Error("Error de acceso a la base de datos"));
+                        } else {
+                            if (result2.affectedRows) {
+                                callback(null, result2.insertId);
+                            } else {
+                                callback(new Error("Error en el registro de técnico"));
+                            }
+                        }
+                    });
             }
         });
     }
@@ -129,21 +132,27 @@ class DAO_Tecnico {
 
     obtenerImagen(id, callback) {
         this.pool.getConnection(function(err, connection) {
-        if (err)
-            callback(err);
-        else {
-                let sql = "SELECT imagen FROM UCM_AW_CAU_TEC_Tecnicos  WHERE idTec = ?";
+            if (err) {
+                callback(err);
+            } else {
+                let sql = "SELECT imagen, mime FROM UCM_AW_CAU_TEC_Tecnicos WHERE idTec = ?";
                 connection.query(sql, [id], function(err, rows) {
-                    connection.release(); // devolver al pool la conexión
+                    connection.release();
                     if (err) {
                         callback(new Error("Error de acceso a la base de datos"));
+                    } else {
+                        if (rows.length === 0) {
+                            callback(null, false); // No está el técnico con el ID proporcionado
+                        } else {
+                            const imagen = {
+                                data: rows[0].data, // Los datos de la imagen
+                                mime: rows[0].mime // El tipo MIME de la imagen
+                            };
+                            callback(null, imagen);
+                        }
                     }
-                    else {
-                        if (rows.length === 0) callback(null,false); //no está el usuario con el password proporcionado
-                        else callback(null,rows[0].imagen);
-                    }
-            });
-        }
+                });
+            }
         });
     }
 

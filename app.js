@@ -219,7 +219,10 @@ app.post("/registro", multerFactory.single('foto'),(request,response) => {
     
         let imagen;
         if (request.file) {
-            imagen= request.file.buffer ;
+            imagen = {
+                data: request.file.buffer, // Los datos de la imagen
+                mime: request.file.mimetype // Aquí obtienes el tipo MIME
+            };
         }
 
         let esTecnico = request.body['tecnico-check'];
@@ -585,34 +588,57 @@ app.post('/search', function(request, response) {
         }
     });
     
+    app.get("/imagen", function(request, response) {
 
+        if(request.session.isTechnician){
+            daoTec.obtenerImagen(request.session.iduser, function(err, imagen) {
+                if (err) {
+                    // Si ocurre un error, enviar la imagen por defecto
+                    console.log('error');
+                    response.status(200);
+                    response.sendFile(path.join(__dirname, 'public', 'img', 'avatars', 'default.jpg'));
+                } else if (Buffer.isBuffer(imagen.data)) {
+                    // Si se obtiene la imagen, enviar los datos binarios al cliente
+                    console.log('hay imagen: ', imagen);
+                    response.writeHead(200, {
+                        'Content-Type': imagen.mime
+                    });
+                    response.end(imagen.data);
+                } else {
+                    // Si no hay imagen, enviar la imagen por defecto
+                    console.log('no hay hay imagen');
+                    response.status(200);
+                    response.sendFile(path.resolve(__dirname, 'public', 'img', 'avatars', 'default.jpg'));
+                }
+            });
+        }
 
-app.get("/imagen", function(request, response) {
-    if(request.session.isTechnician){
-        daoTec.obtenerImagen(request.session.iduser, function(err, imagen) {
-            if (imagen) {
-                response.status(200);
-                response.sendFile(path.join(__dirname,'public', 'img','avatars', imagen));
-            } 
-            else {
-                response.status(200);
-                response.sendFile(path.join(__dirname,'public', 'img','avatars', 'default.jpg'));
-            }
-        });
-    }
-    else{
-        daoUsu.obtenerImagen(request.session.iduser, function(err, imagen) {
-            if (imagen) {
-                response.status(200);
-                response.sendFile(path.join(__dirname,'public', 'img','avatars', imagen));
-            } 
-            else {
-                response.status(200);
-                response.sendFile(path.join(__dirname,'public', 'img','avatars', 'default.jpg'));
-            }
-        });
-    }
-});
+        else{
+            daoUsu.obtenerImagen(request.session.iduser, function(err, imagen) {
+                if (err) {
+                    // Si ocurre un error, enviar la imagen por defecto
+                    console.log('error');
+                    response.status(200);
+                    response.sendFile(path.join(__dirname, 'public', 'img', 'avatars', 'default.jpg'));
+                } else if (Buffer.isBuffer(imagen.data)) {
+                    // Si se obtiene la imagen, enviar los datos binarios al cliente
+                    console.log('hay imagen: ', imagen);
+                    response.writeHead(200, {
+                        'Content-Type': imagen.mime
+                    });
+                    response.end(imagen.data);
+                } else {
+                    // Si no hay imagen, enviar la imagen por defecto
+                    console.log('no hay hay imagen');
+                    response.status(200);
+                    response.sendFile(path.resolve(__dirname, 'public', 'img', 'avatars', 'default.jpg'));
+                }
+            });
+        }
+    });
+    
+    
+    
 
 // Devolver la lista de categorias para el combo box (<select>) del modal de crear aviso
 app.get("/category_list/:typeAvi", (request, response) => {

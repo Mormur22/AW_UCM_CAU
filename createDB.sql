@@ -19,7 +19,8 @@ CREATE TABLE UCM_AW_CAU_USU_Usuarios (
   password VARCHAR(130) NOT NULL,
   nombre VARCHAR(50) NOT NULL,
   perfil ENUM('alumno','pas','pdi','aa') NOT NULL,
-  imagen VARCHAR(255) DEFAULT NULL,
+  imagen BLOB DEFAULT NULL,
+  mime VARCHAR(50) DEFAULT NULL,
   desactivado BOOLEAN DEFAULT 0,
   reputacion DECIMAL(5,2) DEFAULT 50.00,
   PRIMARY KEY (idUsu)
@@ -32,7 +33,8 @@ CREATE TABLE UCM_AW_CAU_TEC_Tecnicos (
   password VARCHAR(130) NOT NULL,
   nombre VARCHAR(50) NOT NULL,
   perfil ENUM('alumno','pas','pdi','aa') NOT NULL,
-  imagen VARCHAR(255) DEFAULT NULL,
+  imagen BLOB DEFAULT NULL,
+  mime VARCHAR(50) DEFAULT NULL,
   desactivado BOOLEAN DEFAULT 0,
   numEmp VARCHAR(8),
   PRIMARY KEY (idTec)
@@ -55,36 +57,39 @@ CREATE TABLE UCM_AW_CAU_AVI_Avisos (
   FOREIGN KEY (idTec) REFERENCES UCM_AW_CAU_TEC_Tecnicos (idTec)
 );
 
-INSERT INTO UCM_AW_CAU_USU_Usuarios (idUsu, fecha, email, password, nombre, perfil, imagen, desactivado, reputacion) VALUES
-  ( 1, '2019-09-11 12:01:22', 'anuñez@ucm.es', 'letmein', 'Alfredo Nuñez', 'alumno', 'anuñez.jpg', 0, 50.00 ),
-  ( 2, '2022-09-09 18:04:41', 'alozano@ucm.es', 'letmein', 'Ana Lozano', 'alumno', 'alozano.jpg', 0, 50.00 ),
-  ( 3, '2022-09-15 21:53:22', 'ctorres@ucm.es', 'letmein', 'Carlota Torres', 'alumno', 'ctorres.jpg', 0, 50.00 ),
-  ( 4, '2021-09-13 14:02:53', 'msalas@ucm.es', 'letmein', 'Matias Salas', 'alumno', 'msalas.jpg', 0, 50.00 ),
-  ( 5, '2021-09-06 08:47:06', 'nroca@ucm.es', 'letmein', 'Nuria Roca', 'alumno', 'nroca.jpg', 0, 50.00 ),
-  ( 6, '2022-09-06 13:07:20', 'rcarrasco@ucm.es', 'letmein', 'Rebeca Carrasco', 'alumno', 'rcarrasco.jpg', 0, 50.00 ),
-  ( 7, '2022-09-07 14:02:53', 'rcontreras@ucm.es', 'letmein', 'Ruben Contreras', 'alumno', 'rcontreras.jpg', 0, 50.00 ),
-  ( 8, '2021-09-03 10:31:32', 'vramos@ucm.es', 'letmein', 'Vanesa Ramos', 'alumno', 'vramos.jpg', 0, 50.00 ),
-  ( 9, '2020-09-14 09:17:54', 'vramirez@ucm.es', 'letmein', 'Victor Ramirez', 'alumno', 'vramirez.jpg', 0, 50.00 ),
-  ( 10, '2021-09-03 11:42:27', 'bgerpe@ucm.es', 'letmein', 'Begoña Gerpe', 'pdi', 'bgerpe.jpg', 0, 50.00 ),
-  ( 11, '2020-09-04 13:09:16', 'eporto@ucm.es', 'letmein', 'Eva Porto', 'pdi', 'eporto.jpg', 0, 50.00 ),
-  ( 12, '2020-09-02 10:25:14', 'jsantaolalla@ucm.es', 'letmein', 'Javier Santaolalla', 'pdi', 'jsantaolalla.jpg', 0, 50.00 ),
-  ( 13, '2014-09-01 11:48:26', 'maranda@ucm.es', 'letmein', 'Marcos Aranda', 'pdi', 'maranda.jpg', 0, 50.00 ),
-  ( 14, '1958-09-03 09:12:30', 'rguzman@ucm.es', 'letmein', 'Roberto Guzman', 'pdi', 'rguzman.jpg', 0, 50.00 ),
-  ( 15, '2022-09-02 10:57:28', 'smontes@ucm.es', 'letmein', 'Sabrina Montes', 'pdi', 'smontes.jpg', 0, 50.00 ),
-  ( 16, '1977-10-21 12:03:44', 'agarrido@ucm.es', 'letmein', 'Ana Garrido', 'pas', 'agarrido.jpg', 0, 50.00 ),
-  ( 17, '1991-02-18 14:08:19', 'csamper@ucm.es', 'letmein', 'Cristian Samper', 'pas', 'csamper.jpg', 0, 50.00 ),
-  ( 18, '2006-04-17 09:44:37', 'mhall@ucm.es', 'letmein', 'Meredith Hall', 'pas', 'mhall.jpg', 0, 50.00 ),
-  ( 19, '1999-05-20 11:41:25', 'rsantos@ucm.es', 'letmein', 'Rebeca Santos', 'pas', 'rsantos.jpg', 0, 50.00 ),
-  ( 20, '1997-06-13 10:59:07', 'tbrown@ucm.es', 'letmein', 'Taylor Brown', 'pas', 'tbrown.jpg', 0, 50.00 ),
-  ( 21, '1978-07-05 12:41:16', 'avillar@ucm.es', 'letmein', 'Andres Villar', 'aa', 'avillar.jpg', 0, 50.00 ),
-  ( 22, '1980-11-24 09:24:14', 'jmolina@ucm.es', 'letmein', 'Julian Molina', 'aa', 'jmolina.jpg', 0, 50.00 ),
-  ( 23, '1985-12-16 08:48:53', 'lmarin@ucm.es', 'letmein', 'Luisa Marin', 'aa', 'lmarin.jpg', 0, 50.00 ),
-  ( 24, '1987-05-11 12:28:39', 'tmorgan@ucm.es', 'letmein', 'Tina Morgan', 'aa', 'tmorgan.jpg', 0, 50.00 );
+INSERT INTO UCM_AW_CAU_USU_Usuarios 
+(idUsu, fecha, email, password, nombre, perfil, desactivado, reputacion) 
+VALUES
+(1, '2019-09-11 12:01:22', 'anuñez@ucm.es', 'letmein', 'Alfredo Nuñez', 'alumno', 0, 50.00),
+(2, '2022-09-09 18:04:41', 'alozano@ucm.es', 'letmein', 'Ana Lozano', 'alumno', 0, 50.00),
+(3, '2022-09-15 21:53:22', 'ctorres@ucm.es', 'letmein', 'Carlota Torres', 'alumno', 0, 50.00),
+(4, '2021-09-13 14:02:53', 'msalas@ucm.es', 'letmein', 'Matias Salas', 'alumno', 0, 50.00),
+(5, '2021-09-06 08:47:06', 'nroca@ucm.es', 'letmein', 'Nuria Roca', 'alumno', 0, 50.00),
+(6, '2022-09-06 13:07:20', 'rcarrasco@ucm.es', 'letmein', 'Rebeca Carrasco', 'alumno', 0, 50.00),
+(7, '2022-09-07 14:02:53', 'rcontreras@ucm.es', 'letmein', 'Ruben Contreras', 'alumno', 0, 50.00),
+(8, '2021-09-03 10:31:32', 'vramos@ucm.es', 'letmein', 'Vanesa Ramos', 'alumno', 0, 50.00),
+(9, '2020-09-14 09:17:54', 'vramirez@ucm.es', 'letmein', 'Victor Ramirez', 'alumno', 0, 50.00),
+(10, '2021-09-03 11:42:27', 'bgerpe@ucm.es', 'letmein', 'Begoña Gerpe', 'pdi', 0, 50.00),
+(11, '2020-09-04 13:09:16', 'eporto@ucm.es', 'letmein', 'Eva Porto', 'pdi', 0, 50.00),
+(12, '2020-09-02 10:25:14', 'jsantaolalla@ucm.es', 'letmein', 'Javier Santaolalla', 'pdi', 0, 50.00),
+(13, '2014-09-01 11:48:26', 'maranda@ucm.es', 'letmein', 'Marcos Aranda', 'pdi', 0, 50.00),
+(14, '1958-09-03 09:12:30', 'rguzman@ucm.es', 'letmein', 'Roberto Guzman', 'pdi', 0, 50.00),
+(15, '2022-09-02 10:57:28', 'smontes@ucm.es', 'letmein','Sabrina Montes', 'pdi', 0, 50.00),
+(16, '1977-10-21 12:03:44', 'agarrido@ucm.es', 'letmein', 'Ana Garrido', 'pas', 0, 50.00),
+(17, '1991-02-18 14:08:19', 'csamper@ucm.es', 'letmein', 'Cristian Samper', 'pas', 0, 50.00),
+(18, '2006-04-17 09:44:37', 'mhall@ucm.es', 'letmein', 'Meredith Hall', 'pas', 0, 50.00),
+(19, '1999-05-20 11:41:25', 'rsantos@ucm.es', 'letmein', 'Rebeca Santos', 'pas', 0, 50.00),
+(20, '1997-06-13 10:59:07', 'tbrown@ucm.es', 'letmein', 'Taylor Brown', 'pas', 0, 50.00),
+(21, '1978-07-05 12:41:16', 'avillar@ucm.es', 'letmein', 'Andres Villar', 'aa', 0, 50.00),
+(22, '1980-11-24 09:24:14', 'jmolina@ucm.es', 'letmein', 'Julian Molina', 'aa', 0, 50.00),
+(23, '1985-12-16 08:48:53', 'lmarin@ucm.es', 'letmein', 'Luisa Marin', 'aa', 0, 50.00),
+(24, '1987-05-11 12:28:39', 'tmorgan@ucm.es', 'letmein', 'Tina Morgan', 'aa', 0, 50.00);
+
 
 INSERT INTO UCM_AW_CAU_EMP_Empleados (numero) VALUES
   ('4678-dfs'),
   ('5102-gev'),
-  ('6884-hnx'),
+  ('6884-hnx'),ea
   ('7039-con'), 
   ('8959-azy'),
   ('1234-abc'),
@@ -96,12 +101,12 @@ INSERT INTO UCM_AW_CAU_EMP_Empleados (numero) VALUES
   ('5555-eee'),
   ('0000-xxx');
 
-INSERT INTO UCM_AW_CAU_TEC_Tecnicos ( idTec, fecha, email, password, nombre, perfil, imagen, desactivado, numEmp ) VALUES
-  ( 1, '1991-09-02 11:55:19', 'aortiz@ucm.es', 'letmein', 'Alexander Ortiz', 'pas', 'aortiz.jpg', 0, '4678-dfs' ),
-  ( 2, '2002-06-05 12:24:33', 'csolis@ucm.es', 'letmein', 'Carolina Solis', 'pas', 'csolis.jpg', 0, '5102-gev' ),
-  ( 3, '2015-03-15 08:49:56', 'hsmith@ucm.es', 'letmein', 'Harold Smith', 'pas', 'hsmith.jpg', 0, '6884-hnx' ),
-  ( 4, '2020-01-05 10:25:08', 'pjuarez@ucm.es', 'letmein', 'Pablo Juarez', 'pas', 'pjuarez.jpg', 0, '7039-con' ),
-  ( 5, '2022-09-01 09:10:40', 'lmoreno@ucm.es', 'letmein', 'Lucas Moreno', 'pas', 'lmoreno.jpg', 0, '8959-azy' );
+INSERT INTO UCM_AW_CAU_TEC_Tecnicos ( idTec, fecha, email, password, nombre, perfil, desactivado, numEmp ) VALUES
+  ( 1, '1991-09-02 11:55:19', 'aortiz@ucm.es', 'letmein', 'Alexander Ortiz', 'pas',0 , '4678-dfs' ),
+  ( 2, '2002-06-05 12:24:33', 'csolis@ucm.es', 'letmein', 'Carolina Solis', 'pas',0 , '5102-gev' ),
+  ( 3, '2015-03-15 08:49:56', 'hsmith@ucm.es', 'letmein', 'Harold Smith', 'pas',0 , '6884-hnx' ),
+  ( 4, '2020-01-05 10:25:08', 'pjuarez@ucm.es', 'letmein', 'Pablo Juarez', 'pas',0 , '7039-con' ),
+  ( 5, '2022-09-01 09:10:40', 'lmoreno@ucm.es', 'letmein', 'Lucas Moreno', 'pas', 0 , '8959-azy' );
 
 INSERT INTO UCM_AW_CAU_AVI_Avisos ( idAvi, tipo, categoria, subcategoria, fecha, observaciones, comentario, cerrado, cancelado, idUsu, idTec ) VALUES
   ( 1, 'incidencia', 'comunicaciones', 'correo_electronico', '2022-09-14', 'Después de haber solicitado la migración de mi cuenta puedo acceder al nuevo correo, pero no encuentro los correos antiguos y me faltan carpetas.', 'Lo hemos revisado y por lo visto no se realizó correctamente la migración. Lo más probable es que no se seleccionasen las opciones adecuadas en el momento de hacer la copia. Somos humanos y a veces metemos la pata. Afortunadamente, tu antigua cuenta aún no había sido eliminada y hemos podido recuperar lo que faltaba. Ya deberías tenerlo todo disponible en tu nueva cuenta.', 1, 0, 12, 2 ),  -- jsantaolalla / csolis
@@ -114,4 +119,33 @@ INSERT INTO UCM_AW_CAU_AVI_Avisos ( idAvi, tipo, categoria, subcategoria, fecha,
   ( 8, 'felicitacion', 'informatica', NULL, '2022-11-15', 'Hola, quiero daros la enhorabuena por la gran labor de mantenimiento que hacéis con los equipos de los laboratorios. ¡Buen trabajo!', 'Muchas gracias. Resulta reconfortante saber que se valora el esfuerzo que hacemos.', 1, 0, 11, 1 ),  -- eporto / aortiz
   ( 9, 'incidencia', 'docencia', 'aula_virtual', '2022-11-28', 'La calefacción está muy alta en el Aula 2.09 ¿podéis bajarla unos grados?', 'Este aviso ha sido eliminado por el técnico Harold Smith debido a:\n\nLo siento, nosotros no llevamos eso. Pregunta en conserjería.', 0, 1, 7, 3 ),  -- rcontreras / hsmith
   ( 10, 'incidencia', 'comunicaciones', 'correo_electronico', '2022-12-02', 'Este curso es mi último año en la universidad y me gustaría conservar copia de mis correos electrónicos ¿Podéis hacerme una?', 'Si solo te interesa conservar unos cuantos emails te recomiendo que uses la opción de exportar correos. Crea una nueva carpeta con todos los correos que te interesen y desde las opciones de carpeta elije "exportar".<br/><br/>Si los quieres todos, podemos proporcionarte una copia, pero primero deberás realizar una solicitud de entrega de datos desde la página de administración electrónica. No se te olvide marcar la casilla de "correos electrónicos".', 1, 0, 14, 5 ),  -- rguzman / lmoreno
-  ( 11, 'incidencia', 'comunicaciones', 'correo_electronico', '2022-12-12', 'Voy a estar ausente un tiempo y deseo que otra persona pueda acceder a la cuenta institucional para poder contestar a los correos nuevos.', 'Lo siento, pero por motivos de privacidad de datos no se permite esa posibilidad. Sin embargo siempre puedes activar la opción de reenvío automático para correos entrantes. Cuando la marques se te habilitará el campo "cuenta de destino", en el que deberás escribir la dirección de correo electrónico de la persona que quieres que los reciba. Otra opción es la de "respuesta automática", en la que puedes poner un texto como "estoy de vacaciones y no puedo atenderte". Pero acuérdate de desactívala cuando vuelvas.', 1, 0, 13, 4 );  -- maranda / pjuarez
+  ( 11, 'incidencia', 'comunicaciones', 'correo_electronico', '2022-12-12', 'Voy a estar ausente un tiempo y deseo que otra persona pueda acceder a la cuenta institucional para poder contestar a los correos nuevos.', 'Lo siento, pero por motivos de privacidad de datos no se permite esa posibilidad. Sin embargo siempre puedes activar la opción de reenvío automático para correos entrantes. Cuando la marques se te habilitará el campo "cuenta de destino", en el que deberás escribir la dirección de correo electrónico de la persona que quieres que los reciba. Otra opción es la de "respuesta automática", en la que puedes poner un texto como "estoy de vacaciones y no puedo atenderte". Pero acuérdate de desactívala cuando vuelvas.', 1, 0, 13, 4 ),  -- maranda / pjuarez
+  ( 12, 'incidencia', 'comunicaciones', 'correo_electronico', '2023-05-23', 'No puedo iniciar sesión en mi correo de la UCM.', 'Se han restablecido las credenciales. Por favor, intente de nuevo.', 1, 0, 16, 1),
+  ( 13, 'sugerencia', 'informatica', 'software', '2023-05-23', 'El software de la biblioteca podría ser más intuitivo.', 'Se ha enviado la sugerencia al equipo de desarrollo.', 1, 0, 17, 2),
+  ( 14, 'incidencia', 'comunicaciones', 'correo_electronico', '2023-05-24', 'No recibo correos de mis profesores.', 'Se ha revisado la configuración del filtro de spam y se han ajustado los ajustes.', 1, 0, 18, 3),
+  ( 15, 'felicitacion', 'informatica', NULL, '2023-05-24', 'El nuevo sistema de reserva de aulas es excelente.', 'Gracias por tus comentarios. Nos alegra que te guste.', 1, 0, 19, 4),
+  ( 16, 'incidencia', 'docencia', 'aula_virtual', '2023-05-25', 'No puedo ver las tareas para mi clase de física.', 'Se ha actualizado la lista de tareas en el aula virtual.', 1, 0, 20, 5),
+  ( 17, 'incidencia', 'comunicaciones', 'cuenta_alumno', '2023-05-26', 'No puedo iniciar sesión en mi cuenta de estudiante.', 'Se han restablecido las credenciales. Por favor, intente de nuevo.', 1, 0, 21, 1),
+  ( 18, 'sugerencia', 'docencia', 'aula_virtual', '2023-05-27', 'Sería útil tener una función de búsqueda en el aula virtual.', 'Se ha enviado la sugerencia al equipo de desarrollo.', 1, 0, 22, 2),
+  ( 19, 'incidencia', 'comunicaciones', 'correo_electronico', '2023-05-28', 'No puedo enviar correos desde mi cuenta de UCM.', 'Se ha revisado y corregido el problema con el servidor de correo.', 1, 0, 23, 3),
+  ( 20, 'felicitacion', 'informatica', NULL, '2023-05-29', 'Los ordenadores del laboratorio de informática son muy rápidos.', 'Gracias por tus comentarios. Nos esforzamos por ofrecer el mejor equipamiento.', 1, 0, 24, 4),
+  ( 21, 'incidencia', 'comunicaciones', 'correo_electronico', '2023-06-01', 'He olvidado la contraseña de mi correo de la UCM.', 'Se ha enviado un enlace para restablecer la contraseña a tu correo alternativo.', 1, 0, 16, 2),
+  ( 22, 'incidencia', 'docencia', 'aula_virtual', '2023-06-02', 'No puedo descargar los archivos de las asignaturas en el aula virtual.', 'Se ha resuelto el problema con los archivos, ya deberías poder descargarlos.', 1, 0, 17, 1),
+  ( 23, 'incidencia', 'comunicaciones', 'correo_electronico', '2023-06-03', 'No puedo adjuntar archivos en mis correos de la UCM.', 'Se ha corregido un error en la función de adjuntar archivos. Por favor, intente de nuevo.', 1, 0, 18, 3),
+  ( 24, 'sugerencia', 'informatica', 'software', '2023-06-04', 'Sería genial si pudiéramos tener más opciones de software en los laboratorios.', 'Gracias por tu sugerencia. La pasaremos al equipo encargado.', 1, 0, 19, 5),
+  ( 25, 'incidencia', 'docencia', 'aula_virtual', '2023-06-05', 'No puedo ver las tareas para mi clase de física.', 'Se ha actualizado la lista de tareas en el aula virtual.', 1, 0, NULL, 4),
+  ( 26, 'incidencia', 'comunicaciones', 'correo_electronico', '2023-06-07', 'Mi correo de la UCM no recibe mensajes.', 'Hemos resuelto un problema con el servidor de correo. Deberías recibir correos normalmente ahora.', 1, 0, NULL, 1),
+  ( 27, 'sugerencia', 'docencia', 'aula_virtual', '2023-06-08', 'Sería útil tener un calendario de eventos en el aula virtual.', 'Gracias por tu sugerencia. La pasaremos al equipo encargado.', 1, 0, NULL, 2),
+  ( 28, 'incidencia', 'comunicaciones', 'correo_electronico', '2023-06-09', 'No puedo cambiar la contraseña de mi correo de la UCM.', 'Se ha solucionado el problema con la función de cambio de contraseña.', 1, 0, NULL, 3),
+  ( 29, 'felicitacion', 'informatica', NULL, '2023-07-10', 'El servicio de atención al cliente es excepcional. ¡Gran trabajo!', 'Agradecemos tus comentarios positivos. ¡Nuestro objetivo es proporcionar el mejor servicio posible!', 1, 0, NULL, 4),
+  ( 30, 'incidencia', 'comunicaciones', 'correo_electronico', '2023-07-01', 'No estoy recibiendo correos en mi cuenta de la UCM.', 'Estamos investigando el problema, por favor, ten paciencia.', 0, 0, NULL, 1),
+  ( 31, 'incidencia', 'docencia', 'aula_virtual', '2023-07-02', 'No puedo subir archivos al aula virtual.', 'Hemos resuelto el problema, ya deberías poder subir archivos.', 1, 0, NULL, 2),
+  ( 32, 'incidencia', 'comunicaciones', 'correo_electronico', '2023-07-03', 'Mi correo de la UCM parece haber sido hackeado.', 'Por seguridad, hemos bloqueado tu cuenta mientras investigamos.', 0, 0, NULL, 3),
+  ( 33, 'incidencia', 'informatica', 'hardware', '2023-07-04', 'Mi portátil de la UCM no se enciende.', 'Este aviso ha sido cancelado por el técnico Pablo Juarez debido a: \n\nEl usuario resolvió el problema por su cuenta.', 0, 1, NULL, 4),
+  ( 34, 'sugerencia', 'docencia', 'aula_virtual', '2023-07-05', 'Sería útil poder ver las calificaciones en el aula virtual.', 'Estamos considerando la implementación de esta funcionalidad. Gracias por tu sugerencia.', 0, 0, NULL, 5),
+  ( 35, 'felicitacion', 'informatica', NULL, '2023-07-06', 'La nueva actualización del sistema es increíble, ¡gracias!', 'Agradecemos tus comentarios positivos. ¡Trabajamos duro para mejorar nuestros servicios!', 1, 0, NULL, 1),
+  ( 36, 'incidencia', 'comunicaciones', 'correo_electronico', '2023-07-07', 'Todos los correos que envío desde mi cuenta de la UCM están yendo a la carpeta de spam.', 'Estamos trabajando en este problema, agradecemos tu paciencia.', 0, 0, NULL, 3),
+  ( 37, 'sugerencia', 'docencia', 'aula_virtual', '2023-07-08', 'El aula virtual podría tener un diseño más atractivo.', 'Gracias por tu sugerencia, se la haremos llegar al equipo de diseño.', 1, 0, NULL, 2),
+  ( 38, 'incidencia', 'comunicaciones', 'correo_electronico', '2023-07-09', 'He olvidado la contraseña de mi correo de la UCM.', 'Este aviso ha sido cancelado por el técnico Lucas Moreno debido a: \n\nEl usuario recordó su contraseña.', 0, 1, NULL, 5),
+  ( 39, 'felicitacion', 'informatica', NULL, '2023-07-10', 'El servicio de atención al cliente es excepcional. ¡Gran trabajo!', 'Agradecemos tus comentarios positivos. ¡Nuestro objetivo es proporcionar el mejor servicio posible!', 1, 0, NULL, 4),
+  ( 40, 'incidencia', 'comunicaciones', 'correo_electronico', '2023-07-11', 'No puedo enviar correos desde mi cuenta de UCM.', 'Se ha revisado y corregido el problema con el servidor de correo.', 1, 0, NULL, 3);

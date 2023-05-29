@@ -335,14 +335,14 @@ class DAO_Aviso {
      * @param myIdUsu El id del usuario estándar que está usando la applicaión.
      * @param callback Función de callback que gestiona los casos de error y éxito. Parámetros de entrada: (Error err, [Aviso , ... , Aviso] result) .
      * Aviso = { idAvi: Number, tipo: String, categoria: String, subcategoria: String, fecha: Date, observaciones: String, comentario: String, cerrado: Boolean, cancelado: Boolean, idUsu: Number, idTec: Number } .
-     * Ejecuta la consulta "SELECT * FROM UCM_AW_CAU_AVI_Avisos WHERE cerrado = 1 AND cancelado = 0 AND idUsu = $idUsu;".
+     * Ejecuta la consulta "SELECT * FROM UCM_AW_CAU_AVI_Avisos WHERE (cerrado = 1 OR cancelado = 1) AND idUsu = $idUsu;".
      */
     getUserClosedNotifies(myIdUsu, callback) {
         this.pool.getConnection(
             function(err, connection) {
                 if(err) callback(new Error("Error de conexión a la base de datos"), null);
                 else {
-                    connection.query("SELECT * FROM UCM_AW_CAU_AVI_Avisos WHERE cerrado = 1 AND cancelado = 0 AND idUsu = ?;", [myIdUsu],
+                    connection.query("SELECT * FROM UCM_AW_CAU_AVI_Avisos WHERE (cerrado = 1 OR cancelado = 1) AND idUsu = ?;", [myIdUsu],
                         function(err, rows) {
                             connection.release();
                             if(err) callback(new Error("No se ha podido recuperar datos de la tabla UCM_AW_CAU_AVI_Avisos"), null);
@@ -459,13 +459,11 @@ class DAO_Aviso {
     }
 
 
-        //busca los avisos abiertos del usuario o tecnico asociado al id que se pasa por parámetro por descripción
+    // Busca los avisos abiertos del usuario o tecnico asociado al id que se pasa por parámetro por descripción
     buscarMisAvisosTecnicoPorDescripcion(idTec, descripcion, callback) {
          this.pool.getConnection((err, connection) => {
             if(err) callback(new Error("Error de conexión a la base de datos"), null);
-
             else {
-                console.log('parametros:',idTec,descripcion)
                 connection.query("SELECT * FROM UCM_AW_CAU_AVI_Avisos WHERE idTec = ? AND observaciones LIKE ? AND cerrado = 0 AND cancelado = 0", [idTec, '%' + descripcion + '%'],
                     (err, rows) => {
                         connection.release();
@@ -477,8 +475,7 @@ class DAO_Aviso {
         });
     }
 
-    //busca los avisos cerrados del historico por descripción
-
+    // Busca los avisos cerrados del historico por descripción
     buscarHistoricoAvisosUsuarioPorDescripcion(idUsu, descripcion, callback) {
         this.pool.getConnection((err, connection) => {
             if(err) callback(new Error("Error de conexión a la base de datos"), null);

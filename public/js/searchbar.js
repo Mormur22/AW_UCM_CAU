@@ -4,7 +4,7 @@ function search() {
     const tab_aviElement= document.getElementById("tab_avi");
     const searchText = searchTextElement ? searchTextElement.value : '';
     const isUserSearch = isUserSearchElement ? isUserSearchElement.checked : false;
-    const option= tab_aviElement ? $("#tab_avi").data("option") : 0;
+    const option = tab_aviElement ? $("#tab_avi").data("option") : 0;
 
     // Comprobar si searchText está vacío
     if(searchText.trim() === '') {
@@ -25,6 +25,10 @@ function search() {
     }).done(function(data) {
         dataContainer.empty();
         dataContainer.html(data);
+        $("#tab_avi").data("option", option);
+        $("#tab_avi").data("search", true);
+        $( "#opcion"+actualOp ).attr("data-showin", "background" );
+        actualOp = 0;
     }).fail(function(jqXHR, textStatus) {
         alert("Error recuperando datos");
     });

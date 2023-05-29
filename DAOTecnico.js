@@ -154,8 +154,12 @@ class DAO_Tecnico {
                 callback(new Error("Error de conexión a la base de datos"));
             }
             else {
-                const sql = "SELECT * FROM UCM_AW_CAU_USU_Usuarios WHERE (nombre LIKE ?) or (nombre LIKE ?);";
-                connection.query(sql, [`${nombre}%`, `%${nombre}`], function(err, rows) {
+                const sql = `
+                    (SELECT *, 'usuario' AS tipo FROM UCM_AW_CAU_USU_Usuarios WHERE (nombre LIKE ?) or (nombre LIKE ?))
+                    UNION
+                    (SELECT *, 'tecnico' AS tipo FROM UCM_AW_CAU_TEC_Tecnicos WHERE (nombre LIKE ?) or (nombre LIKE ?))
+                `;
+                connection.query(sql, [`${nombre}%`, `%${nombre}`, `${nombre}%`, `%${nombre}`], function(err, rows) {
                     connection.release(); // devolver al pool la conexión
                     if (err) {
                         callback(new Error("Error de acceso a la base de datos"));
@@ -167,6 +171,7 @@ class DAO_Tecnico {
             }
         });
     }
+    
     
     
     

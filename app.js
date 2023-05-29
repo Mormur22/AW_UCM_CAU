@@ -314,7 +314,6 @@ app.post("/registro", multerFactory.single('foto'),(request,response) => {
                     tipoAlert: "alert-danger"});
                 } 
                 else {
-                    console.log(existeUsu);
                     //no existe el usuario con el nombre de usuario
                     if(!existeUsu){
                         daoUsu.existeCorreoUsuario(request.body.correo,function(err, existeCorreo) {
@@ -419,19 +418,14 @@ app.get("/main", function(request, response) {
 
 app.post('/search', function(request, response) {
 
-    console.log("peticion de busqueda");
     const searchText = request.body.searchText;
     const searchUsers = request.body.isUserSearch;
     const option = Number(request.body.option);
     const isTechnician = request.session.isTechnician;
 
-    console.log(option);
-    console.log(searchText+" "+searchUsers);
-
     if (searchUsers === 'true') {
         daoTec.buscarUsuarioPorNombreApellido(searchText, function(err, result) {
             if (err) {
-                console.log(err);
                 response.send("<p> Error </p>");
                 response.status(500).json({ error: 'Error en la búsqueda de usuarios.' });
             } else {
@@ -448,7 +442,6 @@ app.post('/search', function(request, response) {
                     daoAvi.buscarHistoricoAvisostecnicoPorDescripcion(request.session.iduser,searchText,
                         function(err, result) {
                             if (err) {
-                                console.log(err);
                                 response.send("<p> Error </p>");
                                 response.status(500).json({ error: 'Error en la búsqueda de avisos.' });
                             }
@@ -462,7 +455,6 @@ app.post('/search', function(request, response) {
                     daoAvi.buscarHistoricoAvisosUsuarioPorDescripcion(request.session.iduser,searchText,
                         function(err, result) {
                             if (err) {
-                                console.log(err);
                                 response.send("<p> Error </p>");
                                 response.status(500).json({ error: 'Error en la búsqueda de avisos.' });
                             }
@@ -478,7 +470,6 @@ app.post('/search', function(request, response) {
             case 1:
                 daoAvi.buscarAvisoPorDescripcion(searchText, function(err, result) {
                     if (err) {
-                        console.log(err);
                         response.send("<p> Error </p>");
                         response.status(500).json({ error: 'Error en la búsqueda de avisos.' });
                     } else {
@@ -495,7 +486,6 @@ app.post('/search', function(request, response) {
                     daoAvi.buscarMisAvisosTecnicoPorDescripcion(request.session.iduser,searchText,
                         function(err, result) {
                             if (err) {
-                                console.log(err);
                                 response.send("<p> Error </p>");
                                 response.status(500).json({ error: 'Error en la búsqueda de avisos.' });
                             }
@@ -508,9 +498,7 @@ app.post('/search', function(request, response) {
                 else {
                     daoAvi.buscarMisAvisosUsuarioPorDescripcion(request.session.iduser,searchText,
                         function(err, result) {
-
                             if (err) {
-                                console.log(err);
                                 response.send("<p> Error </p>");
                                 response.status(500).json({ error: 'Error en la búsqueda de avisos.' });
                             }
@@ -528,7 +516,6 @@ app.post('/search', function(request, response) {
                     daoAvi.buscarHistoricoAvisostecnicoPorDescripcion(request.session.iduser,searchText,
                         function(err, result) {
                             if (err) {
-                                console.log(err);
                                 response.send("<p> Error </p>");
                                 response.status(500).json({ error: 'Error en la búsqueda de avisos.' });
                             }
@@ -542,7 +529,6 @@ app.post('/search', function(request, response) {
                     daoAvi.buscarHistoricoAvisosUsuarioPorDescripcion(request.session.iduser,searchText,
                         function(err, result) {
                             if (err) {
-                                console.log(err);
                                 response.send("<p> Error </p>");
                                 response.status(500).json({ error: 'Error en la búsqueda de avisos.' });
                             }
@@ -559,7 +545,6 @@ app.post('/search', function(request, response) {
                     daoAvi.buscarHistoricoAvisostecnicoPorDescripcion(request.session.iduser,searchText,
                         function(err, result) {
                             if (err) {
-                                console.log(err);
                                 response.send("<p> Error </p>");
                                 response.status(500).json({ error: 'Error en la búsqueda de avisos.' });
                             }
@@ -573,7 +558,6 @@ app.post('/search', function(request, response) {
                     daoAvi.buscarHistoricoAvisosUsuarioPorDescripcion(request.session.iduser,searchText,
                         function(err, result) {
                             if (err) {
-                                console.log(err);
                                 response.send("<p> Error </p>");
                                 response.status(500).json({ error: 'Error en la búsqueda de avisos.' });
                             }

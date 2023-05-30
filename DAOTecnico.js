@@ -145,7 +145,7 @@ class DAO_Tecnico {
                             callback(null, false); // No está el técnico con el ID proporcionado
                         } else {
                             const imagen = {
-                                data: rows[0].data, // Los datos de la imagen
+                                data: rows[0].imagen, // Los datos de la imagen
                                 mime: rows[0].mime // El tipo MIME de la imagen
                             };
                             callback(null, imagen);

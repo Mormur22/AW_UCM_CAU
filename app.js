@@ -576,6 +576,7 @@ app.post('/search', function(request, response) {
 
         if(request.session.isTechnician){
             daoTec.obtenerImagen(request.session.iduser, function(err, imagen) {
+                console.log(imagen.data)
                 if (err) {
                     // Si ocurre un error, enviar la imagen por defecto
                     console.log('error');

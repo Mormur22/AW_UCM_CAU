@@ -168,7 +168,7 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
                             response.status(500);
                                 response.render("login", {  
                                 title: "Error", 
-                                msgRegistro: "ERROR no coinciden usuario y contraseña", 
+                                msgRegistro: "ERROR no coinciden usuario y contraseña o el usuario está desactivado", 
                                 tipoAlert: "alert-danger"
                             });
                         }
@@ -193,14 +193,11 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
             response.status(500);
             response.render("login", {  
             title: "Error", 
-            msgRegistro: "ERROR no coinciden usuario y contraseña",tipoAlert: "alert-danger"
+            msgRegistro: "ERROR no coinciden usuario y contraseña o el usuario está desactivado",tipoAlert: "alert-danger"
             });
         }
 
     });
-
-    //habría que pasarle el request.session
-    
 
 })
 

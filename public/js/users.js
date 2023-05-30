@@ -28,7 +28,7 @@ function viewTechnician(id) {
 function cancelTechnician(id) {
     $.confirm({
         title: "<img src='/img/icons/advertencia-azul.png' width='100' height='100'><br/><br/>Confirmar desactivación",
-        content: "¿Desactiar la cuenta del ténico " + $("#usu"+id).data("name") + "?",
+        content: "¿Desactiar la cuenta del ténico " + $(".usu_tec[data-id='" + id + "']").data("name") + "?",
         type: "orange", // "red" / "orange" / "green" / "blue" / "dark" / "purple"
         theme: "supervan", // "light" / "dark" / "modern" / "supervan" / "material" / "bootstrap"
         animation: "scale",
@@ -86,7 +86,7 @@ function viewStandardUser(id) {
 function cancelStandardUser(id) {
     $.confirm({
         title: "<img src='/img/icons/advertencia-azul.png' width='100' height='100'><br/><br/>Confirmar desactivación",
-        content: "¿Desactiar la cuenta del usuario estándar " + $("#usu"+id).data("name") + "?",
+        content: "¿Desactiar la cuenta del usuario estándar " + $(".usu_std[data-id='" + id + "']").data("name") + "?",
         type: "orange", // "red" / "orange" / "green" / "blue" / "dark" / "purple"
         theme: "supervan", // "light" / "dark" / "modern" / "supervan" / "material" / "bootstrap"
         animation: "scale",

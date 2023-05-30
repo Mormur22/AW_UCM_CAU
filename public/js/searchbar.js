@@ -1,3 +1,7 @@
+$("#txt_search").on("keydown", function(e) {
+    if(e.which == 13) search();
+});
+
 function search() {
     const searchTextElement = document.getElementById("txt_search");
     const isUserSearchElement = document.getElementById("chk_users");

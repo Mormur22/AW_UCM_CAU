@@ -204,17 +204,9 @@ class DAO_Usuario {
                             if(rows.affectedRows != 1) {
                                 connection.release();
                                 if(rows.affectedRows == 0) callback(new Error("Error al intentar desactivar el usuario estándar (idUsu="+idUsu+" no encontrado)."), false);
-                                else callback(new Error("Error al intentar desactivar el usuario estándar ("+rows.affectedRows+" filas modificadas)."), false);
+                                else callback(new Error("Error al intentar desactivar el usuario estándar (" + rows.affectedRows + " filas modificadas)."), false);
                             }
-                            else{
-                                connection.query("UPDATE UCM_AW_CAU_AVI_Avisos SET idUsu = NULL WHERE idUsu = ?;", [idUsu],
-                                    function(err, rows) {
-                                        connection.release();
-                                        if(err) callback(new Error("No se ha podido modificar los avisos del usuario estándar (idUsu="+idUsu+")."), false);
-                                        else callback(null, true);
-                                    }
-                                );
-                            }
+                            else callback(null, true);
                         }
                     );
                 }

@@ -506,6 +506,37 @@ class DAO_Aviso {
         });
     }
 
+        // Busca los avisos cerrados del historico por descripción
+        buscarTodosAvisosUsuarioPorDescripcion(idUsu, descripcion, callback) {
+            this.pool.getConnection((err, connection) => {
+                if(err) callback(new Error("Error de conexión a la base de datos"), null);
+                else {
+                    connection.query("SELECT * FROM UCM_AW_CAU_AVI_Avisos WHERE idUsu = ? AND observaciones LIKE ?", [idUsu, '%' + descripcion + '%'],
+                        (err, rows) => {
+                            connection.release();
+                            if(err) callback(new Error("Error en la consulta"), null);
+                            else callback(null, rows);
+                        }
+                    );
+                }
+            });
+        }
+    
+        buscarTodosAvisostecnicoPorDescripcion(descripcion, callback) {
+            this.pool.getConnection((err, connection) => {
+                if(err) callback(new Error("Error de conexión a la base de datos"), null);
+                else {
+                    connection.query("SELECT * FROM UCM_AW_CAU_AVI_Avisos WHERE observaciones LIKE ?", ['%' + descripcion + '%'],
+                        (err, rows) => {
+                            connection.release();
+                            if(err) callback(new Error("Error en la consulta"), null);
+                            else callback(null, rows);
+                        }
+                    );
+                }
+            });
+        }
+
 }
 
 module.exports = DAO_Aviso;

@@ -439,7 +439,7 @@ app.post('/search', function(request, response) {
 
             case 0:
                 if(request.session.isTechnician) {
-                    daoAvi.buscarHistoricoAvisostecnicoPorDescripcion(request.session.iduser,searchText,
+                    daoAvi.buscarTodosAvisostecnicoPorDescripcion(searchText,
                         function(err, result) {
                             if (err) {
                                 response.send("<p> Error </p>");
@@ -452,7 +452,7 @@ app.post('/search', function(request, response) {
                         });
                 }
                 else {
-                    daoAvi.buscarHistoricoAvisosUsuarioPorDescripcion(request.session.iduser,searchText,
+                    daoAvi.buscarTodosAvisosUsuarioPorDescripcion(request.session.iduser,searchText,
                         function(err, result) {
                             if (err) {
                                 response.send("<p> Error </p>");
@@ -542,7 +542,7 @@ app.post('/search', function(request, response) {
 
             default:
                 if(request.session.isTechnician) {
-                    daoAvi.buscarHistoricoAvisostecnicoPorDescripcion(request.session.iduser,searchText,
+                    daoAvi.buscarTodosAvisostecnicoPorDescripcion(searchText,
                         function(err, result) {
                             if (err) {
                                 response.send("<p> Error </p>");
@@ -555,7 +555,7 @@ app.post('/search', function(request, response) {
                         });
                 }
                 else {
-                    daoAvi.buscarHistoricoAvisosUsuarioPorDescripcion(request.session.iduser,searchText,
+                    daoAvi.buscarTodosAvisosUsuarioPorDescripcion(request.session.iduser,searchText,
                         function(err, result) {
                             if (err) {
                                 response.send("<p> Error </p>");

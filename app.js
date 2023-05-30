@@ -176,7 +176,7 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
 
                     //error de base de datos
                     else{
-                        response.status(500);
+                        response.status(501);
                         response.render("login", {  
                             title: "Error", 
                             msgRegistro: err.msg,
@@ -231,7 +231,11 @@ app.post("/registro", multerFactory.single('foto'),(request,response) => {
         if(esTecnico){
             daoTec.existeTecnico(request.body.username,function(err, existeTec) {
                 if(err) {
-                    response.status(500);
+                    response.status(501);
+                    response.render("signup", 
+                    { title: "ERROR",
+                    msgRegistro: "Error de conexión con la base de datos",
+                    tipoAlert: "alert-danger"});//False para usu que no existe True si ya existe 
                 } 
                 else {
                     //no existe el tecnico con el nombre de usuario
@@ -318,7 +322,7 @@ app.post("/registro", multerFactory.single('foto'),(request,response) => {
                     if(!existeUsu){
                         daoUsu.existeCorreoUsuario(request.body.correo,function(err, existeCorreo) {
                             if(err) {
-                                response.status(500); 
+                                response.status(501); 
                                 response.render("signup", { title: "ERROR",
                                 msgRegistro: err.message,
                                 tipoAlert: "alert-danger"});
@@ -328,7 +332,7 @@ app.post("/registro", multerFactory.single('foto'),(request,response) => {
                                 if(!existeCorreo){   
                                     daoUsu.registroUsuario(request.body, imagen, function(err,insertId){
                                     if(err) {
-                                        response.status(500); 
+                                        response.status(501); 
                                                         response.render("signup", { title: "ERROR",
                                                         msgRegistro: err.message,
                                                         tipoAlert: "alert-danger"});

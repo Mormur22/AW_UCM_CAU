@@ -57,31 +57,31 @@ CREATE TABLE UCM_AW_CAU_AVI_Avisos (
   FOREIGN KEY (idTec) REFERENCES UCM_AW_CAU_TEC_Tecnicos (idTec)
 );
 
-INSERT INTO UCM_AW_CAU_USU_Usuarios (idUsu, fecha, email, password, nombre, perfil, imagen, mime, desactivado, reputacion) VALUES
-(1, '2019-09-11 12:01:22', 'anuñez@ucm.es', 'letmein', 'Alfredo Nuñez', 'alumno', NULL, NULL, 0, 50.00),
-(2, '2022-09-09 18:04:41', 'alozano@ucm.es', 'letmein', 'Ana Lozano', 'alumno', NULL, NULL, 0, 50.00),
-(3, '2022-09-15 21:53:22', 'ctorres@ucm.es', 'letmein', 'Carlota Torres', 'alumno', NULL, NULL, 0, 50.00),
-(4, '2021-09-13 14:02:53', 'msalas@ucm.es', 'letmein', 'Matias Salas', 'alumno', NULL, NULL, 0, 50.00),
-(5, '2021-09-06 08:47:06', 'nroca@ucm.es', 'letmein', 'Nuria Roca', 'alumno', NULL, NULL, 0, 50.00),
-(6, '2022-09-06 13:07:20', 'rcarrasco@ucm.es', 'letmein', 'Rebeca Carrasco', 'alumno', NULL, NULL, 0, 50.00),
-(7, '2022-09-07 14:02:53', 'rcontreras@ucm.es', 'letmein', 'Ruben Contreras', 'alumno', NULL, NULL, 0, 50.00),
-(8, '2021-09-03 10:31:32', 'vramos@ucm.es', 'letmein', 'Vanesa Ramos', 'alumno', NULL, NULL, 0, 50.00),
-(9, '2020-09-14 09:17:54', 'vramirez@ucm.es', 'letmein', 'Victor Ramirez', 'alumno', NULL, NULL, 0, 50.00),
-(10, '2021-09-03 11:42:27', 'bgerpe@ucm.es', 'letmein', 'Begoña Gerpe', 'pdi', NULL, NULL, 0, 50.00),
-(11, '2020-09-04 13:09:16', 'eporto@ucm.es', 'letmein', 'Eva Porto', 'pdi', NULL, NULL, 0, 50.00),
-(12, '2020-09-02 10:25:14', 'jsantaolalla@ucm.es', 'letmein', 'Javier Santaolalla', 'pdi', NULL, NULL, 0, 50.00),
-(13, '2014-09-01 11:48:26', 'maranda@ucm.es', 'letmein', 'Marcos Aranda', 'pdi', NULL, NULL, 0, 50.00),
-(14, '1958-09-03 09:12:30', 'rguzman@ucm.es', 'letmein', 'Roberto Guzman', 'pdi', NULL, NULL, 0, 50.00),
-(15, '2022-09-02 10:57:28', 'smontes@ucm.es', 'letmein','Sabrina Montes', 'pdi', NULL, NULL, 0, 50.00),
-(16, '1977-10-21 12:03:44', 'agarrido@ucm.es', 'letmein', 'Ana Garrido', 'pas', NULL, NULL, 0, 50.00),
-(17, '1991-02-18 14:08:19', 'csamper@ucm.es', 'letmein', 'Cristian Samper', 'pas', NULL, NULL, 0, 50.00),
-(18, '2006-04-17 09:44:37', 'mhall@ucm.es', 'letmein', 'Meredith Hall', 'pas', NULL, NULL, 0, 50.00),
-(19, '1999-05-20 11:41:25', 'rsantos@ucm.es', 'letmein', 'Rebeca Santos', 'pas', NULL, NULL, 0, 50.00),
-(20, '1997-06-13 10:59:07', 'tbrown@ucm.es', 'letmein', 'Taylor Brown', 'pas', NULL, NULL, 0, 50.00),
-(21, '1978-07-05 12:41:16', 'avillar@ucm.es', 'letmein', 'Andres Villar', 'aa', NULL, NULL, 0, 50.00),
-(22, '1980-11-24 09:24:14', 'jmolina@ucm.es', 'letmein', 'Julian Molina', 'aa', NULL, NULL, 0, 50.00),
-(23, '1985-12-16 08:48:53', 'lmarin@ucm.es', 'letmein', 'Luisa Marin', 'aa', NULL, NULL, 0, 50.00),
-(24, '1987-05-11 12:28:39', 'tmorgan@ucm.es', 'letmein', 'Tina Morgan', 'aa', NULL, NULL, 0, 50.00);
+INSERT INTO UCM_AW_CAU_USU_Usuarios ( idUsu, fecha, email, password, nombre, perfil, imagen, mime, desactivado, reputacion ) VALUES
+( 1, '2019-09-11 12:01:22', 'anuñez@ucm.es', 'letmein', 'Alfredo Nuñez', 'alumno', NULL, NULL, 0, 50.00 ),
+( 2, '2022-09-09 18:04:41', 'alozano@ucm.es', 'letmein', 'Ana Lozano', 'alumno', NULL, NULL, 0, 50.00 ),
+( 3, '2022-09-15 21:53:22', 'ctorres@ucm.es', 'letmein', 'Carlota Torres', 'alumno', NULL, NULL, 0, 50.00 ),
+( 4, '2021-09-13 14:02:53', 'msalas@ucm.es', 'letmein', 'Matias Salas', 'alumno', NULL, NULL, 0, 50.00 ),
+( 5, '2021-09-06 08:47:06', 'nroca@ucm.es', 'letmein', 'Nuria Roca', 'alumno', NULL, NULL, 0, 50.00 ),
+( 6, '2022-09-06 13:07:20', 'rcarrasco@ucm.es', 'letmein', 'Rebeca Carrasco', 'alumno', NULL, NULL, 0, 50.00 ),
+( 7, '2022-09-07 14:02:53', 'rcontreras@ucm.es', 'letmein', 'Ruben Contreras', 'alumno', NULL, NULL, 0, 50.00 ),
+( 8, '2021-09-03 10:31:32', 'vramos@ucm.es', 'letmein', 'Vanesa Ramos', 'alumno', NULL, NULL, 0, 50.00 ),
+( 9, '2020-09-14 09:17:54', 'vramirez@ucm.es', 'letmein', 'Victor Ramirez', 'alumno', NULL, NULL, 0, 50.00 ),
+( 10, '2021-09-03 11:42:27', 'bgerpe@ucm.es', 'letmein', 'Begoña Gerpe', 'pdi', NULL, NULL, 0, 50.00 ),
+( 11, '2020-09-04 13:09:16', 'eporto@ucm.es', 'letmein', 'Eva Porto', 'pdi', NULL, NULL, 0, 50.00 ),
+( 12, '2020-09-02 10:25:14', 'jsantaolalla@ucm.es', 'letmein', 'Javier Santaolalla', 'pdi', NULL, NULL, 0, 50.00 ),
+( 13, '2014-09-01 11:48:26', 'maranda@ucm.es', 'letmein', 'Marcos Aranda', 'pdi', NULL, NULL, 0, 50.00 ),
+( 14, '1958-09-03 09:12:30', 'rguzman@ucm.es', 'letmein', 'Roberto Guzman', 'pdi', NULL, NULL, 0, 50.00 ),
+( 15, '2022-09-02 10:57:28', 'smontes@ucm.es', 'letmein','Sabrina Montes', 'pdi', NULL, NULL, 0, 50.00 ),
+( 16, '1977-10-21 12:03:44', 'agarrido@ucm.es', 'letmein', 'Ana Garrido', 'pas', NULL, NULL, 0, 50.00 ),
+( 17, '1991-02-18 14:08:19', 'csamper@ucm.es', 'letmein', 'Cristian Samper', 'pas', NULL, NULL, 0, 50.00 ),
+( 18, '2006-04-17 09:44:37', 'mhall@ucm.es', 'letmein', 'Meredith Hall', 'pas', NULL, NULL, 0, 50.00 ),
+( 19, '1999-05-20 11:41:25', 'rsantos@ucm.es', 'letmein', 'Rebeca Santos', 'pas', NULL, NULL, 0, 50.00 ),
+( 20, '1997-06-13 10:59:07', 'tbrown@ucm.es', 'letmein', 'Taylor Brown', 'pas', NULL, NULL, 0, 50.00 ),
+( 21, '1978-07-05 12:41:16', 'avillar@ucm.es', 'letmein', 'Andres Villar', 'aa', NULL, NULL, 0, 50.00 ),
+( 22, '1980-11-24 09:24:14', 'jmolina@ucm.es', 'letmein', 'Julian Molina', 'aa', NULL, NULL, 0, 50.00 ),
+( 23, '1985-12-16 08:48:53', 'lmarin@ucm.es', 'letmein', 'Luisa Marin', 'aa', NULL, NULL, 0, 50.00 ),
+( 24, '1987-05-11 12:28:39', 'tmorgan@ucm.es', 'letmein', 'Tina Morgan', 'aa', NULL, NULL, 0, 50.00 );
 
 INSERT INTO UCM_AW_CAU_EMP_Empleados (numero) VALUES
   ('4678-dfs'),
@@ -105,7 +105,7 @@ INSERT INTO UCM_AW_CAU_TEC_Tecnicos ( idTec, fecha, email, password, nombre, per
   ( 4, '2020-01-05 10:25:08', 'pjuarez@ucm.es', 'letmein', 'Pablo Juarez', 'pas', NULL, NULL, 0, '7039-con' ),
   ( 5, '2022-09-01 09:10:40', 'lmoreno@ucm.es', 'letmein', 'Lucas Moreno', 'pas', NULL, NULL, 0, '8959-azy' );
 
-INSERT INTO UCM_AW_CAU_AVI_Avisos (idAvi, tipo, categoria, subcategoria, fecha, observaciones, comentario, cerrado, cancelado, idUsu, idTec) VALUES
+INSERT INTO UCM_AW_CAU_AVI_Avisos ( idAvi, tipo, categoria, subcategoria, fecha, observaciones, comentario, cerrado, cancelado, idUsu, idTec ) VALUES
   ( 1, 'incidencia', 'comunicaciones', 'correo_electronico', '2022-09-14', 'Después de haber solicitado la migración de mi cuenta puedo acceder al nuevo correo, pero no encuentro los correos antiguos y me faltan carpetas.', 'Lo hemos revisado y por lo visto no se realizó correctamente la migración. Lo más probable es que no se seleccionasen las opciones adecuadas en el momento de hacer la copia. Somos humanos y a veces metemos la pata. Afortunadamente, tu antigua cuenta aún no había sido eliminada y hemos podido recuperar lo que faltaba. Ya deberías tenerlo todo disponible en tu nueva cuenta.', 1, 0, 12, 2 ),  -- jsantaolalla (pdi) / csolis
   ( 2, 'incidencia', 'docencia', 'aula_virtual', '2022-09-20', 'He solicitado un cambio de matrícula pero en el Campus Virtual me siguen apareciendo las asignaturas del la carrera en la que estaba antes.', 'Las notificaciones de traspasos tardan unos días en llegar al servicio de informática. Estamos trabajando para acelerar el proceso. Si dentro de unos 10 días sigue sin haberse actualizado el listado de asignaturas, vuelve a contactar con nosotros.', 1, 0, 1, 3 ),  -- anuñez (alumno) / hsmith
   ( 3, 'incidencia', 'comunicaciones', 'correo_electronico', '2022-09-21', 'Me están llegando correos en los que el remitente soy yo mismo.', 'Márcalos como "correo no deseado". Una vez que se hayan movido a la carpeta de "Spam" puedes indicar el motivo en el apartado de categorización de correo. Indica en el primer desplegable "mensaje fraudulento" y en el segundo "suplantación de identidad".', 1, 0, 17, 4 ),  -- csamper (pas) / pjuarez
@@ -144,26 +144,47 @@ INSERT INTO UCM_AW_CAU_AVI_Avisos (idAvi, tipo, categoria, subcategoria, fecha, 
   ( 36, 'sugerencia', 'docencia', 'aula_virtual', '2023-02-23', 'El aula virtual podría tener un diseño más atractivo.', 'Gracias por tu sugerencia, se la haremos llegar al equipo de diseño.', 1, 0, 2, 1),
   ( 37, 'incidencia', 'comunicaciones', 'correo_electronico', '2023-02-24', 'He olvidado la contraseña de mi correo de la UCM.', 'Este aviso ha sido cancelado por el técnico Lucas Moreno debido a: \n\nEl usuario recordó su contraseña.', 0, 1, 5, 4),
   ( 38, 'felicitacion', 'informatica', NULL, '2023-02-27', 'Sois unos maquinas', '¡Gracias por el cunmplido!. Intentamos hacerlo lo mejor posible.', 1, 0, 4, 4),
-  ( 39, 'incidencia', 'comunicaciones', 'correo_electronico', '2023-02-28', 'No puedo enviar correos desde mi cuenta de UCM.', 'Se ha revisado y corregido el problema con el servidor de correo.', 1, 0, 3, 1);
-  ( 40, 'sugerencia', 'administracion', 'certificado_digital', '2023-05-22', '¡Una brisa misteriosa solicita el certificado digital!', NULL, 0, 0, 1, 2),
-  ( 41, 'sugerencia', 'comunicaciones', 'google_meet', '2023-05-21', 'El canto del encuentro virtual se desvanece en el éter', NULL, 0, 0, 2, 2),
-  ( 42, 'sugerencia', 'conectividad', 'wifi_eduroam', '2023-05-20', 'Entre las ondas se pierde la conexión, en busca de Eduroam', NULL, 0, 0, 3, 1),
-  ( 43, 'sugerencia', 'docencia', 'blackboard_collaborate', '2023-05-19', 'En el aula virtual, susurros de colaboración se desvanecen', NULL, 0, 0, 4, 3),
-  ( 44, 'sugerencia', 'web', 'portal_eventos', '2023-05-18', 'El portal de eventos en sombras y misterio se sumerge', NULL, 0, 0, 5, 3),
-  ( 45, 'sugerencia', 'administracion', 'certificado_electronico', '2023-05-17', 'En el archivo perdido, un eco de certificados electrónicos', NULL, 0, 0, 11, 3),
-  ( 46, 'sugerencia', 'administracion', 'portafirmas', '2023-05-16', 'La firma espera en el umbral del portafirmas', NULL, 0, 0, 13, 2),
-  ( 47, 'sugerencia', 'administracion', 'certificado_electronico', '2023-05-15', 'En el rincón de la biblioteca, un susurro de registro electrónico', NULL, 0, 0, 10, 4),
-  ( 48, 'sugerencia', 'administracion', 'sede_electronica', '2023-05-14', 'En el centro de información, un portal hacia la sede electrónica', NULL, 0, 0, 9, 4),
-  ( 49, 'sugerencia', 'administracion', 'certificado_digital', '2023-05-13', 'En los departamentos docentes, un eco de certificados digitales', NULL, 0, 0, 10, 2),
-  ( 50, 'incidencia', 'comunicaciones', 'correo_electronico', '2023-05-12', 'El viento sopla mensajes perdidos en el ciberespacio', '¡Palabras de solución brillan en la oscuridad del correo!', 1, 0, 11, 1),
-  ( 51, 'incidencia', 'conectividad', 'vpn', '2023-05-11', 'En el túnel virtual, la conexión se desvanece en la bruma', 'El velo de la VPN se disipa, la conexión restablecida en plenitud', 1, 0, 12, 2),
-  ( 52, 'incidencia', 'docencia', 'aula_virtual', '2023-05-10', 'En el aula virtual, un eco de preguntas sin respuesta', 'Este aviso ha sido cancelado por el técnico Pablo Juarez debido a: \n\nEl usuario resolvió el problema por su cuenta.', 0, 1, 13, 3),
-  ( 53, 'incidencia', 'web', 'analitica_web', '2023-05-09', 'En los números se pierde el rastro de la analítica web', 'Los números bailan al ritmo de la analítica web, el misterio revelado', 1, 0, 14, 4),
-  ( 54, 'incidencia', 'comunicaciones', 'cuenta_alumno', '2023-05-08', 'En el reino estudiantil, una cuenta perdida en la nebulosa', 'La cuenta de alumno resurge, la nebulosa se despeja', 1, 0, 15, 1),
-  ( 55, 'incidencia', 'conectividad', 'wifi_visitantes', '2023-05-07', 'En la onda del visitante, la conexión se desvanece en la distancia', 'El visitante se conecta, la señal Wi-Fi lo abraza con alegría', 1, 0, 16, 2),
-  ( 56, 'incidencia', 'docencia', 'moodle', '2023-05-06', 'En la plataforma virtual moodle no me aclaro', 'Este aviso ha sido cancelado por el técnico Pablo Juarez debido a: \n\nEl problema no tiene solución', 0, 1, 17, 3),
-  ( 57, 'incidencia', 'web', 'certificado_ssl', '2023-05-05', 'En la red segura, el certificado se pierde en la oscuridad', 'La seguridad resplandece, el certificado SSL encuentra su camino', 1, 0, 18, 4),
-  ( 58, 'incidencia', 'administracion', 'certificado_electronico', '2023-05-04', 'En el laberinto de certificados, uno se extravía', 'Este aviso ha sido cancelado por el técnico Alexander Ortiz debido a: \n\nEl usuario resolvió el problema por su cuenta.', 0, 1, 19, 1),
-  ( 59, 'incidencia', 'web', 'portal_eventos', '2023-05-03', 'El portal de eventos en sombras y misterio se sumerge', '¡La luz se encendió, el problema resuelto en plenitud!', 1, 0, 20, 2),
-  ( 60, 'incidencia', 'comunicaciones', 'correo_electronico', '2023-05-02', 'El viento sopla mensajes perdidos en el ciberespacio', '¡Palabras de solución brillan en la oscuridad del correo!', 1, 0, 1, 3),
-  ( 61, 'incidencia', 'conectividad', 'vpn', '2023-05-01', 'En el túnel virtual, la conexión se desvanece en la bruma', 'El velo de la VPN se disipa, la conexión restablecida en plenitud', 1, 0, 2, 4);
+  ( 39, 'incidencia', 'comunicaciones', 'correo_electronico', '2023-02-28', 'No puedo enviar correos desde mi cuenta de UCM.', 'Se ha revisado y corregido el problema con el servidor de correo.', 1, 0, 3, 1),
+  ( 40, 'incidencia', 'comunicaciones', 'correo_electronico', '2023-03-01', 'El viento sopla mensajes perdidos en el ciberespacio', '¡Palabras de solución brillan en la oscuridad del correo!', 1, 0, 11, 1),
+  ( 41, 'incidencia', 'conectividad', 'vpn', '2023-03-02', 'En el túnel virtual, la conexión se desvanece en la bruma', 'El velo de la VPN se disipa, la conexión restablecida en plenitud', 1, 0, 12, 2),
+  ( 42, 'incidencia', 'docencia', 'aula_virtual', '2023-03-03', 'En el aula virtual, un eco de preguntas sin respuesta', 'Este aviso ha sido cancelado por el técnico Pablo Juarez debido a: \n\nEl usuario resolvió el problema por su cuenta.', 0, 1, 13, 3),
+  ( 43, 'incidencia', 'web', 'analitica_web', '2023-03-06', 'En los números se pierde el rastro de la analítica web', 'Los números bailan al ritmo de la analítica web, el misterio revelado', 1, 0, 14, 4),
+  ( 44, 'incidencia', 'comunicaciones', 'cuenta_alumno', '2023-03-07', 'En el reino estudiantil, una cuenta perdida en la nebulosa', 'La cuenta de alumno resurge, la nebulosa se despeja', 1, 0, 15, 1),
+  ( 45, 'incidencia', 'conectividad', 'wifi_visitantes', '2023-03-08', 'En la onda del visitante, la conexión se desvanece en la distancia', 'El visitante se conecta, la señal Wi-Fi lo abraza con alegría', 1, 0, 16, 2),
+  ( 46, 'incidencia', 'docencia', 'moodle', '2023-03-09', 'En la plataforma virtual moodle no me aclaro', 'Este aviso ha sido cancelado por el técnico Pablo Juarez debido a: \n\nEl problema no tiene solución', 0, 1, 17, 3),
+  ( 47, 'incidencia', 'web', 'certificado_ssl', '2023-03-10', 'En la red segura, el certificado se pierde en la oscuridad', 'La seguridad resplandece, el certificado SSL encuentra su camino', 1, 0, 18, 4),
+  ( 48, 'incidencia', 'administracion', 'certificado_electronico', '2023-03-13', 'En el laberinto de certificados, uno se extravía', 'Este aviso ha sido cancelado por el técnico Alexander Ortiz debido a: \n\nEl usuario resolvió el problema por su cuenta.', 0, 1, 19, 1),
+  ( 49, 'incidencia', 'web', 'portal_eventos', '2023-03-14', 'El portal de eventos en sombras y misterio se sumerge', '¡La luz se encendió, el problema resuelto en plenitud!', 1, 0, 20, 2),
+  ( 50, 'incidencia', 'comunicaciones', 'correo_electronico', '2023-03-15', 'El viento sopla mensajes perdidos en el ciberespacio', '¡Palabras de solución brillan en la oscuridad del correo!', 1, 0, 1, 3),
+  ( 51, 'incidencia', 'conectividad', 'vpn', '2023-03-16', 'En el túnel virtual, la conexión se desvanece en la bruma', 'El velo de la VPN se disipa, la conexión restablecida en plenitud', 1, 0, 2, 4),
+  ( 52, 'sugerencia', 'administracion', 'certificado_digital', '2023-03-17', '¡Una brisa misteriosa solicita el certificado digital!', NULL, 0, 0, 1, 2),
+  ( 53, 'sugerencia', 'comunicaciones', 'google_meet', '2023-03-20', 'El canto del encuentro virtual se desvanece en el éter', NULL, 0, 0, 2, 2),
+  ( 54, 'sugerencia', 'conectividad', 'wifi_eduroam', '2023-03-21', 'Entre las ondas se pierde la conexión, en busca de Eduroam', NULL, 0, 0, 3, 1),
+  ( 55, 'sugerencia', 'docencia', 'blackboard_collaborate', '2023-03-22', 'En el aula virtual, susurros de colaboración se desvanecen', NULL, 0, 0, 4, 3),
+  ( 56, 'sugerencia', 'web', 'portal_eventos', '2023-03-23', 'El portal de eventos en sombras y misterio se sumerge', NULL, 0, 0, 5, 3),
+  ( 57, 'sugerencia', 'administracion', 'certificado_electronico', '2023-03-24', 'En el archivo perdido, un eco de certificados electrónicos', NULL, 0, 0, 11, 3),
+  ( 58, 'sugerencia', 'administracion', 'portafirmas', '2023-03-27', 'La firma espera en el umbral del portafirmas', NULL, 0, 0, 13, 2),
+  ( 59, 'sugerencia', 'administracion', 'certificado_electronico', '2023-03-28', 'En el rincón de la biblioteca, un susurro de registro electrónico', NULL, 0, 0, 10, 4),
+  ( 60, 'sugerencia', 'administracion', 'sede_electronica', '2023-03-29', 'En el centro de información, un portal hacia la sede electrónica', NULL, 0, 0, 9, 4),
+  ( 61, 'sugerencia', 'administracion', 'certificado_digital', '2023-03-30', 'En los departamentos docentes, un eco de certificados digitales', NULL, 0, 0, 10, 2),
+  ( 62, 'incidencia', 'administracion', 'certificado_electronico', '2023-04-03', 'Me ha caducado. ¿Cómo lo puedo renovar?', NULL, 0, 0, 16, 2),  -- agarrido (pas) / csolis
+  ( 63, 'felicitacion', 'departamentos_docentes', NULL, '2023-04-04', 'Todo está muy bien organizado.', NULL, 0, 0, 12, 3),  -- jsantaolalla (pdi) / hsmith
+  ( 64, 'sugerencia', 'docencia', 'moodle', '2023-04-05', 'El enlace no es fácil de encontrar. Sería mejor ponerlo con los demás.', NULL, 0, 0, 13, 4),  -- maranda (pdi) / pjuarez
+  ( 65, 'incidencia', 'conectividad', 'conexion_cable', '2023-04-06', 'No me va muy bien. La conexión se pierde de vez en cuando.', NULL, 0, 0, 14, 5),  -- rguzman (pdi) / lmoreno
+  ( 66, 'felicitacion', 'biblioteca', NULL, '2023-04-07', 'Disponéis de un excelente catalogo. Es impresionante.', NULL, 0, 0, 15, 1),  -- smontes (pdi) / aortiz
+  ( 67, 'incidencia', 'web', 'hosting', '2023-04-10', 'Algo no va bien con el blog personal de usuario. No guarda las nuevas entradas.', NULL, 0, 0, 12, 2),  -- jsantaolalla (pdi) / csolis
+  ( 68, 'incidencia', 'administracion', 'sede_electronica', '2023-04-11', 'Tenemos problemas para registrar los cambios de turnos. Los compañeros no reciben el aviso de confirmación.', NULL, 0, 0, 16, NULL),  -- agarrido (pas) / NULL
+  ( 69, 'incidencia', 'comunicaciones', 'cuenta_generica', '2023-04-12', 'El algunos compañeros del turno de tarde dicen que no pueden ver los correos de secretaria@ucm.es . Sin embargo, en el turno de mañana nadie tiene ese problema.', NULL, 0, 0, 17, NULL),  -- csamper (pas) / NULL
+  ( 70, 'sugerencia', 'web', 'portal_eventos', '2023-04-13', 'En el portal aparecen los eventos ordenados cronológicamente en orden ascendente. Sería mejor que pusierais arriba los nuevos eventos o que colocaseis los eventos ya pasados en otro apartado. ', NULL, 0, 0, 18, NULL),  -- mhall (pas) / NULL
+  ( 71, 'incidencia', 'docencia', 'listado_clase', '2023-04-14', 'Nos han informado que los listados de alumnos no incluyen a  los estudiantes de Erasmus.', NULL, 0, 0, 19, NULL),  -- rsantos (pas) / NULL
+  ( 72, 'felicitacion', 'centro_informacion', NULL, '2023-04-17', 'Gracias por la nueva interfaz de búsqueda. Es mucho más intuitiva que la que había antes.', NULL, 0, 0, 20, NULL),  -- tbrown (pas) / NULL
+  ( 73, 'sugerencia', 'comunicaciones', 'cuenta_personal', '2023-04-18', 'Seria muy útil que incluyeseis en el perfil también el número del teléfono interno.', NULL, 0, 0, 16, NULL),  -- agarrido (pas) / NULL
+  ( 74, 'incidencia', 'comunicaciones', 'google_meet', '2023-04-19', 'En la sala de reuniones no va bien el micrófono.', NULL, 0, 0, 17, NULL),  -- csamper (pas) / NULL
+  ( 75, 'incidencia', 'administracion', 'registro_electronico', '2023-04-20', 'Los antiguos títulos no tienen el código de identificación del Ministerio.', NULL, 0, 0, 21, NULL),  -- avillar (aa) / NULL
+  ( 76, 'incidencia', 'web', 'portal_eventos', '2023-04-21', 'Los eventos de la Asociación de Antiguos Alumnos no aparecen. ', NULL, 0, 0, 22, NULL),  -- jmolina (aa) / NULL
+  ( 77, 'sugerencia', 'comunicaciones', 'correo_electronico', '2023-04-24', 'Sería bueno añadir listas de distribución por año de promoción además de por carrera.', NULL, 0, 0, 23, NULL),  -- lmarin (aa) / NULL
+  ( 78, 'felicitacion', 'departamentos_docentes', NULL, '2023-04-25', 'Enhorabuena por los cursos online para mantener al día a los antiguos alumnos. Han gustado mucho.', NULL, 0, 0, 24, NULL),  -- tmorgan (aa) / NULL
+  ( 79, 'incidencia', 'administracion', 'registro_electronico', '2023-04-26', 'Las certificaciones académicas no se pueden descargar.', NULL, 0, 0, 1, NULL),  -- anuñez (alumno) / NULL
+  ( 80, 'incidencia', 'conectividad', 'cortafuegos', '2023-04-27', 'Parece que cortafuegos no permite la conexión con wifi con la aplicación móvil de consulta de exámenes, porque con datos me funciona bien,', NULL, 0, 0, 2, NULL),  -- alozano (alumno) / NULL
+  ( 81, 'incidencia', 'docencia', 'cursos_online', '2023-04-28', 'No se le a dado acceso a los profesores auxiliares.', NULL, 0, 0, 12, NULL);  -- jsantaolalla (pdi) / NULL
+  

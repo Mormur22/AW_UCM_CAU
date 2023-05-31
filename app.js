@@ -139,7 +139,7 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
                             request.session.name = loginUsuExito.nombre;
                             request.session.correo = loginUsuExito.email
                             request.session.profile = loginUsuExito.perfil;
-                            request.session.fecha = loginUsuExito.fecha.toISOString().replace('T', ' ').substr(0, 19);
+                            request.session.fecha = loginUsuExito.fecha === undefined ? "????-??-?? ??:??:??" : loginUsuExito.fecha.toISOString().replace('T', ' ').substr(0, 19);
                             request.session.isTechnician = false;
             
                             response.locals.iduser=request.session.iduser;

@@ -89,7 +89,7 @@ app.get("/", (request, response) => {
     }
 });
 
-app.post("/login_user", multerFactory.none(),(request, response) => {
+app.post("/login_user", multerFactory.none(),(request, response, next) => {
 
     daoTec.loginTecnico(request.body.correo, request.body.password, function(err, loginTecExito) {
 
@@ -173,6 +173,7 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
 
                     //error de base de datos
                     else {
+                        err.status = 500; // Establecer el código de error a 500
                         next(err); // Pasar el error al middleware de error
                     }
                 });
@@ -181,6 +182,7 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
         }
 
         else {
+            err.status = 500; // Establecer el código de error a 500
             next(err); // Pasar el error al middleware de error
         }
     });
@@ -189,7 +191,7 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
 
 
 app.get("/signup", (request, response, next) => {
-    daoTec.testConnection(function (err, isConnected) {
+    daoGen.testConnection(function (err, isConnected) {
       if (!err && isConnected) {
         if (request.session.iduser === undefined) {
           response.status(200);

@@ -36,7 +36,7 @@
                     <form action="/login_user" method="POST" enctype="multipart/form-data">
                         <h1 class="display-6 text-center" style="margin-bottom:2.5rem">Iniciar Sesión</h1>
                         <div class="input-group p-2">
-                            <input type="email" name="correo" class="form-control" id="floatingInput" placeholder="nombre@ucm.es">
+                            <input name="correo" class="form-control" id="floatingInput" placeholder="nombre@ucm.es" pattern="^[a-zA-Z0-9_.+-\ñ\Ñ]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?ucm\.es$">
                         </div>
                         
                         <div class="input-group p-2">

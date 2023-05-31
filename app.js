@@ -378,11 +378,11 @@ app.get("/main", function(request, response) {
     response.locals.isTechnician = request.session.isTechnician;
     response.locals.fecha = request.session.fecha;
     response.locals.perfil= request.session.profile;
+    response.locals.perfil_texto = util.toProfileText(request.session.profile);
     let avisosData;
     //Recuperamos los datos del perfil dependiendo de si es usuario o técnico de
     if(response.locals.isTechnician===true){
 
-       
         daoAvi.getTechnicianAllNotifies(request.session.iduser, function (err,avisos)
         {   if(err){
 

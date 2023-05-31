@@ -15,15 +15,22 @@
 
         <script>
             $(document).ready(function(){
+                $("#numEmp").hide();
+                //$("#numEmp").css("visibility", "hidden");
                 $("#flexCheckDefault").click(function(){
                     if( $(this).is(':checked') ) { //comprobamos que el checkbox está seleccionado
-                        $(".Alumno").hide(); //ocultamos las opciones
+                        $(".PAS").attr("selected", true);
+                        $(".Alumno").hide();
                         $(".PDI").hide();
                         $(".AA").hide();
+                        $("#numEmp").show();
+                        //$("#numEmp").css("visibility", "visible");
                     } else {
-                        $(".Alumno").show(); //ocultamos las opciones
+                        $(".Alumno").show();
                         $(".PDI").show();
                         $(".AA").show();
+                        $("#numEmp").hide();
+                        //$("#numEmp").css("visibility", "hidden");
                     }
                 });
             });
@@ -75,7 +82,7 @@
                             </div>
                             <div class="col-6">
                                 <div class="input-group p-2">
-                                    <input type="email" name="correo" class="form-control" id="email" placeholder="correo@ucm.es" required pattern="^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?ucm\.es$">
+                                    <input name="correo" class="form-control" id="email" placeholder="correo@ucm.es" required pattern="^[a-zA-Z0-9_.+-\ñ\Ñ]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?ucm\.es$">
                                     
                                 </div>
                             </div>
@@ -110,7 +117,7 @@
 
 
                         <div class="input-group p-2">
-                            <input type="text" name="numEmp" class="form-control" id="floatingInput" placeholder="NºEmpleado">
+                            <input type="text" name="numEmp" class="form-control" id="numEmp" placeholder="NºEmpleado">
                         </div>
 
 

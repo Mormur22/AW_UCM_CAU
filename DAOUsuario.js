@@ -93,29 +93,36 @@ class DAO_Usuario {
     
     loginUsuario(email, password, callback) {
         this.pool.getConnection(function(err, connection) {
-            if (err) callback(new Error("Error de conexión a la base de datos"));
-            else {
-                connection.query("SELECT * FROM UCM_AW_CAU_USU_Usuarios WHERE email = ? AND password= ? AND desactivado=0;" ,
-                    [email,password],
-                    function(err, rows) {
-                        connection.release();
-                        if (err) {
-                            callback(new Error("Error de acceso a la base de datos"));
-                        }
-                        else {
-                            if (rows.length === 0) callback(null,false); //no está el usuario con el password proporcionado
-                            else callback(null,rows[0]);
-                        }
-                    }
-                );
-            }
+          if (err) {
+            callback({ 
+                status: 500,
+                message: "Error de conexión a la base de datos"
+            });
+          } else {
+            connection.query("SELECT * FROM UCM_AW_CAU_USU_Usuarios WHERE email = ? AND password= ? AND desactivado=0;",
+              [email, password],
+              function(err, rows) {
+                connection.release();
+                if (err) {
+                  callback(new Error("Error de acceso a la base de datos")); // Error de acceso a la base de datos
+                } else {
+                  if (rows.length === 0) {
+                    callback(null, { error: "Usuario o contraseña incorrectos" }); // Error de usuario o contraseña
+                  } else {
+                    callback(null, rows[0]);
+                  }
+                }
+              }
+            );
+          }
         });
-    }
+      }
+      
 
     obtenerImagen(id, callback) {
         this.pool.getConnection(function(err, connection) {
             if (err) {
-                callback(err);
+                callback(new Error("Error de conexión a la base de datos")); // Error de conexión a la base de datos
             } else {
                 let sql = "SELECT imagen, mime FROM UCM_AW_CAU_USU_Usuarios WHERE idUsu = ?";
                 connection.query(sql, [id], function(err, rows) {
@@ -201,8 +208,8 @@ class DAO_Usuario {
                 else {
                     connection.query("UPDATE UCM_AW_CAU_USU_Usuarios SET desactivado = 1 WHERE idUsu = ?;", [idUsu],
                         function(err, rows) {
+                            connection.release();
                             if(rows.affectedRows != 1) {
-                                connection.release();
                                 if(rows.affectedRows == 0) callback(new Error("Error al intentar desactivar el usuario estándar (idUsu="+idUsu+" no encontrado)."), false);
                                 else callback(new Error("Error al intentar desactivar el usuario estándar (" + rows.affectedRows + " filas modificadas)."), false);
                             }

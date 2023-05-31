@@ -1,10 +1,6 @@
 /* APLICACIONES WEB. Práctica obligatoria: UCM-CAU - El Centro de Atencion a Usuarios. Grupo 33: Daniel Compán López de Lacalle y Alejandro Moreno Murillo */
 'use strict'
 
-// Librerias
-//const livereload = require("livereload"); // watch front-end changes
-//const connectLivereload = require("connect-livereload");
-//const liveReloadServer = livereload.createServer(); // open livereload high port and start to watch public directory for changes
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
@@ -115,6 +111,7 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
                 response.locals.name = request.session.name;
                 response.locals.perfil = request.session.profile;
                 response.locals.isTechnician = true;
+
                 const cookieVal = {
                     id:  response.locals.iduser,
                     nombre:  response.locals.name,
@@ -175,41 +172,39 @@ app.post("/login_user", multerFactory.none(),(request, response) => {
                     }
 
                     //error de base de datos
-                    else{
-                        response.status(501);
-                        response.render("login", {  
-                            title: "Error", 
-                            msgRegistro: err.msg,
-                            tipoAlert: "alert-danger"
-                        });
+                    else {
+                        next(err); // Pasar el error al middleware de error
                     }
                 });
             }
             
         }
 
-        //error de base de datos
-        else{
-            response.status(500);
-            response.render("login", {  
-            title: "Error", 
-            msgRegistro: "ERROR no coinciden usuario y contraseña o el usuario está desactivado",tipoAlert: "alert-danger"
-            });
+        else {
+            next(err); // Pasar el error al middleware de error
         }
-
     });
 
 })
 
 
-app.get("/signup", (request, response) => {     
-    if(request.session.iduser===undefined){
-        response.status(200);
-        const errors = validationResult(request);
-        response.render("signup", { title: "Página de registro",
-                                    errores: errors.mapped() ,
-                                    msgRegistro: false});//False para usu que no existe True si ya existe 
-    }   
+app.get("/signup", (request, response, next) => {
+    daoTec.testConnection(function (err, isConnected) {
+      if (!err && isConnected) {
+        if (request.session.iduser === undefined) {
+          response.status(200);
+          const errors = validationResult(request);
+          response.render("signup", {
+            title: "Página de registro",
+            errores: errors.mapped(),
+            msgRegistro: false
+          });
+        }
+      } else {
+        err.status = 500; // Establecer el código de error a 500
+        next(err);
+      }
+    });
 });
 
 app.post("/registro", multerFactory.single('foto'),(request,response) => {
@@ -922,11 +917,22 @@ app.post("/notice/cancel", function(request, response) {
     else response.send(false);
 });
 
-// Logout
+//logout
 app.get("/logout", (request, response) => {
-    response.status(200);
-    request.session.destroy();
-    response.redirect("/");
+    // Verificar si existe una sesión activa
+    if (request.session) {
+      // Destruir la sesión
+      request.session.destroy((err) => {
+        if (err) {
+          console.log("Error al destruir la sesión:", err);
+        }
+        // Redireccionar a la página de inicio de sesión
+        response.redirect("/");
+      });
+    } else {
+      // Si no hay sesión, simplemente redireccionar a la página de inicio de sesión
+      response.redirect("/");
+    }
 });
 
 // Uso de un middleware para la gestion de errores 404 (Not Found)

@@ -109,7 +109,10 @@ class DAO_Tecnico {
     loginTecnico(email, password,callback) {
         this.pool.getConnection(function(err, connection) {
             if (err) {
-                callback(new Error("Error de conexión a la base de datos"));
+                callback({ 
+                    status: 500,
+                    message: "Error de conexión a la base de datos"
+                });
             }
             else {
                 connection.query("SELECT * FROM UCM_AW_CAU_TEC_Tecnicos WHERE email = ? AND password= ? AND desactivado=0;" ,
@@ -133,7 +136,7 @@ class DAO_Tecnico {
     obtenerImagen(id, callback) {
         this.pool.getConnection(function(err, connection) {
             if (err) {
-                callback(err);
+                callback(new Error("Error de conexión a la base de datos"));
             } else {
                 let sql = "SELECT imagen, mime FROM UCM_AW_CAU_TEC_Tecnicos WHERE idTec = ?";
                 connection.query(sql, [id], function(err, rows) {
